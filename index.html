@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#071a2e" />
+<meta name="description" content="Shiloh Saints 4th Grade Football — roster, coaching staff and game schedule for parents." />
+<title>Shiloh Saints · Team Hub</title>
+<script>
+  // Runs before paint: if this browser already entered the code, skip the gate.
+  try { if (localStorage.getItem("shiloh.gate") === "ok")
+          document.documentElement.classList.add("unlocked"); } catch (e) {}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Roboto+Condensed:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+/* ═══════════════════════════════════════════════════════════
+   Shiloh Saints — mobile-first team hub.
+   Base styles target the phone; the min-width blocks below
+   scale the same markup up to the full desktop web view.
+   ═══════════════════════════════════════════════════════════ */
+
+:root{
+  --navy:#071a2e;
+  --navy-2:#0c2741;
+  --navy-3:#12365a;
+  --accent:#2596be;
+  --paper:#eef1f5;
+  --ink:#0d1b2a;
+  --muted:#5b6b7c;
+  --line:#e2e7ed;
+  --win:#1f9d57;
+  --loss:#d8553f;
+  --card-w:280px;
+  --tabbar-h:calc(60px + env(safe-area-inset-bottom, 0px));
+  --radius:20px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+/* our display:flex rules would otherwise beat the UA's [hidden] display:none */
+[hidden]{display:none !important;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  font-family:"Roboto",system-ui,-apple-system,sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body.is-locked{overflow:hidden;}
+button,input{font-family:inherit;}
+button{cursor:pointer;}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:6px;}
+img{max-width:100%;}
+
+.app{position:relative;min-height:100vh;display:flex;flex-direction:column;}
+.app-backdrop{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(700px 400px at 80% -10%, rgba(37,150,190,.10), transparent 60%);
+}
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+
+/* ── PASSWORD GATE ────────────────────────────────────────── */
+html.unlocked #gate{display:none;}
+html:not(.unlocked) .app,
+html:not(.unlocked) #modal{display:none !important;}
+.gate{
+  position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:24px;
+  background:
+    radial-gradient(900px 520px at 78% -10%, rgba(37,150,190,.22), transparent 60%),
+    linear-gradient(160deg,#071a2e 0%,#04101d 100%);
+  color:#fff;overflow:auto;
+}
+.gate-card{width:100%;max-width:340px;text-align:center;}
+.gate-mark{
+  height:86px;aspect-ratio:1202/1308;margin:0 auto 20px;display:grid;place-items:center;
+  background:#fff;border-radius:16px;padding:6px;box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+.gate-mark img{width:100%;height:100%;object-fit:contain;display:block;}
+.gate-mark.no-photo{background:none;padding:0;box-shadow:none;aspect-ratio:1;}
+.gate-mark.no-photo .mark-fallback{
+  width:100%;height:100%;display:grid;place-items:center;background:#fff;color:var(--navy);
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:30px;
+  clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+}
+.gate-title{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:30px;letter-spacing:.5px;}
+.gate-sub{font-size:13px;color:#9fb3c6;margin-top:5px;}
+.gate-form{margin-top:28px;}
+.gate-label{display:block;font-size:12.5px;color:#aebfce;margin-bottom:12px;letter-spacing:.3px;}
+.pin{display:flex;gap:10px;justify-content:center;}
+.pin input{
+  width:56px;height:64px;text-align:center;
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:28px;color:#fff;
+  background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.18);
+  border-radius:14px;outline:none;transition:.16s;-webkit-text-security:disc;
+}
+.pin input:focus{border-color:var(--accent);background:rgba(37,150,190,.16);}
+.pin.is-bad input{border-color:#e4614f;background:rgba(228,97,79,.12);}
+.pin.is-bad{animation:shake .35s;}
+@keyframes shake{
+  0%,100%{transform:translateX(0);} 20%{transform:translateX(-7px);}
+  40%{transform:translateX(7px);}  60%{transform:translateX(-4px);} 80%{transform:translateX(4px);}
+}
+.gate-err{min-height:18px;margin-top:12px;font-size:12.5px;color:#ff9d8f;}
+.gate-go{
+  width:100%;margin-top:6px;padding:15px;border:0;border-radius:14px;
+  background:var(--accent);color:#fff;font-family:inherit;font-weight:700;font-size:15px;
+}
+.gate-foot{margin-top:18px;font-size:11.5px;color:#6f8499;}
+@media(max-width:360px){ .pin input{width:48px;height:58px;font-size:24px;} }
+
+/* ── TOP APP BAR (mobile) ─────────────────────────────────── */
+.appbar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  position:sticky;top:0;z-index:25;
+  padding:calc(env(safe-area-inset-top, 0px) + 12px) 18px 12px;
+  background:linear-gradient(180deg,var(--navy) 0%,#06182b 100%);
+  color:#fff;box-shadow:0 4px 16px -8px rgba(7,26,46,.5);
+}
+.mbrand{display:flex;align-items:center;gap:11px;min-width:0;}
+/* The SC logo ships on an opaque white background whose navy matches this bar
+   exactly, so it gets a white badge sized to the artwork's own 1202:1308 ratio —
+   the image's background blends into the plate and reads as one mark. */
+.mmark{
+  height:46px;aspect-ratio:1202/1308;flex:0 0 auto;display:grid;place-items:center;
+  background:#fff;border-radius:9px;padding:3px;
+  box-shadow:0 2px 10px rgba(0,0,0,.28);
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:16px;
+  color:var(--navy);
+}
+.mmark img,.brand-mark img{width:100%;height:100%;object-fit:contain;display:block;}
+/* If the logo file goes missing, drop the plate and show the hexagon monogram. */
+.mark-fallback{display:none;}
+/* Scoped to the two logo marks — the player/coach photo hosts also carry
+   .no-photo and must keep their own sizing. */
+.mmark.no-photo,.brand-mark.no-photo{background:none;padding:0;box-shadow:none;aspect-ratio:1;}
+.mmark.no-photo .mark-fallback,.brand-mark.no-photo .mark-fallback{
+  width:100%;height:100%;display:grid;place-items:center;background:#fff;
+  clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+}
+.mbrand-txt{display:flex;flex-direction:column;line-height:1.1;min-width:0;}
+.mbrand-txt b{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:16px;letter-spacing:.3px;}
+.mbrand-txt span{font-size:10.5px;color:#9fb3c6;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mrec{
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:22px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+  padding:5px 13px;border-radius:12px;flex:0 0 auto;
+}
+.mrec i{color:var(--accent);font-style:normal;margin:0 3px;}
+
+/* ── SIDEBAR / BOTTOM TAB BAR ─────────────────────────────── */
+.side{
+  position:fixed;bottom:0;left:0;right:0;z-index:40;
+  display:flex;padding:7px 8px calc(env(safe-area-inset-bottom, 6px) + 7px);
+  background:rgba(255,255,255,.93);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);
+  backdrop-filter:blur(16px) saturate(160%);
+  border-top:1px solid var(--line);
+  box-shadow:0 -4px 20px -10px rgba(7,26,46,.25);
+}
+.brand,.side-record,.side-foot{display:none;}
+.nav{display:flex;width:100%;justify-content:space-around;}
+.nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  background:none;border:0;color:var(--muted);
+  font-size:11px;font-weight:500;padding:7px 4px;border-radius:12px;
+  min-height:48px;transition:color .16s;
+}
+.nav-item svg{width:23px;height:23px;}
+.nav-item.is-active{color:var(--accent);}
+.nav-count{display:none;}
+
+/* ── MAIN ─────────────────────────────────────────────────── */
+.main{
+  position:relative;z-index:1;flex:1;
+  padding:18px 16px calc(var(--tabbar-h) + 36px);
+}
+.topbar{display:flex;flex-direction:column;gap:14px;margin-bottom:16px;}
+.topbar h1{
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:25px;
+  letter-spacing:.3px;color:var(--navy);line-height:1.1;
+}
+.topbar-titles p{color:var(--muted);font-size:13px;margin-top:4px;}
+.search{
+  display:flex;align-items:center;gap:9px;background:#fff;
+  border:1px solid var(--line);border-radius:14px;padding:12px 14px;
+  color:var(--muted);box-shadow:0 2px 8px rgba(7,26,46,.04);
+}
+.search input{
+  border:0;outline:0;font-size:16px;flex:1;min-width:0;
+  color:var(--ink);background:none;
+}
+.search-x{
+  border:0;background:#eef1f5;border-radius:50%;
+  width:24px;height:24px;flex:0 0 24px;color:var(--muted);font-size:16px;line-height:1;
+}
+
+.toolbar{display:flex;flex-direction:column;gap:12px;margin-bottom:18px;}
+/* No overflow scrolling here — it would clip the Options popover, and with
+   only Sort + Options left the row wraps comfortably instead. */
+.opts{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  justify-content:space-between;
+}
+.optgrp{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);flex:0 0 auto;}
+.optgrp>span{flex:0 0 auto;}
+.segbtn{
+  font-size:13px;border:0;background:none;color:var(--muted);
+  padding:7px 11px;border-radius:9px;font-weight:500;min-height:34px;
+}
+.segbtn.is-on{background:#fff;color:var(--navy);box-shadow:0 1px 4px rgba(7,26,46,.08);font-weight:700;}
+
+/* ── OPTIONS MENU (card style) ────────────────────────────── */
+.menu-wrap{position:relative;flex:0 0 auto;}
+.menu-btn{
+  display:flex;align-items:center;gap:7px;
+  font-size:13px;font-weight:500;color:var(--muted);
+  background:#fff;border:1px solid var(--line);
+  padding:8px 14px;border-radius:10px;min-height:36px;transition:.16s;
+}
+.menu-btn.is-on,.menu-btn[aria-expanded="true"]{
+  border-color:var(--accent);color:var(--navy);font-weight:700;
+}
+.menu{
+  position:absolute;right:0;top:calc(100% + 8px);z-index:30;min-width:172px;
+  background:#fff;border:1px solid var(--line);border-radius:14px;padding:6px;
+  box-shadow:0 12px 32px -10px rgba(7,26,46,.32);
+}
+.menu-h{
+  font-size:10px;letter-spacing:.9px;text-transform:uppercase;color:var(--muted);
+  font-weight:700;padding:7px 10px 6px;
+}
+.menu-item{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;
+  background:none;border:0;color:var(--ink);font-size:14px;text-align:left;
+  padding:10px 10px;border-radius:9px;min-height:40px;
+}
+.menu-item.is-on{color:var(--navy);font-weight:700;}
+.menu-item.is-on::after{
+  content:"";width:7px;height:12px;flex:0 0 auto;margin-right:2px;
+  border:solid var(--accent);border-width:0 2.4px 2.4px 0;transform:rotate(45deg);
+}
+
+.grid{display:grid;gap:18px;grid-template-columns:1fr;max-width:420px;margin:0 auto;}
+.grid-coach{gap:16px;max-width:480px;}
+.empty{padding:56px 20px;text-align:center;color:var(--muted);font-size:15px;}
+
+/* ── FLIP CARD SHELL ──────────────────────────────────────── */
+.tc{
+  width:100%;aspect-ratio:320/430;perspective:1400px;
+  display:block;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  -webkit-user-select:none;user-select:none;
+}
+.tc-inner{
+  position:relative;width:100%;height:100%;
+  transition:transform .6s cubic-bezier(.4,.1,.2,1);
+  transform-style:preserve-3d;
+}
+.tc.is-flipped .tc-inner{transform:rotateY(180deg);}
+.tc-face{
+  position:absolute;inset:0;border-radius:var(--radius);overflow:hidden;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+}
+.tc-back{transform:rotateY(180deg);}
+.tc-front{box-shadow:0 0 0 1.5px rgba(37,150,190,.4) inset, 0 16px 30px -12px rgba(7,26,46,.55);}
+
+.tc-flip-hint{
+  position:absolute;right:12px;bottom:12px;z-index:6;
+  display:flex;align-items:center;gap:5px;border:0;
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:10px;letter-spacing:1.2px;
+  color:#fff;background:rgba(7,26,46,.55);
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+  padding:7px 10px;border-radius:20px;opacity:.9;transition:opacity .2s;
+}
+
+/* ── PHOTO FRONT (classic + bold) ─────────────────────────── */
+.tcf-photo{position:absolute;inset:0;background:var(--navy);}
+.tcf-bg{position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 8%, var(--navy-3), var(--navy) 55%, #050f1b 100%);}
+.tcf-hex{
+  position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);
+  width:88%;aspect-ratio:1;
+  clip-path:polygon(50% 1%,100% 25%,100% 75%,50% 99%,0 75%,0 25%);
+  background:var(--accent);filter:drop-shadow(0 0 16px rgba(37,150,190,.85));
+}
+.tcf-hex::after{
+  content:"";position:absolute;inset:6px;
+  clip-path:polygon(50% 1%,100% 25%,100% 75%,50% 99%,0 75%,0 25%);
+  background:radial-gradient(120% 80% at 50% 8%, var(--navy-3), var(--navy) 60%, #061321 100%);
+}
+.tcf-bignum{
+  position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:300px;line-height:1;
+  color:rgba(255,255,255,.07);z-index:1;letter-spacing:-6px;
+}
+.tcf-wedge{
+  position:absolute;left:0;right:0;bottom:0;height:44%;z-index:3;
+  background:linear-gradient(180deg,transparent 0%,rgba(37,150,190,.55) 30%,var(--accent) 58%);
+  clip-path:polygon(0 26%,100% 0,100% 100%,0 100%);
+}
+.tcf-img{
+  position:absolute;left:50%;top:-3%;transform:translateX(-50%);
+  width:108%;height:120%;object-fit:cover;object-position:center top;z-index:2;
+}
+.tcf-shade{
+  position:absolute;inset:0;z-index:3;
+  background:linear-gradient(180deg,rgba(7,26,46,.30) 0%,transparent 22% 46%,rgba(7,26,46,.80) 76%,rgba(5,15,27,.98) 100%);
+}
+.tcf-foil{
+  position:absolute;inset:0;z-index:5;pointer-events:none;
+  background:linear-gradient(125deg,transparent 38%,rgba(255,255,255,.16) 48%,transparent 58%);
+  mix-blend-mode:screen;opacity:.7;
+}
+.tcf-top{position:absolute;top:13px;left:13px;right:13px;z-index:4;display:flex;align-items:flex-start;justify-content:space-between;}
+.tcf-numchip{
+  --chip:var(--accent);--chipfg:#fff;
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:26px;line-height:1;
+  min-width:46px;height:46px;padding:0 8px;display:grid;place-items:center;
+  background:var(--chip);color:var(--chipfg);border-radius:13px;
+  box-shadow:0 4px 12px rgba(0,0,0,.3);border:1.5px solid rgba(255,255,255,.25);
+}
+.tcf-pospill{
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;
+  color:#fff;background:rgba(255,255,255,.14);
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+  border:1px solid rgba(255,255,255,.25);padding:6px 11px;border-radius:20px;
+}
+.tcf-plate{position:absolute;left:18px;right:18px;bottom:16px;z-index:4;}
+.tcf-nick{font-size:12.5px;color:var(--accent);font-weight:500;font-style:italic;margin-bottom:3px;}
+.tcf-name{
+  font-family:"Roboto Condensed",sans-serif;font-weight:400;font-size:27px;line-height:1.02;
+  color:#fff;text-transform:uppercase;letter-spacing:.4px;
+}
+.tcf-name b{font-weight:700;}
+.tcf-pos{font-size:12px;color:#aebfce;margin-top:5px;letter-spacing:.4px;}
+
+/* bold variant overrides */
+.tc-bold .tcf-bg{background:linear-gradient(155deg,var(--navy-3) 0%,var(--navy) 48%,#050f1b 100%);}
+.tc-bold .tcf-shade{display:none;}
+.tc-bold .tcf-bignum{
+  left:auto;right:6px;bottom:2px;top:auto;transform:none;
+  font-size:170px;line-height:.78;color:rgba(7,26,46,.28);z-index:3;letter-spacing:-8px;
+}
+.tc-bold .tcf-plate{bottom:18px;}
+.tc-bold .tcf-nick{color:#eafaff;font-style:normal;font-weight:500;}
+.tc-bold .tcf-name{text-shadow:0 2px 10px rgba(7,26,46,.35);}
+.tc-bold .tcf-pos{color:rgba(255,255,255,.92);}
+
+/* ── MODERN FRONT ─────────────────────────────────────────── */
+.tcm{
+  position:absolute;inset:0;background:#fff;display:flex;flex-direction:column;
+  border:1px solid var(--line);border-radius:var(--radius);
+}
+.tc-modern .tc-front{box-shadow:0 10px 26px -14px rgba(7,26,46,.4);}
+.tcm-photowrap{position:relative;height:66%;border-radius:19px 19px 0 0;overflow:hidden;background:var(--navy);}
+.tcm-photobg{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 0%, var(--navy-3), var(--navy) 70%);}
+.tcm-img{position:absolute;left:50%;top:-4%;transform:translateX(-50%);width:110%;height:150%;object-fit:cover;object-position:center top;}
+.tcm-numchip{
+  position:absolute;top:12px;right:12px;z-index:3;
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:18px;
+  background:var(--chip,var(--accent));color:var(--chipfg,#fff);
+  padding:5px 11px;border-radius:11px;box-shadow:0 4px 10px rgba(0,0,0,.25);
+}
+.tcm-body{padding:15px 18px 16px;display:flex;flex-direction:column;gap:3px;}
+.tcm-pos{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);}
+.tcm-name{font-family:"Roboto Condensed",sans-serif;font-weight:400;font-size:23px;color:var(--navy);text-transform:uppercase;line-height:1.05;}
+.tcm-name b{font-weight:700;}
+.tcm-nick{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);margin-top:5px;}
+.tcm-nick svg{color:var(--accent);flex:0 0 auto;}
+
+/* ── PHOTO FALLBACK (no asset available) ──────────────────── */
+.ph{position:absolute;inset:0;z-index:1;display:grid;place-items:center;}
+.ph-mono{
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;
+  font-size:64px;letter-spacing:2px;color:rgba(255,255,255,.16);
+}
+.no-photo .tcf-img,.no-photo .tcm-img,.no-photo>img{display:none;}
+
+/* ── CARD BACK ────────────────────────────────────────────── */
+.tcb{
+  position:absolute;inset:0;color:#fff;padding:20px 20px 16px;
+  background:linear-gradient(165deg,var(--navy-2),var(--navy) 70%,#040e1a);
+  display:flex;flex-direction:column;
+  border:1.5px solid rgba(37,150,190,.4);border-radius:var(--radius);
+}
+.tcb-head{display:flex;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.1);}
+.tcb-num{
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:24px;
+  width:44px;height:44px;flex:0 0 44px;display:grid;place-items:center;border-radius:12px;
+  background:var(--chip,var(--accent));color:var(--chipfg,#fff);
+}
+.tcb-name{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:19px;letter-spacing:.3px;line-height:1.1;}
+.tcb-pos{font-size:11.5px;color:#9fb3c6;margin-top:2px;}
+.tcb-rows{padding:14px 0 4px;display:flex;flex-direction:column;}
+.tcb-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:13px;}
+.tcb-k{color:#8fa6ba;flex:0 0 auto;}
+.tcb-v{font-weight:500;text-align:right;}
+.tcb-fact{margin-top:auto;background:rgba(37,150,190,.12);border-left:3px solid var(--accent);border-radius:0 12px 12px 0;padding:12px 14px;}
+.tcb-fact-label{
+  display:flex;align-items:center;gap:6px;
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:11px;
+  letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:5px;
+}
+.tcb-fact p{font-size:13px;line-height:1.45;color:#dce6ef;}
+.tcb-open{
+  margin-top:13px;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
+  font-weight:700;font-size:13.5px;color:#fff;background:var(--accent);
+  border:0;border-radius:12px;padding:13px;transition:filter .16s;
+}
+.tcb-flipback{text-align:center;font-size:10px;color:#6f8499;margin-top:9px;letter-spacing:.3px;}
+
+/* ── COACH CARD ───────────────────────────────────────────── */
+.cc{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:0 8px 22px -16px rgba(7,26,46,.4);transition:.2s;}
+.cc-top{position:relative;height:118px;background:linear-gradient(150deg,var(--navy-3),var(--navy) 75%);}
+.cc-top::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,transparent 0 22px,rgba(255,255,255,.025) 22px 23px);}
+.cc-avatar{
+  position:absolute;left:24px;bottom:-34px;width:88px;height:88px;border-radius:50%;
+  overflow:hidden;border:4px solid #fff;box-shadow:0 6px 16px rgba(7,26,46,.28);z-index:2;
+  background:linear-gradient(150deg,var(--navy-3),var(--navy));display:grid;place-items:center;
+}
+.cc-avatar img{width:100%;height:100%;object-fit:cover;object-position:center 8%;}
+.cc-avatar .ph-mono{font-size:28px;color:rgba(255,255,255,.55);position:absolute;}
+.cc-tag{
+  position:absolute;top:14px;right:14px;
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:11px;letter-spacing:1px;
+  text-transform:uppercase;color:var(--navy);background:#fff;padding:5px 11px;border-radius:20px;white-space:nowrap;
+}
+.cc-body{padding:44px 24px 22px;}
+.cc-name{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:20px;color:var(--navy);letter-spacing:.2px;}
+.cc-role{font-size:13px;color:var(--accent);font-weight:500;margin-top:2px;}
+.cc-motto{font-size:14px;font-style:italic;color:var(--ink);margin:14px 0 10px;line-height:1.4;}
+.cc-fact{font-size:12.5px;color:var(--muted);line-height:1.5;}
+/* Name-and-role only: pull the navy band in so the card isn't top-heavy. */
+.cc-brief .cc-top{height:92px;}
+.cc-brief .cc-avatar{width:76px;height:76px;bottom:-28px;}
+.cc-brief .cc-body{padding:38px 24px 20px;}
+
+/* ── SCHEDULE ─────────────────────────────────────────────── */
+.sched{display:flex;flex-direction:column;gap:11px;max-width:880px;}
+.game{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px 16px;
+}
+.game-week{
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:12px;letter-spacing:.5px;
+  color:var(--muted);text-transform:uppercase;flex:0 0 auto;
+}
+.game-main{flex:1 0 100%;order:2;min-width:0;}
+.game-opp{display:flex;align-items:center;gap:10px;font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:17px;color:var(--navy);line-height:1.2;}
+.ha{font-size:11px;font-weight:700;letter-spacing:.5px;padding:3px 7px;border-radius:6px;flex:0 0 auto;}
+.ha.home{background:rgba(37,150,190,.14);color:var(--accent);}
+.ha.away{background:#eef1f5;color:var(--muted);}
+.game-when{font-size:12.5px;color:var(--muted);margin-top:4px;}
+.game-right{margin-left:auto;flex:0 0 auto;text-align:right;order:1;}
+.game-res{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:17px;padding:5px 12px;border-radius:10px;white-space:nowrap;}
+.game-res.win{color:var(--win);background:rgba(31,157,87,.12);}
+.game-res.loss{color:var(--loss);background:rgba(216,85,63,.12);}
+.game-upc{font-size:13px;color:var(--muted);font-weight:500;}
+.game-badge{
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.8px;
+  text-transform:uppercase;color:#fff;background:var(--accent);padding:6px 12px;border-radius:10px;white-space:nowrap;
+}
+.game-badge.playoff{background:var(--navy);}
+.game.is-next{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,150,190,.12);}
+.game.is-playoff{background:linear-gradient(180deg,#fff,#f6f9fb);border-style:dashed;}
+
+/* ── DETAIL SHEET / MODAL ─────────────────────────────────── */
+.modal{
+  position:fixed;inset:0;z-index:50;background:rgba(5,15,27,.7);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  display:flex;align-items:flex-end;justify-content:center;
+  animation:fade .2s;
+}
+.modal[hidden]{display:none;}
+@keyframes fade{from{opacity:0;}to{opacity:1;}}
+.modal-card{
+  display:flex;flex-direction:column;background:#fff;position:relative;
+  width:100%;max-height:94vh;max-height:94dvh;overflow:auto;
+  border-radius:24px 24px 0 0;
+  box-shadow:0 40px 80px -20px rgba(0,0,0,.6);
+  animation:sheet .3s cubic-bezier(.2,.8,.3,1);
+  -webkit-overflow-scrolling:touch;
+}
+@keyframes sheet{from{transform:translateY(40px);opacity:.6;}to{transform:translateY(0);opacity:1;}}
+.modal-x{
+  position:absolute;top:16px;right:16px;z-index:10;
+  width:38px;height:38px;border-radius:50%;border:0;
+  background:rgba(255,255,255,.92);color:var(--navy);font-size:24px;line-height:1;
+  box-shadow:0 2px 8px rgba(0,0,0,.2);
+}
+.modal-photo{position:relative;flex:none;height:46vh;height:46dvh;min-height:260px;background:var(--navy);overflow:hidden;}
+.modal-bg{position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 6%, var(--navy-3), var(--navy) 55%, #050f1b);}
+.modal-hex{
+  position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);width:76%;aspect-ratio:1;
+  clip-path:polygon(50% 1%,100% 25%,100% 75%,50% 99%,0 75%,0 25%);
+  background:var(--accent);filter:drop-shadow(0 0 22px rgba(37,150,190,.8));
+}
+.modal-hex::after{
+  content:"";position:absolute;inset:7px;
+  clip-path:polygon(50% 1%,100% 25%,100% 75%,50% 99%,0 75%,0 25%);
+  background:radial-gradient(120% 80% at 50% 6%, var(--navy-3), var(--navy) 60%, #061321);
+}
+.modal-photo img{position:absolute;left:50%;top:-2%;transform:translateX(-50%);width:104%;height:114%;object-fit:cover;object-position:center top;z-index:2;}
+.modal-shade{position:absolute;inset:0;z-index:3;background:linear-gradient(180deg,transparent 50%,rgba(5,15,27,.85));}
+.modal-num{
+  position:absolute;top:18px;left:18px;z-index:4;
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:32px;
+  min-width:58px;height:58px;padding:0 10px;display:grid;place-items:center;border-radius:16px;
+  background:var(--chip,var(--accent));color:var(--chipfg,#fff);
+  box-shadow:0 6px 16px rgba(0,0,0,.35);border:2px solid rgba(255,255,255,.25);
+}
+.modal-plate{position:absolute;left:22px;right:22px;bottom:20px;z-index:4;}
+.modal-nick{font-size:14px;font-style:italic;color:var(--accent);margin-bottom:4px;}
+.modal-name{font-family:"Roboto Condensed",sans-serif;font-weight:400;font-size:31px;color:#fff;text-transform:uppercase;line-height:1;}
+.modal-name b{font-weight:700;}
+.modal-info{flex:1;padding:26px 22px calc(env(safe-area-inset-bottom, 0px) + 26px);display:flex;flex-direction:column;}
+.modal-pos{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);}
+.modal-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0 22px;}
+.ms{background:var(--paper);border-radius:14px;padding:13px 8px;text-align:center;}
+.ms span{display:block;font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.ms b{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:22px;color:var(--navy);}
+/* A multi-position list ("QB,RB,LB") needs to step down to fit its tile. */
+.ms-pos b{font-size:15px;letter-spacing:.2px;overflow-wrap:anywhere;}
+.modal-fact{background:var(--navy);color:#fff;border-radius:16px;padding:18px 20px;}
+.modal-fact-h{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:var(--accent);margin-bottom:7px;}
+.modal-fact p{font-size:14.5px;line-height:1.5;color:#dce6ef;}
+
+/* ── SEASON STATS (full card) ─────────────────────────────── */
+.stats{margin-top:24px;border-top:1px solid var(--line);padding-top:20px;}
+.stats-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.stats-h h3{
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:17px;
+  letter-spacing:.4px;text-transform:uppercase;color:var(--navy);
+}
+.stats-h span{font-size:11.5px;color:var(--muted);}
+.statgrp{margin-top:16px;}
+.statgrp-h{
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:11px;
+  letter-spacing:1.2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;
+}
+/* Fixed 4-up: auto-fit would stretch a lone tile across the whole row. */
+.statrow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.st{background:var(--paper);border-radius:12px;padding:10px 6px;text-align:center;}
+.st span{display:block;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.st b{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:19px;color:var(--navy);}
+.stats-empty{margin-top:14px;font-size:13.5px;color:var(--muted);}
+
+/* ── TEAM STATS + BOX SCORE ───────────────────────────────── */
+.tstat-top{max-width:520px;}
+.bs-sec{margin-top:26px;max-width:640px;}
+.bs-h{
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:17px;
+  letter-spacing:.5px;text-transform:uppercase;color:var(--navy);margin-bottom:10px;
+}
+.tbl{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;}
+.tbl-row{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:12px 16px;font-size:14px;color:var(--muted);
+  border-bottom:1px solid var(--line);
+}
+.tbl-row:last-child{border-bottom:0;}
+.tbl-row b{font-family:"Roboto Condensed",sans-serif;font-size:17px;color:var(--navy);}
+
+.lead-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+.lead{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;}
+.lead-k{font-size:10.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--accent);font-weight:700;}
+.lead-v{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:30px;color:var(--navy);line-height:1.1;margin:2px 0 3px;}
+.lead-p{font-size:12.5px;color:var(--muted);}
+.lead-p b{color:var(--navy);}
+
+/* box-score header */
+.backlink{
+  display:inline-flex;align-items:center;gap:5px;border:0;background:none;
+  color:var(--accent);font-size:13.5px;font-weight:700;padding:6px 0;margin-bottom:6px;
+}
+.bs-head{background:var(--navy);color:#fff;border-radius:18px;padding:16px 20px;max-width:640px;}
+.bs-meta{font-size:11.5px;letter-spacing:.6px;text-transform:uppercase;color:#8fa6ba;margin-bottom:10px;}
+.bs-line{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:7px 0;}
+.bs-team{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:18px;letter-spacing:.3px;color:#aebfce;}
+.bs-score{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:30px;color:#aebfce;}
+.bs-line.is-win .bs-team,.bs-line.is-win .bs-score{color:#fff;}
+.bs-line.is-win .bs-score{color:var(--accent);}
+
+/* team-vs-opponent comparison rows */
+.cmp-head,.cmp{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;}
+.cmp-head{padding:0 16px 8px;}
+.cmp-head span{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);font-weight:700;}
+.cmp-head span:first-child{text-align:right;}
+.cmp{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin-bottom:6px;}
+.cmp span{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:16px;color:var(--navy);text-align:right;}
+.cmp span:last-child{text-align:left;color:var(--muted);}
+.cmp em{font-style:normal;font-size:11.5px;color:var(--muted);text-align:center;min-width:112px;}
+
+/* per-player stat tables */
+.pstat{margin-top:24px;max-width:640px;}
+.pstat-h{
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:12px;
+  letter-spacing:1.2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;
+}
+.pstat-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;background:#fff;border:1px solid var(--line);border-radius:14px;}
+.pstat table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:340px;}
+.pstat th,.pstat td{padding:10px 8px;text-align:center;white-space:nowrap;}
+.pstat thead th{
+  font-size:10.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);
+  font-weight:700;border-bottom:1px solid var(--line);
+}
+.pstat tbody tr{border-bottom:1px solid var(--line);}
+.pstat tbody tr:last-child{border-bottom:0;}
+.pstat td{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:15px;color:var(--navy);}
+.pstat .pstat-name{text-align:left;padding-left:14px;font-family:"Roboto",sans-serif;font-weight:400;font-size:13.5px;}
+.pstat td.pstat-name b{font-family:"Roboto Condensed",sans-serif;color:var(--accent);margin-right:5px;}
+
+/* played games are tappable */
+button.game{width:100%;text-align:left;font:inherit;cursor:pointer;}
+/* order:1 keeps the chevron trailing the result on the mobile two-row layout. */
+.game-go{order:1;margin-left:10px;color:var(--muted);display:flex;flex:0 0 auto;}
+
+/* ═══════════════════════════════════════════════════════════
+   TABLET — two-up cards, roomier gutters
+   ═══════════════════════════════════════════════════════════ */
+@media (min-width:560px){
+  .main{padding:22px 24px calc(var(--tabbar-h) + 40px);}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));max-width:none;gap:22px 18px;}
+  .grid-coach{grid-template-columns:repeat(auto-fill,minmax(290px,1fr));max-width:none;}
+  .opts{margin:0;padding:0;overflow:visible;justify-content:space-between;flex-wrap:wrap;}
+  .game-main{flex:1;order:0;}
+  .game-right{order:0;}
+  .game-week{width:64px;flex:0 0 64px;}
+  .modal{align-items:center;padding:24px;}
+  .modal-card{max-width:520px;border-radius:24px;max-height:88vh;}
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DESKTOP — sidebar shell, split modal, hover affordances
+   ═══════════════════════════════════════════════════════════ */
+@media (min-width:900px){
+  :root{--tabbar-h:0px;}
+  .app{flex-direction:row;}
+  .app-backdrop{
+    background:
+      radial-gradient(1100px 600px at 78% -10%, rgba(37,150,190,.10), transparent 60%),
+      repeating-linear-gradient(90deg, transparent 0 119px, rgba(7,26,46,.035) 119px 120px);
+  }
+  .appbar{display:none;}
+
+  .side{
+    position:sticky;top:0;bottom:auto;left:auto;right:auto;align-self:flex-start;
+    height:100vh;width:266px;flex:0 0 266px;z-index:2;
+    flex-direction:column;padding:26px 20px 22px;
+    background:linear-gradient(180deg,var(--navy) 0%,#04101d 100%);
+    color:#fff;border-top:0;border-right:1px solid rgba(255,255,255,.06);
+    -webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;
+  }
+  .brand{display:flex;align-items:center;gap:13px;padding:0 4px 22px;}
+  .brand-mark{
+    height:58px;aspect-ratio:1202/1308;flex:0 0 auto;display:grid;place-items:center;
+    background:#fff;border-radius:11px;padding:4px;
+    box-shadow:0 4px 16px rgba(0,0,0,.32);
+    font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:20px;letter-spacing:.5px;
+    color:var(--navy);
+  }
+  .brand-mark.no-photo .mark-fallback{box-shadow:0 0 0 2px var(--accent), 0 4px 14px rgba(37,150,190,.4);}
+  .brand-name{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:18px;letter-spacing:.4px;line-height:1.05;}
+  .brand-sub{font-size:11px;color:#9fb3c6;margin-top:2px;letter-spacing:.2px;}
+
+  .nav{flex-direction:column;gap:5px;margin-top:6px;justify-content:flex-start;}
+  .nav-item{
+    flex:0 0 auto;flex-direction:row;align-items:center;gap:13px;
+    color:#aebfce;font-size:15px;font-weight:500;
+    padding:12px 14px;border-radius:13px;text-align:left;justify-content:flex-start;
+    transition:.18s;
+  }
+  .nav-item svg{width:20px;height:20px;opacity:.85;}
+  .nav-item:hover{background:rgba(255,255,255,.06);color:#fff;}
+  .nav-item.is-active{background:var(--accent);color:#fff;box-shadow:0 6px 18px rgba(37,150,190,.35);}
+  .nav-item.is-active svg{opacity:1;}
+  .nav-count{
+    display:inline-block;margin-left:auto;font-style:normal;font-size:12px;font-weight:700;
+    background:rgba(255,255,255,.16);padding:2px 9px;border-radius:20px;
+  }
+  .nav-item.is-active .nav-count{background:rgba(0,0,0,.18);}
+
+  .side-record{
+    display:block;margin-top:auto;background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px 18px;
+  }
+  .rec-title{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#8fa6ba;}
+  .rec-big{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:46px;line-height:1;margin:5px 0 4px;letter-spacing:1px;}
+  .rec-big span{color:var(--accent);margin:0 4px;}
+  .rec-sub{font-size:11.5px;color:#9fb3c6;}
+  .side-foot{display:block;margin-top:14px;font-size:10.5px;color:#6f8499;text-align:center;letter-spacing:.3px;}
+
+  .main{flex:1;min-width:0;padding:28px 36px 60px;}
+  .topbar{flex-direction:row;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:22px;flex-wrap:wrap;}
+  .topbar h1{font-size:30px;white-space:nowrap;}
+  .topbar-titles p{font-size:14px;}
+  .search{min-width:330px;padding:11px 14px;}
+  .search input{font-size:14px;}
+  .toolbar{flex-direction:row;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px;flex-wrap:wrap;}
+  .opts{gap:18px;}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(var(--card-w),1fr));gap:26px 22px;align-items:start;}
+  .tc{max-width:var(--card-w);aspect-ratio:300/430;margin:0 auto;}
+
+  .modal-card{flex-direction:row;max-width:760px;max-height:88vh;overflow:hidden;}
+  .modal-photo{flex:0 0 46%;height:auto;min-height:420px;}
+  .modal-hex{width:92%;}
+  .modal-info{padding:48px 32px 32px;overflow:auto;}
+  .modal-name{font-size:34px;}
+  .modal-stats{gap:10px;}
+  .ms{padding:14px;}
+  .ms b{font-size:24px;}
+  .ms-pos b{font-size:17px;}
+}
+
+/* pointer-precision affordances only where hover really exists */
+@media (hover:hover) and (pointer:fine){
+  .menu-btn:hover{border-color:var(--accent);color:var(--navy);}
+  .menu-item:hover{background:var(--paper);}
+  .tc-flip-hint{opacity:0;}
+  .tc:hover .tc-flip-hint{opacity:1;}
+  .tc:hover .tc-front{box-shadow:0 0 0 1.5px var(--accent) inset, 0 22px 40px -12px rgba(7,26,46,.6);}
+  .tc-modern:hover .tc-front{box-shadow:0 16px 34px -14px rgba(7,26,46,.5);}
+  .cc:hover{transform:translateY(-3px);box-shadow:0 18px 32px -18px rgba(7,26,46,.5);}
+  .game:hover{border-color:#cdd6df;}
+  .tcb-open:hover{filter:brightness(1.08);}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important;}
+  .tc-inner{transition:none;}
+}
+</style>
+</head>
+<body>
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <div class="gate-mark photo-host">
+      <img src="assets/sc-logo.png" alt=""
+           onerror="this.closest('.photo-host').classList.add('no-photo')" />
+      <span class="mark-fallback" aria-hidden="true">SC</span>
+    </div>
+    <h1 class="gate-title">Shiloh Saints</h1>
+    <p class="gate-sub">Shiloh 4th Grade Football · Team Hub</p>
+
+    <form class="gate-form" id="gate-form" novalidate>
+      <label class="gate-label" for="pin1">Enter the 4-digit team code</label>
+      <div class="pin" id="pin">
+        <input id="pin1" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1"
+               autocomplete="off" aria-label="Digit 1" />
+        <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1"
+               autocomplete="off" aria-label="Digit 2" />
+        <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1"
+               autocomplete="off" aria-label="Digit 3" />
+        <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1"
+               autocomplete="off" aria-label="Digit 4" />
+      </div>
+      <p class="gate-err" id="gate-err" role="alert"></p>
+      <button class="gate-go" type="submit">Enter</button>
+    </form>
+    <p class="gate-foot">Ask a coach or team parent for the code.</p>
+  </div>
+</div>
+
+<div class="app" id="app">
+  <div class="app-backdrop" aria-hidden="true"></div>
+
+  <!-- ── TOP APP BAR (mobile) ─────────────────────────────── -->
+  <header class="appbar">
+    <div class="mbrand">
+      <div class="mmark photo-host">
+        <img src="assets/sc-logo.png" alt="Shiloh Saints logo"
+             onerror="this.closest('.photo-host').classList.add('no-photo')" />
+        <span class="mark-fallback" aria-hidden="true">SC</span>
+      </div>
+      <div class="mbrand-txt">
+        <b>Shiloh Saints</b>
+        <span>Shiloh 4th Grade Football</span>
+      </div>
+    </div>
+    <div class="mrec" id="m-record" aria-label="Season record"></div>
+  </header>
+
+  <!-- ── NAV: sidebar on desktop, tab bar on mobile ───────── -->
+  <aside class="side">
+    <div class="brand">
+      <div class="brand-mark photo-host">
+        <img src="assets/sc-logo.png" alt="Shiloh Saints logo"
+             onerror="this.closest('.photo-host').classList.add('no-photo')" />
+        <span class="mark-fallback" aria-hidden="true">SC</span>
+      </div>
+      <div>
+        <div class="brand-name">Shiloh Saints</div>
+        <div class="brand-sub">Shiloh 4th Grade Football</div>
+      </div>
+    </div>
+
+    <nav class="nav" id="nav" aria-label="Sections"></nav>
+
+    <div class="side-record">
+      <div class="rec-title" id="rec-season"></div>
+      <div class="rec-big" id="rec-big"></div>
+      <div class="rec-sub" id="rec-sub"></div>
+    </div>
+    <div class="side-foot">Parent Hub · Tap any card to flip</div>
+  </aside>
+
+  <!-- ── MAIN ─────────────────────────────────────────────── -->
+  <main class="main" id="main">
+    <header class="topbar">
+      <div class="topbar-titles">
+        <h1 id="page-title"></h1>
+        <p id="page-sub"></p>
+      </div>
+      <div class="search" id="searchwrap" hidden>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <label class="sr-only" for="q">Search players</label>
+        <input id="q" type="search" autocomplete="off" placeholder="Search name, number, position…" />
+        <button class="search-x" id="q-clear" hidden aria-label="Clear search">×</button>
+      </div>
+    </header>
+
+    <div class="toolbar" id="toolbar" hidden>
+      <div class="opts">
+        <div class="optgrp" id="sortgrp" role="group" aria-label="Sort players">
+          <span>Sort</span>
+          <button class="segbtn is-on" data-sort="num">Number</button>
+          <button class="segbtn" data-sort="name">Name</button>
+        </div>
+        <div class="menu-wrap">
+          <button class="menu-btn" id="menu-btn" aria-haspopup="true" aria-expanded="false">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2" fill="currentColor" stroke="none"/>
+              <circle cx="15" cy="12" r="2" fill="currentColor" stroke="none"/>
+              <circle cx="8" cy="18" r="2" fill="currentColor" stroke="none"/>
+            </svg>
+            Options
+          </button>
+          <div class="menu" id="menu" hidden>
+            <div class="menu-h">Card style</div>
+            <button class="menu-item" data-style="classic" role="menuitemradio" aria-checked="false">Classic</button>
+            <button class="menu-item" data-style="modern"  role="menuitemradio" aria-checked="false">Modern</button>
+            <button class="menu-item" data-style="bold"    role="menuitemradio" aria-checked="true">Bold</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="view"></div>
+  </main>
+</div>
+
+<!-- ── PLAYER DETAIL SHEET ────────────────────────────────── -->
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modal-name">
+  <div class="modal-card" id="modal-card">
+    <button class="modal-x" id="modal-x" aria-label="Close">×</button>
+    <div class="modal-photo" id="modal-photo"></div>
+    <div class="modal-info" id="modal-info"></div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   DATA — Shiloh 4th Grade Football
+   ═══════════════════════════════════════════════════════════ */
+// Player photos: drop a file per jersey number in assets/players/ — 24.jpg
+// (a .png of the same name is tried automatically before the initials fallback).
+const playerPhoto = (num) => `assets/players/${num}.jpg`;
+
+// [first, last, #, positions, nickname, fun fact]
+// Positions are shown exactly as entered — kids play multiple spots, so the
+// whole list travels together and the first one is the primary.
+const RAW = [
+  ["Caden", "Goodin", 1, "QB,RB,LB", "Goodini", "Plays all three phases — offense, defense, and hype man"],
+  ["Brooks", "Godwin", 3, "RB,LB", "Brooksie", "Runs it in, then goes and makes the tackle"],
+  ["Hayden", "Casey", 4, "LB", "Case Closed", "Finds the ball carrier no matter where he hides"],
+  ["Aaron", "Reaves", 5, "OL,LB", "The Anchor", "Opens the hole, then plugs it on defense"],
+  ["Alec", "Booher", 6, "WR,S", "Boo", "Catches it deep, defends it deeper"],
+  ["Curtis", "Camp", 7, "DL", "Base Camp", "First one off the ball every single snap"],
+  ["Hudson", "Head", 8, "CB", "Heads Up", "Shadows the other team's fastest kid"],
+  ["Samson", "Crittendon", 10, "OL", "Strongman", "Nothing gets through the middle on his watch"],
+  ["Rhett", "Barnes", 11, "QB", "Rocket", "Keeps his cool when the pocket doesn't"],
+  ["Grant", "Renauro", 12, "OL", "Granite", "Does the job that never shows up on a stat sheet"],
+  ["Lincoln", "Gober", 13, "LB", "Linc", "Calls out the play before the snap"],
+  ["Calvin", "Everheart", 15, "CB", "All Heart", "Plays the ball, never the fake"],
+  ["Skyler", "Rodriguez", 18, "WR", "Sky High", "Runs the crispest route on the field"],
+  ["Cole", "Salbaum", 20, "WR,CB", "Cole Train", "Catches passes one drive, breaks them up the next"],
+  ["Holston", "Flannagan", 21, "WR", "Hollywood", "Always finds the open grass"],
+  ["Teller", "Owens", 22, "CB", "The Teller", "Sticks to his man like a shadow"],
+  ["Jacob", "Ray", 24, "WR,LB", "Ray Gun", "Hands on offense, hammer on defense"],
+  ["Rhyden", "Smith", 25, "RB,LB", "Ridin' Lightning", "Downhill on both sides of the ball"],
+  ["Jaxson", "Buck", 27, "DL", "Buckwild", "Lives in the other team's backfield"],
+  ["Kannon", "Pace", 28, "DL", "The Cannon", "Fires off the line just like his nickname"],
+  ["Emmett", "Seipel", 29, "OL,DL", "Big E", "Wins the line of scrimmage in both directions"],
+  ["Rhett", "Hunt", 34, "CB", "The Hunt", "Tracks the ball the whole way"],
+  ["Remick", "Starnes", 37, "RB,LB", "Remi", "Never goes down on first contact"],
+  ["Jack", "Simpson", 51, "OL,DL", "Jackhammer", "Moves the pile forward, then blows one up"],
+  ["Gauge", "Watkins", 52, "S,WR", "Full Gauge", "Last line of defense, first read on offense"],
+  ["Noland", "Arnold", 55, "OL", "No Man's Land", "The road grader on the right side"],
+  ["Preston", "Avey", 56, "OL", "Press", "Snap to whistle, every rep"],
+  ["Oliver", "Hardin", 61, "OL", "Hard Hat", "Low man wins — and he's always low"],
+  ["Owen Cal", "Hathaway", 67, "DL", "OC", "Two first names, one job: get to the ball"],
+  ["Nathan", "Baggs", 81, "CB,WR", "Nate the Great", "Bags interceptions and touchdowns"],
+  ["Whitley", "Stuckey", 89, "WR", "Sticky Hands", "If it's catchable, he catches it"],
+  ["Cohen", "McCorry", 99, "LB", "The Wall", "Everything stops at the wall"],
+];
+
+const ROSTER = RAW.map(([first, last, num, positions, nick, fact], i) => ({
+  id: i + 1, first, last,
+  name: first + " " + last,
+  num,
+  pos: positions.split(",")[0].trim(),  // primary — used for the small front pill
+  position: positions,                  // full list, shown as entered
+  nickname: nick,
+  fact,
+  photo: playerPhoto(num),
+}));
+
+/* PLACEHOLDER season stats, keyed by player id (matches RAW order above).
+   These numbers are invented to show the layout — replace them with real ones.
+   Only the groups a player actually has are drawn on their full card.
+     pass {c,a,yds,td,int}   rush {att,yds,td}   rec {rec,yds,td}
+     def  {tkl,tfl,sck,int,pd,ff}   blk {gs,pan}   kick {xpm,xpa,fgm,fga,lng} */
+/* Real staff — no motto/fun-fact lines here on purpose: the previous ones were
+   invented for placeholder names, and putting made-up quotes in real coaches'
+   mouths isn't right. Add `motto` / `fact` per coach and the card picks them up. */
+const COACHES = [
+  { id:1, name:"Coach Jamie Arnold",   role:"Head Coach",      tag:"Head Coach" },
+  { id:2, name:"Coach Scott Godwin",   role:"Assistant Coach", tag:"Assistant" },
+  { id:3, name:"Coach Ray Hathaway",   role:"Assistant Coach", tag:"Assistant" },
+  { id:4, name:"Coach Jonathan Buck",  role:"Assistant Coach", tag:"Assistant" },
+  { id:5, name:"Coach Jeremy Pace",    role:"Assistant Coach", tag:"Assistant" },
+  { id:6, name:"Coach Scott Casey",    role:"Assistant Coach", tag:"Assistant" },
+];
+
+/* ── SCHEDULE + GAME STATS ─────────────────────────────────────
+   One entry per game. Add a `stats` block when a game gets played and
+   everything else — each player's season totals, the Team Stats page and
+   the box score — derives from it automatically.
+   Player lines are keyed by JERSEY NUMBER, not name. */
+const GAMES = [
+  { id:1, week:"Wk 1", date:"2026-08-15", opp:"Farmington", home:true, final:true,
+    us:28, them:0,
+    stats:{
+      team:{ totalYards:353, rushYds:350, passYds:3, points:28, td:4, twoPt:{ made:3, att:4 },
+             firstDowns:8, firstRush:8, firstPass:0,
+             penalties:6, penaltyYds:40, fumbles:"2-0",
+             def:{ tfl:5, sacks:2, int:1, fr:1, yardsLost:32, yardsAllowed:94 } },
+      rushing:{ 11:{att:5,yds:134,td:1}, 3:{att:6,yds:43,td:1}, 6:{att:1,yds:55,td:1},
+                1:{att:4,yds:106,td:1,twoPt:2}, 37:{att:1,yds:12,td:0} },
+      passing:{ 11:{c:1,a:4,yds:3,td:0,int:0} },
+      receiving:{ 25:{rec:1,yds:3,td:0,twoPt:1} },
+      defense:{ 1:{solo:2,ast:5}, 3:{solo:2,ast:3,fr:1}, 4:{solo:1,ast:0},
+                5:{solo:0,ast:1},  6:{solo:0,ast:1}, 8:{solo:1,ast:3},
+                13:{solo:0,ast:1}, 15:{solo:0,ast:1}, 20:{solo:0,ast:3,int:1},
+                22:{solo:1,ast:1}, 24:{solo:0,ast:2}, 25:{solo:1,ast:0},
+                27:{solo:0,ast:2}, 28:{solo:0,ast:3}, 51:{solo:1,ast:0} },
+    } },
+  { id:2,  week:"Wk 2", date:"2026-08-22", opp:"Pea Ridge",        home:false },
+  { id:3,  week:"Wk 3", date:"2026-08-29", opp:"Springdale",       home:false },
+  { id:4,  week:"Wk 4", date:"2026-09-12", opp:"Rogers Heritage",  home:false },
+  { id:5,  week:"Wk 5", date:"2026-09-19", opp:"Bentonville",      home:true },
+  { id:6,  week:"Wk 6", date:"2026-09-26", opp:"Rogers",           home:true },
+  { id:7,  week:"Wk 7", date:"2026-10-03", opp:"Bentonville West", home:false },
+  { id:8,  week:"Wk 8", date:"2026-10-10", opp:"Siloam Springs",   home:true },
+  { id:9,  week:"Wk 9", date:"2026-10-17", opp:"Fayetteville",     home:false },
+  { id:10, week:"Playoff",      date:"2026-10-24", opp:"TBD", playoff:true },
+  { id:11, week:"Championship", date:"2026-10-31", opp:"TBD", playoff:true },
+];
+
+const PLAYED  = GAMES.filter(g => g.final);
+const NEXT_ID = (GAMES.find(g => !g.final) || {}).id;
+
+const TEAM = {
+  name: "Shiloh Saints",
+  full: "Shiloh 4th Grade Football",
+  season: "2026 Season",
+  monogram: "SC",
+  record: {
+    w: PLAYED.filter(g => g.us >  g.them).length,
+    l: PLAYED.filter(g => g.us <  g.them).length,
+    t: PLAYED.filter(g => g.us === g.them).length,
+  },
+};
+
+/* ── DERIVED STATS ─────────────────────────────────────────────
+   Nothing below is hand-maintained; it all rolls up from GAMES. */
+const BY_NUM = {};
+ROSTER.forEach(p => { BY_NUM[p.num] = p; });
+
+const addInto = (dst, src, keys) => keys.forEach(k => {
+  if (src[k] != null) dst[k] = (dst[k] || 0) + src[k];
+});
+
+// One player's totals across every played game.
+function seasonStats(num) {
+  const out = { gp: 0 };
+  PLAYED.forEach(g => {
+    const s = g.stats; if (!s) return;
+    let played = false;
+    const r = s.rushing   && s.rushing[num];
+    const a = s.passing   && s.passing[num];
+    const c = s.receiving && s.receiving[num];
+    const d = s.defense   && s.defense[num];
+    const k = s.kicking   && s.kicking[num];
+    if (r) { out.rush = out.rush || {}; addInto(out.rush, r, ["att","yds","td","twoPt"]); played = true; }
+    if (a) { out.pass = out.pass || {}; addInto(out.pass, a, ["c","a","yds","td","int"]); played = true; }
+    if (c) { out.rec  = out.rec  || {}; addInto(out.rec,  c, ["rec","yds","td","twoPt"]); played = true; }
+    if (d) { out.def  = out.def  || {}; addInto(out.def,  d, ["solo","ast","tfl","sck","int","fr"]); played = true; }
+    if (k) { out.kick = out.kick || {}; addInto(out.kick, k, ["xpm","xpa","fgm","fga"]); played = true; }
+    if (played) out.gp++;
+  });
+  if (out.def) out.def.tkl = (out.def.solo || 0) + (out.def.ast || 0);
+  return out;
+}
+
+// Team totals across every played game.
+function teamSeason() {
+  const t = { games:0, points:0, pointsAgainst:0, totalYards:0, rushYds:0, passYds:0,
+              td:0, twoPtMade:0, twoPtAtt:0,
+              firstDowns:0, firstRush:0, firstPass:0, penalties:0, penaltyYds:0,
+              tfl:0, sacks:0, int:0, fr:0, yardsLost:0, yardsAllowed:0, solo:0, ast:0 };
+  PLAYED.forEach(g => {
+    t.games++; t.points += g.us || 0; t.pointsAgainst += g.them || 0;
+    const s = g.stats; if (!s) return;
+    addInto(t, s.team, ["totalYards","rushYds","passYds","td","firstDowns",
+                        "firstRush","firstPass","penalties","penaltyYds"]);
+    if (s.team.def) addInto(t, s.team.def, ["tfl","sacks","int","fr","yardsLost","yardsAllowed"]);
+    if (s.team.twoPt) { t.twoPtMade += s.team.twoPt.made || 0; t.twoPtAtt += s.team.twoPt.att || 0; }
+    Object.keys(s.defense || {}).forEach(n => {
+      t.solo += s.defense[n].solo || 0; t.ast += s.defense[n].ast || 0;
+    });
+  });
+  t.tackles = t.solo + t.ast;
+  return t;
+}
+
+// Season leader for a given stat path, e.g. s => s.rush && s.rush.yds
+function leaderBy(pick) {
+  const rows = ROSTER.map(p => ({ p, v: pick(seasonStats(p.num)) }))
+                     .filter(r => r.v != null && r.v > 0)
+                     .sort((a, b) => b.v - a.v);
+  return rows[0] || null;
+}
+
+/* Scoring values for the audit below. Little-league conversions aren't worth
+   the standard 2 everywhere, so CONVERSION is left null until confirmed — the
+   points cross-foot stays off rather than flagging correct data as wrong. */
+const SCORING = { TD: 6, CONVERSION: null };
+
+/* Sanity-check each played game while entering stats. Warns in the console
+   only; never alters the numbers shown. */
+function auditGames() {
+  PLAYED.forEach(g => {
+    const s = g.stats; if (!s) return;
+    const sum = (obj, key) => Object.keys(obj || {})
+      .reduce((n, k) => n + (obj[k][key] || 0), 0);
+    // A passing TD scores the same points as its receiving TD — count once.
+    const td    = sum(s.rushing, "td") + sum(s.receiving, "td") + sum(s.returns, "td");
+    const twoPt = sum(s.rushing, "twoPt") + sum(s.receiving, "twoPt");
+
+    if (s.team && s.team.td != null && s.team.td !== td)
+      console.warn(`[${g.week}] team line says ${s.team.td} TDs, player lines show ${td}.`);
+
+    if (SCORING.CONVERSION != null) {
+      const pts = td * SCORING.TD + twoPt * SCORING.CONVERSION
+                + sum(s.kicking, "xpm") + sum(s.kicking, "fgm") * 3;
+      if (pts !== g.us)
+        console.warn(`[${g.week}] player lines total ${pts} pts but the final score says ${g.us}.`);
+    } else {
+      console.info(`[${g.week}] ${td} TD, ${twoPt} conversions, final ${g.us}–${g.them}. `
+        + `Set SCORING.CONVERSION to enable the points cross-foot.`);
+    }
+  });
+}
+
+const fmtDate = (iso, opts) =>
+  new Date(iso + "T12:00:00").toLocaleDateString("en-US",
+    opts || { weekday:"short", month:"short", day:"numeric" });
+
+/* ═══════════════════════════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════════════════════════ */
+const NAV = [
+  { id:"players",  label:"Players",  icon:"M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1" },
+  { id:"coaches",  label:"Coaches",  icon:"M12 2l2.4 5 5.6.6-4.2 3.9 1.2 5.5L12 19.3 6.9 22l1.2-5.5L4 12.6 9.6 12z" },
+  { id:"schedule", label:"Schedule", icon:"M8 2v4M16 2v4M3 9h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" },
+  { id:"stats",    label:"Team Stats", icon:"M4 20V10M10 20V4M16 20v-7M22 20H2" },
+];
+const TABS = NAV.map(n => n.id);
+const STYLES = ["classic", "modern", "bold"];
+const LS_KEY = "shiloh.cardStyle.v2";   // bumped so Bold becomes everyone's default
+
+// The showcase host can drive card style + accent through the URL, same as
+// the original prototype (?card=bold&accent=2596be).
+const params = new URLSearchParams(location.search);
+const urlCard = params.get("card");
+const urlAccent = params.get("accent");
+if (urlAccent && /^#?[0-9a-f]{3,8}$/i.test(urlAccent)) {
+  document.documentElement.style.setProperty("--accent", "#" + urlAccent.replace(/^#/, ""));
+}
+
+const stored = (() => { try { return localStorage.getItem(LS_KEY); } catch (e) { return null; } })();
+const hashTab = location.hash.replace("#", "");
+
+const state = {
+  tab: TABS.includes(hashTab) ? hashTab : "players",
+  q: "",
+  sort: "num",
+  box: null,          // open box-score game id (schedule sub-view)
+  style: STYLES.includes(urlCard) ? urlCard : (STYLES.includes(stored) ? stored : "bold"),
+  flipped: new Set(),
+};
+
+/* ═══════════════════════════════════════════════════════════
+   HELPERS
+   ═══════════════════════════════════════════════════════════ */
+const $ = (sel) => document.querySelector(sel);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) =>
+  ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+
+const initials = (p) => (p.first[0] + p.last[0]).toUpperCase();
+
+// Photos ship as a project asset; when it isn't there (opened standalone) the
+// card falls back to a monogram over the same navy art rather than a broken img.
+const img = (src, alt, cls) =>
+  `<img src="${esc(src)}" alt="${esc(alt)}" class="${cls}" draggable="false"
+        loading="lazy" onerror="photoFallback(this)" />`;
+
+// Try the .png twin before giving up and showing the initials monogram, so a
+// folder of PNG portraits works without renaming anything.
+function photoFallback(el) {
+  if (!el.dataset.retried && /\.jpg$/i.test(el.getAttribute("src") || "")) {
+    el.dataset.retried = "1";
+    el.setAttribute("src", el.getAttribute("src").replace(/\.jpg$/i, ".png"));
+    return;
+  }
+  const host = el.closest(".photo-host");
+  if (host) host.classList.add("no-photo");
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER — chrome
+   ═══════════════════════════════════════════════════════════ */
+function renderChrome() {
+  const { w, l } = TEAM.record;
+  $("#m-record").innerHTML = `${w}<i>–</i>${l}`;
+  $("#rec-season").textContent = TEAM.season;
+  $("#rec-big").innerHTML = `${w}<span>–</span>${l}`;
+  $("#rec-sub").textContent =
+    `Win–Loss · ${Math.round(w / (w + l) * 100)}% on the year`;
+
+  $("#nav").innerHTML = NAV.map(n => {
+    const count = n.id === "players" ? ROSTER.length : n.id === "coaches" ? COACHES.length : null;
+    return `<button class="nav-item" data-tab="${n.id}" aria-current="false">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${n.icon}"/></svg>
+      <span>${n.label}</span>
+      ${count != null ? `<em class="nav-count">${count}</em>` : ""}
+    </button>`;
+  }).join("");
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER — cards
+   ═══════════════════════════════════════════════════════════ */
+function photoFront(p, variant) {
+  return `<div class="tcf-photo photo-host">
+    <div class="tcf-bg"></div>
+    ${variant === "classic" ? `<div class="tcf-hex" aria-hidden="true"></div>` : ""}
+    ${variant === "bold"
+      ? `<div class="tcf-wedge" aria-hidden="true"></div><div class="tcf-bignum" aria-hidden="true">${p.num}</div>`
+      : ""}
+    <div class="ph" aria-hidden="true"><span class="ph-mono">${initials(p)}</span></div>
+    ${img(p.photo, p.name, "tcf-img")}
+    <div class="tcf-shade"></div>
+    <div class="tcf-top">
+      <div class="tcf-numchip">${p.num}</div>
+      <div class="tcf-pospill">${p.pos}</div>
+    </div>
+    <div class="tcf-plate">
+      <div class="tcf-nick">“${esc(p.nickname)}”</div>
+      <div class="tcf-name">${esc(p.first)} <b>${esc(p.last)}</b></div>
+      <div class="tcf-pos">${p.position}</div>
+    </div>
+    <div class="tcf-foil" aria-hidden="true"></div>
+  </div>`;
+}
+
+function modernFront(p) {
+  return `<div class="tcm">
+    <div class="tcm-photowrap photo-host">
+      <div class="tcm-photobg"></div>
+      <div class="ph" aria-hidden="true"><span class="ph-mono">${initials(p)}</span></div>
+      ${img(p.photo, p.name, "tcm-img")}
+      <div class="tcm-numchip">#${p.num}</div>
+    </div>
+    <div class="tcm-body">
+      <div class="tcm-pos">${p.position}</div>
+      <div class="tcm-name">${esc(p.first)} <b>${esc(p.last)}</b></div>
+      <div class="tcm-nick">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11 5H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2v3l4-3h0a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/></svg>
+        ${esc(p.nickname)}
+      </div>
+    </div>
+  </div>`;
+}
+
+function cardBack(p) {
+  return `<div class="tcb">
+    <div class="tcb-head">
+      <div class="tcb-num">${p.num}</div>
+      <div>
+        <div class="tcb-name">${esc(p.name)}</div>
+        <div class="tcb-pos">${p.position}</div>
+      </div>
+    </div>
+    <div class="tcb-rows">
+      <div class="tcb-row"><span class="tcb-k">Jersey</span><span class="tcb-v">#${p.num}</span></div>
+      <div class="tcb-row"><span class="tcb-k">Positions</span><span class="tcb-v">${p.position}</span></div>
+      <div class="tcb-row"><span class="tcb-k">Nickname</span><span class="tcb-v">“${esc(p.nickname)}”</span></div>
+    </div>
+    <div class="tcb-fact">
+      <div class="tcb-fact-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        Fun Fact
+      </div>
+      <p>${esc(p.fact)}</p>
+    </div>
+    <button class="tcb-open" data-open="${p.id}">
+      View full card
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+    <div class="tcb-flipback">tap card to flip back</div>
+  </div>`;
+}
+
+function playerCard(p) {
+  const v = state.style;
+  const flipped = state.flipped.has(p.id);
+  // A div, not a button: the back holds its own "View full card" button and the
+  // HTML parser would hoist a nested button straight out of the card.
+  return `<div class="tc tc-${v}${flipped ? " is-flipped" : ""}"
+      role="button" tabindex="0" data-flip="${p.id}" aria-pressed="${flipped}"
+      aria-label="${esc(p.name)}, number ${p.num}, ${p.position}. Activate to flip the card.">
+    <div class="tc-inner">
+      <div class="tc-face tc-front"${flipped ? " inert" : ""}>
+        ${v === "modern" ? modernFront(p) : photoFront(p, v)}
+        <span class="tc-flip-hint" aria-hidden="true">
+          <span>FLIP</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+        </span>
+      </div>
+      <div class="tc-face tc-back"${flipped ? "" : " inert"}>${cardBack(p)}</div>
+    </div>
+  </div>`;
+}
+
+function coachCard(c) {
+  const words = c.name.replace(/^Coach\s+/, "").split(" ");
+  const mono = (words.length > 1 ? words.map(w => w[0]).join("") : words[0].slice(0, 2)).toUpperCase();
+  const brief = !c.motto && !c.fact;
+  return `<article class="cc${brief ? " cc-brief" : ""}">
+    <div class="cc-top">
+      <div class="cc-avatar photo-host">
+        <span class="ph-mono" aria-hidden="true">${mono}</span>
+        ${img(`assets/coaches/${c.id}.jpg`, c.name, "")}
+      </div>
+      <div class="cc-tag">${c.tag}</div>
+    </div>
+    <div class="cc-body">
+      <h3 class="cc-name">${esc(c.name)}</h3>
+      <div class="cc-role">${esc(c.role)}</div>
+      ${c.motto ? `<p class="cc-motto">${esc(c.motto)}</p>` : ""}
+      ${c.fact  ? `<p class="cc-fact">${esc(c.fact)}</p>`   : ""}
+    </div>
+  </article>`;
+}
+
+function gameRow(g) {
+  const won  = g.final && g.us > g.them;
+  const next = g.id === NEXT_ID;
+  const right = g.final
+    ? `<div class="game-res ${won ? "win" : "loss"}">${won ? "W" : "L"} ${g.us}–${g.them}</div>`
+    : next     ? `<div class="game-badge">Next Up</div>`
+    : g.playoff ? `<div class="game-badge playoff">${g.week}</div>`
+    : `<div class="game-upc">Upcoming</div>`;
+
+  const inner = `
+    <div class="game-week">${g.week}</div>
+    <div class="game-main">
+      <h3 class="game-opp">
+        <span class="ha ${g.home ? "home" : "away"}">${g.home ? "VS" : "@"}</span>
+        ${esc(g.opp)}
+      </h3>
+      <div class="game-when">${fmtDate(g.date)}${g.final ? " · Final" : ""}</div>
+    </div>
+    <div class="game-right">${right}</div>`;
+
+  // Played games are tappable and open the box score.
+  return g.final
+    ? `<button class="game is-final" data-box="${g.id}">${inner}
+         <span class="game-go" aria-hidden="true">
+           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+         </span>
+       </button>`
+    : `<article class="game${next ? " is-next" : ""}${g.playoff ? " is-playoff" : ""}">${inner}</article>`;
+}
+
+/* ── Box score (one game) ─────────────────────────────────── */
+// Renders a stat table only when at least one player has a line in it.
+function statTable(title, cols, rows) {
+  if (!rows.length) return "";
+  return `<div class="pstat">
+    <div class="pstat-h">${title}</div>
+    <div class="pstat-scroll">
+      <table>
+        <thead><tr><th class="pstat-name">Player</th>${cols.map(c => `<th>${c}</th>`).join("")}</tr></thead>
+        <tbody>${rows.map(r => `<tr><td class="pstat-name">${r.name}</td>${
+          r.vals.map(v => `<td>${v}</td>`).join("")}</tr>`).join("")}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+const pName = (num) => {
+  const p = BY_NUM[num];
+  return p ? `<b>${p.num}</b> ${esc(p.last)}` : `<b>${num}</b>`;
+};
+
+function boxScoreView(id) {
+  const g = GAMES.find(x => x.id === id);
+  if (!g || !g.final) return `<p class="empty">No box score for that game yet.</p>`;
+  const s = g.stats || {};
+  const t = s.team || {};
+  const won = g.us > g.them;
+
+  const order = (obj) => Object.keys(obj || {}).map(Number)
+    .sort((a, b) => (obj[b].yds || obj[b].solo + obj[b].ast || 0) - (obj[a].yds || obj[a].solo + obj[a].ast || 0));
+
+  const rush = order(s.rushing).map(n => { const v = s.rushing[n];
+    return { name:pName(n), vals:[v.att, v.yds, (v.yds/v.att).toFixed(1), v.td || 0, v.twoPt || 0] }; });
+  const pass = order(s.passing).map(n => { const v = s.passing[n];
+    return { name:pName(n), vals:[`${v.c}–${v.a}`, v.yds, v.td || 0, v.int || 0] }; });
+  const recv = order(s.receiving).map(n => { const v = s.receiving[n];
+    return { name:pName(n), vals:[v.rec, v.yds, v.td || 0, v.twoPt || 0] }; });
+  const dRows = Object.keys(s.defense || {}).map(Number)
+    .sort((a, b) => (s.defense[b].solo + s.defense[b].ast) - (s.defense[a].solo + s.defense[a].ast))
+    .map(n => { const v = s.defense[n];
+      return { name:pName(n), vals:[v.solo || 0, v.ast || 0, (v.solo || 0) + (v.ast || 0),
+                                    v.int || 0, v.fr || 0] }; });
+
+  const cmp = (label, a, b) => `<div class="cmp"><span>${a}</span><em>${label}</em><span>${b}</span></div>`;
+  const dash = "—";
+
+  return `
+    <button class="backlink" data-back="1">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+      All games
+    </button>
+
+    <div class="bs-head">
+      <div class="bs-meta">Final · ${fmtDate(g.date, { weekday:"long", month:"long", day:"numeric", year:"numeric" })}</div>
+      <div class="bs-line ${won ? "is-win" : ""}">
+        <span class="bs-team">${TEAM.name}${g.home ? "" : " (away)"}</span>
+        <span class="bs-score">${g.us}</span>
+      </div>
+      <div class="bs-line ${won ? "" : "is-win"}">
+        <span class="bs-team">${esc(g.opp)}</span>
+        <span class="bs-score">${g.them}</span>
+      </div>
+    </div>
+
+    <section class="bs-sec">
+      <h3 class="bs-h">Team Stats</h3>
+      <div class="cmp-head"><span>${TEAM.name}</span><em></em><span>${esc(g.opp)}</span></div>
+      ${cmp("Total Yards",   t.totalYards ?? dash, (t.def && t.def.yardsAllowed) ?? dash)}
+      ${cmp("Rushing",       t.rushYds ?? dash, dash)}
+      ${cmp("Passing",       t.passYds ?? dash, dash)}
+      ${cmp("First Downs",   t.firstDowns ?? dash, dash)}
+      ${cmp("Rush 1st Downs", t.firstRush ?? dash, dash)}
+      ${cmp("Pass 1st Downs", t.firstPass ?? dash, dash)}
+      ${cmp("Touchdowns",    t.td ?? dash, dash)}
+      ${cmp("2PT Conv.",     t.twoPt ? `${t.twoPt.made}–${t.twoPt.att}` : dash, dash)}
+      ${cmp("Penalties–Yds", `${t.penalties ?? 0}–${t.penaltyYds ?? 0}`, dash)}
+      ${cmp("Fumbles–Lost",  t.fumbles ?? dash, dash)}
+    </section>
+
+    ${statTable("Rushing",   ["Att","Yds","Avg","TD","2PT"], rush)}
+    ${statTable("Passing",   ["C–A","Yds","TD","INT"],       pass)}
+    ${statTable("Receiving", ["Rec","Yds","TD","2PT"],       recv)}
+    ${statTable("Defense",   ["Solo","Ast","Tot","INT","FR"], dRows)}
+
+    <section class="bs-sec">
+      <h3 class="bs-h">Team Defense</h3>
+      <div class="tbl">
+        ${tblRow("Yards Allowed", (t.def && t.def.yardsAllowed) ?? dash)}
+        ${tblRow("Points Allowed", g.them)}
+        ${tblRow("Tackles for Loss", (t.def && t.def.tfl) ?? dash)}
+        ${tblRow("Sacks", (t.def && t.def.sacks) ?? dash)}
+        ${tblRow("Yards Lost", (t.def && t.def.yardsLost) ?? dash)}
+        ${tblRow("Interceptions", (t.def && t.def.int) ?? dash)}
+        ${tblRow("Fumble Recoveries", (t.def && t.def.fr) ?? dash)}
+      </div>
+    </section>`;
+}
+
+/* ── Team stats (season) ──────────────────────────────────── */
+const tblRow = (k, v) => `<div class="tbl-row"><span>${k}</span><b>${v}</b></div>`;
+
+function leaderCard(label, row, fmt) {
+  if (!row) return "";
+  return `<div class="lead">
+    <div class="lead-k">${label}</div>
+    <div class="lead-v">${fmt(row.v)}</div>
+    <div class="lead-p"><b>#${row.p.num}</b> ${esc(row.p.name)}</div>
+  </div>`;
+}
+
+function teamStatsView() {
+  const t = teamSeason();
+  if (!t.games) return `<p class="empty">No games played yet this season.</p>`;
+  const per = (n) => (n / t.games).toFixed(1);
+
+  return `
+    <div class="modal-stats tstat-top">
+      <div class="ms"><span>Record</span><b>${TEAM.record.w}–${TEAM.record.l}</b></div>
+      <div class="ms"><span>Points For</span><b>${t.points}</b></div>
+      <div class="ms"><span>Points Ag.</span><b>${t.pointsAgainst}</b></div>
+    </div>
+
+    <section class="bs-sec">
+      <h3 class="bs-h">Team Leaders</h3>
+      <div class="lead-grid">
+        ${leaderCard("Rushing Yards",   leaderBy(s => s.rush && s.rush.yds), v => v)}
+        ${leaderCard("Passing Yards",   leaderBy(s => s.pass && s.pass.yds), v => v)}
+        ${leaderCard("Receiving Yards", leaderBy(s => s.rec  && s.rec.yds),  v => v)}
+        ${leaderCard("Tackles",         leaderBy(s => s.def  && s.def.tkl),  v => v)}
+      </div>
+    </section>
+
+    <section class="bs-sec">
+      <h3 class="bs-h">Offense</h3>
+      <div class="tbl">
+        ${tblRow("Total Yards", t.totalYards)}
+        ${tblRow("Yards per Game", per(t.totalYards))}
+        ${tblRow("Rushing Yards", t.rushYds)}
+        ${tblRow("Passing Yards", t.passYds)}
+        ${tblRow("Points", t.points)}
+        ${tblRow("Points per Game", per(t.points))}
+        ${tblRow("Touchdowns", t.td)}
+        ${tblRow("2PT Conversions", `${t.twoPtMade}–${t.twoPtAtt}`)}
+        ${tblRow("First Downs", t.firstDowns)}
+        ${tblRow("&nbsp;&nbsp;Rushing", t.firstRush)}
+        ${tblRow("&nbsp;&nbsp;Passing", t.firstPass)}
+        ${tblRow("Penalties", t.penalties)}
+        ${tblRow("Penalty Yards", t.penaltyYds)}
+      </div>
+    </section>
+
+    <section class="bs-sec">
+      <h3 class="bs-h">Defense</h3>
+      <div class="tbl">
+        ${tblRow("Yards Allowed", t.yardsAllowed)}
+        ${tblRow("Yards Allowed per Game", per(t.yardsAllowed))}
+        ${tblRow("Points Allowed", t.pointsAgainst)}
+        ${tblRow("Total Tackles", t.tackles)}
+        ${tblRow("&nbsp;&nbsp;Solo", t.solo)}
+        ${tblRow("&nbsp;&nbsp;Assisted", t.ast)}
+        ${tblRow("Tackles for Loss", t.tfl)}
+        ${tblRow("Sacks", t.sacks)}
+        ${tblRow("Yards Lost", t.yardsLost)}
+        ${tblRow("Interceptions", t.int)}
+        ${tblRow("Fumble Recoveries", t.fr)}
+      </div>
+    </section>`;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER — views
+   ═══════════════════════════════════════════════════════════ */
+function visiblePlayers() {
+  const s = state.q.trim().toLowerCase();
+  return ROSTER
+    .filter(p => {
+      if (!s) return true;
+      return p.name.toLowerCase().includes(s)
+        || p.nickname.toLowerCase().includes(s)
+        || p.position.toLowerCase().includes(s)
+        || String(p.num).includes(s);
+    })
+    .sort((a, b) => state.sort === "num" ? a.num - b.num : a.last.localeCompare(b.last));
+}
+
+function render() {
+  const tab = state.tab;
+
+  // nav + tab bar
+  document.querySelectorAll(".nav-item").forEach(b => {
+    const on = b.dataset.tab === tab;
+    b.classList.toggle("is-active", on);
+    b.setAttribute("aria-current", on ? "page" : "false");
+  });
+
+  // header copy
+  const boxGame = state.box && GAMES.find(g => g.id === state.box);
+  $("#page-title").textContent =
+    tab === "players"  ? "Meet the Team"
+  : tab === "coaches"  ? "Coaching Staff"
+  : tab === "stats"    ? "Team Stats"
+  : boxGame            ? `${TEAM.name} vs ${boxGame.opp}`
+  :                      "Game Schedule";
+  $("#page-sub").textContent =
+    tab === "players"  ? ""
+  : tab === "coaches"  ? `${COACHES.length} coaches & staff guiding the Saints`
+  : tab === "stats"    ? `${TEAM.season} · ${PLAYED.length} game${PLAYED.length === 1 ? "" : "s"} played`
+  : boxGame            ? `Box score · ${fmtDate(boxGame.date)}`
+  :                      `${TEAM.season} · ${PLAYED.length} of ${GAMES.length} games played`;
+
+  $("#page-sub").hidden = !$("#page-sub").textContent;
+  $("#searchwrap").hidden = tab !== "players";
+  $("#toolbar").hidden = tab !== "players";
+  $("#q-clear").hidden = !state.q;
+
+  // toolbar state
+  document.querySelectorAll("#sortgrp .segbtn").forEach(b =>
+    b.classList.toggle("is-on", b.dataset.sort === state.sort));
+  document.querySelectorAll("#menu .menu-item").forEach(b => {
+    const on = b.dataset.style === state.style;
+    b.classList.toggle("is-on", on);
+    b.setAttribute("aria-checked", String(on));
+  });
+
+  // body
+  const view = $("#view");
+  if (tab === "players") {
+    const list = visiblePlayers();
+    view.innerHTML = list.length
+      ? `<div class="grid">${list.map(playerCard).join("")}</div>`
+      : `<p class="empty">No players match “${esc(state.q)}”.</p>`;
+  } else if (tab === "coaches") {
+    view.innerHTML = `<div class="grid grid-coach">${COACHES.map(coachCard).join("")}</div>`;
+  } else if (tab === "stats") {
+    view.innerHTML = teamStatsView();
+  } else if (state.box) {
+    view.innerHTML = boxScoreView(state.box);
+  } else {
+    view.innerHTML = `<div class="sched">${GAMES.map(gameRow).join("")}</div>`;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DETAIL SHEET
+   ═══════════════════════════════════════════════════════════ */
+let lastFocus = null;
+
+// Season stat groups. Each entry maps a STATS key to its tiles; a group is
+// only drawn when that player actually has numbers for it, so a lineman gets
+// Blocking and a QB gets Passing without either showing empty boxes.
+const STAT_GROUPS = [
+  { key:"pass", label:"Passing", tiles:(v) => [
+      ["Comp–Att", `${v.c}–${v.a}`], ["Yards", v.yds], ["TD", v.td], ["INT", v.int] ] },
+  { key:"rush", label:"Rushing", tiles:(v) => [
+      ["Carries", v.att], ["Yards", v.yds], ["TD", v.td],
+      ["Avg", (v.yds / v.att).toFixed(1)], ["2PT", v.twoPt] ] },
+  { key:"rec", label:"Receiving", tiles:(v) => [
+      ["Catches", v.rec], ["Yards", v.yds], ["TD", v.td],
+      ["Avg", (v.yds / v.rec).toFixed(1)], ["2PT", v.twoPt] ] },
+  { key:"def", label:"Defense", tiles:(v) => [
+      ["Tackles", v.tkl], ["Solo", v.solo], ["Assist", v.ast],
+      ["TFL", v.tfl], ["Sacks", v.sck], ["INT", v.int], ["Fum Rec", v.fr] ] },
+  { key:"kick", label:"Kicking", tiles:(v) => [
+      ["XP", `${v.xpm}/${v.xpa}`], ["FG", `${v.fgm}/${v.fga}`], ["Long", v.lng + " yd"] ] },
+];
+
+function statsSection(st, name) {
+  const groups = STAT_GROUPS
+    .filter(g => st[g.key])
+    .map(g => {
+      const tiles = g.tiles(st[g.key])
+        .filter(([, val]) => val !== undefined && val !== null && !Number.isNaN(val))
+        .map(([k, val]) => `<div class="st"><span>${k}</span><b>${val}</b></div>`)
+        .join("");
+      return `<div class="statgrp">
+        <div class="statgrp-h">${g.label}</div>
+        <div class="statrow">${tiles}</div>
+      </div>`;
+    }).join("");
+
+  return `<section class="stats">
+    <div class="stats-h">
+      <h3>Season Stats</h3>
+      <span>${TEAM.season} · ${PLAYED.length} game${PLAYED.length === 1 ? "" : "s"} played</span>
+    </div>
+    ${groups || `<p class="stats-empty">No stats recorded for ${esc(name)} yet this season.</p>`}
+  </section>`;
+}
+
+function openPlayer(id) {
+  const p = ROSTER.find(x => x.id === id);
+  if (!p) return;
+  lastFocus = document.activeElement;
+
+  $("#modal-photo").className = "modal-photo photo-host";
+  $("#modal-photo").innerHTML = `
+    <div class="modal-bg"></div>
+    <div class="modal-hex" aria-hidden="true"></div>
+    <div class="ph" aria-hidden="true"><span class="ph-mono">${initials(p)}</span></div>
+    ${img(p.photo, p.name, "")}
+    <div class="modal-shade"></div>
+    <div class="modal-num">${p.num}</div>
+    <div class="modal-plate">
+      <div class="modal-nick">“${esc(p.nickname)}”</div>
+      <div class="modal-name" id="modal-name">${esc(p.first)} <b>${esc(p.last)}</b></div>
+    </div>`;
+
+  const st = seasonStats(p.num);
+  $("#modal-info").innerHTML = `
+    <div class="modal-pos">${p.position}</div>
+    <div class="modal-stats">
+      <div class="ms"><span>Jersey</span><b>#${p.num}</b></div>
+      <div class="ms ms-pos"><span>Positions</span><b>${p.position}</b></div>
+    </div>
+    <div class="modal-fact">
+      <div class="modal-fact-h">Fun fact</div>
+      <p>${esc(p.fact)}</p>
+    </div>
+    ${statsSection(st, p.first)}`;
+
+  $("#modal").hidden = false;
+  document.body.classList.add("is-locked");
+  $("#modal-x").focus();
+}
+
+function closePlayer() {
+  $("#modal").hidden = true;
+  document.body.classList.remove("is-locked");
+  if (lastFocus && lastFocus.isConnected) lastFocus.focus();
+  lastFocus = null;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   EVENTS
+   ═══════════════════════════════════════════════════════════ */
+function goTab(id) {
+  if (!TABS.includes(id) || id === state.tab) return;
+  state.tab = id;
+  state.box = null;
+  history.replaceState(null, "", location.search + "#" + id);
+  render();
+  $("#main").scrollIntoView({ block: "start" });
+  window.scrollTo(0, 0);
+}
+
+let menuOpen = false;
+function setMenu(open) {
+  menuOpen = open;
+  $("#menu").hidden = !open;
+  $("#menu-btn").setAttribute("aria-expanded", String(open));
+  $("#menu-btn").classList.toggle("is-on", open);
+}
+
+document.addEventListener("click", (e) => {
+  if (e.target.closest("#menu-btn")) { setMenu(!menuOpen); return; }
+  if (menuOpen && !e.target.closest("#menu")) setMenu(false);
+
+  const nav = e.target.closest("[data-tab]");
+  if (nav) return goTab(nav.dataset.tab);
+
+  // Schedule → box score, and back again.
+  const box = e.target.closest("[data-box]");
+  if (box) { state.box = Number(box.dataset.box); render(); window.scrollTo(0, 0); return; }
+  if (e.target.closest("[data-back]")) { state.box = null; render(); window.scrollTo(0, 0); return; }
+
+  const sort = e.target.closest("[data-sort]");
+  if (sort) { state.sort = sort.dataset.sort; return render(); }
+
+  const style = e.target.closest("[data-style]");
+  if (style) {
+    state.style = style.dataset.style;
+    try { localStorage.setItem(LS_KEY, state.style); } catch (err) { /* private mode */ }
+    setMenu(false);
+    return render();
+  }
+
+  // "View full card" sits on the flipped back — handle it before the flip.
+  const open = e.target.closest("[data-open]");
+  if (open) { e.stopPropagation(); return openPlayer(Number(open.dataset.open)); }
+
+  const card = e.target.closest("[data-flip]");
+  if (card) flipCard(card);
+});
+
+function flipCard(card) {
+  const id = Number(card.dataset.flip);
+  const nowFlipped = !state.flipped.has(id);
+  nowFlipped ? state.flipped.add(id) : state.flipped.delete(id);
+  card.classList.toggle("is-flipped", nowFlipped);
+  card.setAttribute("aria-pressed", String(nowFlipped));
+  // inert keeps the face that's turned away out of the tab order and the
+  // accessibility tree — backface-visibility alone still leaves it focusable.
+  card.querySelector(".tc-front").inert = nowFlipped;
+  card.querySelector(".tc-back").inert = !nowFlipped;
+}
+
+// The card shell is a div with role=button, so Enter/Space need wiring by hand.
+$("#view").addEventListener("keydown", (e) => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  const card = e.target.closest("[data-flip]");
+  if (!card || card !== e.target) return;
+  e.preventDefault();
+  flipCard(card);
+});
+
+$("#q").addEventListener("input", (e) => { state.q = e.target.value; render(); });
+$("#q-clear").addEventListener("click", () => {
+  state.q = ""; $("#q").value = ""; render(); $("#q").focus();
+});
+
+$("#modal-x").addEventListener("click", closePlayer);
+$("#modal").addEventListener("click", (e) => { if (e.target.id === "modal") closePlayer(); });
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  if (!$("#modal").hidden) closePlayer();
+  else if (menuOpen) { setMenu(false); $("#menu-btn").focus(); }
+});
+
+window.addEventListener("hashchange", () => {
+  const h = location.hash.replace("#", "");
+  if (TABS.includes(h)) goTab(h);
+});
+
+/* ═══════════════════════════════════════════════════════════ */
+/* ── PASSWORD GATE ─────────────────────────────────────────────
+   Deliberately lightweight: the code lives in this file, so it keeps casual
+   visitors out, nothing more. Don't put anything genuinely private behind it. */
+const GATE_CODE = "1985";
+
+(function initGate() {
+  const gate = $("#gate"), form = $("#gate-form"), err = $("#gate-err");
+  const pin = $("#pin"), boxes = [...pin.querySelectorAll("input")];
+
+  const unlock = () => {
+    try { localStorage.setItem("shiloh.gate", "ok"); } catch (e) { /* private mode */ }
+    document.documentElement.classList.add("unlocked");
+    gate.setAttribute("hidden", "");
+  };
+
+  const fail = (msg) => {
+    err.textContent = msg;
+    pin.classList.add("is-bad");
+    setTimeout(() => pin.classList.remove("is-bad"), 400);
+    boxes.forEach(b => { b.value = ""; });
+    boxes[0].focus();
+  };
+
+  const submit = () => {
+    const code = boxes.map(b => b.value).join("");
+    if (code.length < 4) return fail("Enter all four digits.");
+    if (code === GATE_CODE) unlock();
+    else fail("That code isn't right. Try again.");
+  };
+
+  boxes.forEach((box, i) => {
+    box.addEventListener("input", () => {
+      box.value = box.value.replace(/\D/g, "").slice(0, 1);
+      err.textContent = "";
+      if (box.value && i < boxes.length - 1) boxes[i + 1].focus();
+      if (boxes.every(b => b.value)) submit();          // auto-submit on the 4th digit
+    });
+    box.addEventListener("keydown", (e) => {
+      if (e.key === "Backspace" && !box.value && i > 0) boxes[i - 1].focus();
+      if (e.key === "ArrowLeft"  && i > 0) boxes[i - 1].focus();
+      if (e.key === "ArrowRight" && i < boxes.length - 1) boxes[i + 1].focus();
+    });
+    // Let a pasted "1985" fill the whole row.
+    box.addEventListener("paste", (e) => {
+      const digits = (e.clipboardData.getData("text") || "").replace(/\D/g, "").slice(0, 4);
+      if (!digits) return;
+      e.preventDefault();
+      digits.split("").forEach((d, n) => { if (boxes[n]) boxes[n].value = d; });
+      boxes[Math.min(digits.length, 3)].focus();
+      if (boxes.every(b => b.value)) submit();
+    });
+  });
+
+  form.addEventListener("submit", (e) => { e.preventDefault(); submit(); });
+
+  if (!document.documentElement.classList.contains("unlocked")) boxes[0].focus();
+  else gate.setAttribute("hidden", "");
+})();
+
+renderChrome();
+render();
+auditGames();
+</script>
+</body>
+</html>

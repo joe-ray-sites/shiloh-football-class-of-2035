@@ -1,0 +1,11 @@
+# Full-resolution photo originals — kept locally, not worth versioning
+assets/_originals/
+
+# macOS
+.DS_Store
+._*
+
+# Editors
+.vscode/
+.idea/
+*.swp
