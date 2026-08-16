@@ -144,6 +144,7 @@ html:not(.unlocked) #modal{display:none !important;}
    the image's background blends into the plate and reads as one mark. */
 .mmark{
   height:46px;aspect-ratio:1202/1308;flex:0 0 auto;display:grid;place-items:center;
+  border:0;cursor:pointer;-webkit-tap-highlight-color:transparent;
   background:#fff;border-radius:9px;padding:3px;
   box-shadow:0 2px 10px rgba(0,0,0,.28);
   font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:16px;
@@ -215,6 +216,23 @@ html:not(.unlocked) #modal{display:none !important;}
   border:0;background:#eef1f5;border-radius:50%;
   width:24px;height:24px;flex:0 0 24px;color:var(--muted);font-size:16px;line-height:1;
 }
+
+/* ── GAME FILM LINK (box score) ───────────────────────────── */
+.filmlink{
+  display:flex;align-items:center;gap:13px;text-decoration:none;
+  background:linear-gradient(180deg,#e2382b 0%,#c4291e 100%);
+  color:#fff;border-radius:14px;padding:11px 16px 11px 11px;
+  box-shadow:0 8px 20px -10px rgba(196,41,30,.85);
+  transition:filter .16s,transform .16s;
+}
+.filmlink-play{
+  width:52px;height:36px;flex:0 0 auto;background:#fff;border-radius:9px;
+  display:grid;place-items:center;color:#d02a1e;
+  box-shadow:0 1px 3px rgba(0,0,0,.18);
+}
+.filmlink-txt{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:17px;letter-spacing:.3px;flex:1;}
+.filmlink-out{opacity:.75;flex:0 0 auto;}
+.filmlink:active{transform:translateY(1px);}
 
 .toolbar{display:flex;flex-direction:column;gap:12px;margin-bottom:18px;}
 /* No overflow scrolling here — it would clip the Options popover, and with
@@ -674,6 +692,7 @@ button.game{width:100%;text-align:left;font:inherit;cursor:pointer;}
   .brand{display:flex;align-items:center;gap:13px;padding:0 4px 22px;}
   .brand-mark{
     height:58px;aspect-ratio:1202/1308;flex:0 0 auto;display:grid;place-items:center;
+    border:0;cursor:pointer;
     background:#fff;border-radius:11px;padding:4px;
     box-shadow:0 4px 16px rgba(0,0,0,.32);
     font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:20px;letter-spacing:.5px;
@@ -715,6 +734,8 @@ button.game{width:100%;text-align:left;font:inherit;cursor:pointer;}
   .topbar h1{font-size:30px;white-space:nowrap;}
   .topbar-titles p{font-size:14px;}
   .search{min-width:330px;padding:11px 14px;}
+  .filmlink{align-self:flex-end;}
+  .filmlink-txt{flex:0 0 auto;}
   .search input{font-size:14px;}
   .toolbar{flex-direction:row;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px;flex-wrap:wrap;}
   .opts{gap:18px;}
@@ -735,6 +756,8 @@ button.game{width:100%;text-align:left;font:inherit;cursor:pointer;}
 /* pointer-precision affordances only where hover really exists */
 @media (hover:hover) and (pointer:fine){
   .menu-btn:hover{border-color:var(--accent);color:var(--navy);}
+  .filmlink:hover{filter:brightness(1.07);}
+  .mmark:hover,.brand-mark:hover{filter:brightness(.94);}
   .menu-item:hover{background:var(--paper);}
   .tc-flip-hint{opacity:0;}
   .tc:hover .tc-flip-hint{opacity:1;}
@@ -787,11 +810,11 @@ button.game{width:100%;text-align:left;font:inherit;cursor:pointer;}
   <!-- ── TOP APP BAR (mobile) ─────────────────────────────── -->
   <header class="appbar">
     <div class="mbrand">
-      <div class="mmark photo-host">
+      <button class="mmark photo-host" data-tab="schedule" aria-label="Go to schedule">
         <img src="assets/sc-logo.png" alt="Shiloh Saints logo"
              onerror="this.closest('.photo-host').classList.add('no-photo')" />
         <span class="mark-fallback" aria-hidden="true">SC</span>
-      </div>
+      </button>
       <div class="mbrand-txt">
         <b>Shiloh Saints</b>
         <span>Shiloh 4th Grade Football</span>
@@ -803,11 +826,11 @@ button.game{width:100%;text-align:left;font:inherit;cursor:pointer;}
   <!-- ── NAV: sidebar on desktop, tab bar on mobile ───────── -->
   <aside class="side">
     <div class="brand">
-      <div class="brand-mark photo-host">
+      <button class="brand-mark photo-host" data-tab="schedule" aria-label="Go to schedule">
         <img src="assets/sc-logo.png" alt="Shiloh Saints logo"
              onerror="this.closest('.photo-host').classList.add('no-photo')" />
         <span class="mark-fallback" aria-hidden="true">SC</span>
-      </div>
+      </button>
       <div>
         <div class="brand-name">Shiloh Saints</div>
         <div class="brand-sub">Shiloh 4th Grade Football</div>
@@ -831,6 +854,15 @@ button.game{width:100%;text-align:left;font:inherit;cursor:pointer;}
         <h1 id="page-title"></h1>
         <p id="page-sub"></p>
       </div>
+      <a class="filmlink" id="filmlink" target="_blank" rel="noopener noreferrer" hidden>
+        <span class="filmlink-play" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>
+        </span>
+        <span class="filmlink-txt">Watch the game film</span>
+        <svg class="filmlink-out" width="14" height="14" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+      </a>
       <div class="search" id="searchwrap" hidden>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
         <label class="sr-only" for="q">Search players</label>
@@ -961,6 +993,7 @@ const COACHES = [
 const GAMES = [
   { id:1, week:"Wk 1", date:"2026-08-15", opp:"Farmington", home:true, final:true,
     us:28, them:0,
+    video:"https://youtu.be/XUzZUAGDuhQ",
     stats:{
       team:{ totalYards:353, rushYds:350, passYds:3, points:28, td:4, twoPt:{ made:3, att:4 },
              firstDowns:8, firstRush:8, firstPass:0,
@@ -1102,11 +1135,12 @@ const fmtDate = (iso, opts) =>
    STATE
    ═══════════════════════════════════════════════════════════ */
 const NAV = [
+  { id:"schedule", label:"Schedule", icon:"M8 2v4M16 2v4M3 9h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" },
   { id:"players",  label:"Players",  icon:"M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1" },
   { id:"coaches",  label:"Coaches",  icon:"M12 2l2.4 5 5.6.6-4.2 3.9 1.2 5.5L12 19.3 6.9 22l1.2-5.5L4 12.6 9.6 12z" },
-  { id:"schedule", label:"Schedule", icon:"M8 2v4M16 2v4M3 9h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" },
-  { id:"stats",    label:"Team Stats", icon:"M4 20V10M10 20V4M16 20v-7M22 20H2" },
+  { id:"stats",    label:"Team Stats", icon:"M4 20V10M10 20v-7M16 20V4M22 20H2" },
 ];
+const HOME_TAB = NAV[0].id;   // the logo returns here
 const TABS = NAV.map(n => n.id);
 const STYLES = ["classic", "modern", "bold"];
 const LS_KEY = "shiloh.cardStyle.v2";   // bumped so Bold becomes everyone's default
@@ -1124,7 +1158,7 @@ const stored = (() => { try { return localStorage.getItem(LS_KEY); } catch (e) {
 const hashTab = location.hash.replace("#", "");
 
 const state = {
-  tab: TABS.includes(hashTab) ? hashTab : "players",
+  tab: TABS.includes(hashTab) ? hashTab : HOME_TAB,
   q: "",
   sort: "num",
   box: null,          // open box-score game id (schedule sub-view)
@@ -1538,6 +1572,10 @@ function render() {
   : tab === "stats"    ? `${TEAM.season} · ${PLAYED.length} game${PLAYED.length === 1 ? "" : "s"} played`
   : boxGame            ? `Box score · ${fmtDate(boxGame.date)}`
   :                      `${TEAM.season} · ${PLAYED.length} of ${GAMES.length} games played`;
+
+  const film = $("#filmlink");
+  if (boxGame && boxGame.video) { film.href = boxGame.video; film.hidden = false; }
+  else film.hidden = true;
 
   $("#page-sub").hidden = !$("#page-sub").textContent;
   $("#searchwrap").hidden = tab !== "players";
