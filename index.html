@@ -1180,14 +1180,17 @@ const GAMES = [
     us:32, them:0,
     video:"https://www.youtube.com/watch?v=ofO1H44QxxI",
     stats:{
-      team:{ totalYards:332, rushYds:332, passYds:0, points:32, td:5,
+      team:{ totalYards:339, rushYds:339, passYds:0, points:32, td:5,
              twoPt:{ made:1, att:4 },
              firstDowns:13, firstRush:13, firstPass:0,
              penalties:1, penaltyYds:15, fumbles:"2-1",
              def:{ tfl:11, sacks:3, int:0, fr:0, yardsLost:36, yardsAllowed:-9 } },
-      rushing:{ 1:{att:8,yds:106,td:3}, 3:{att:4,yds:94,td:2}, 11:{att:2,yds:58,td:0,twoPt:1},
-                6:{att:1,yds:30,td:0}, 37:{att:3,yds:23,td:0}, 25:{att:1,yds:15,td:0},
+      /* Conversion attempts count as carries/attempts and their yardage,
+         same as any other snap. */
+      rushing:{ 1:{att:8,yds:106,td:3}, 3:{att:4,yds:94,td:2}, 11:{att:3,yds:63,td:0,twoPt:1},
+                6:{att:2,yds:32,td:0}, 37:{att:4,yds:23,td:0}, 25:{att:1,yds:15,td:0},
                 22:{att:1,yds:6,td:0} },
+      passing:{ 11:{c:0,a:1,yds:0,td:0,int:0} },
       defense:{ 1:{solo:2,ast:4},  3:{solo:3,ast:2,sck:2,ff:1}, 4:{solo:1,ast:5},
                 5:{solo:1,ast:1},  6:{solo:1,ast:4},  8:{solo:2,ast:2},
                 10:{solo:0,ast:1}, 11:{solo:0,ast:2}, 13:{solo:0,ast:4,sck:1},
@@ -1724,14 +1727,14 @@ function boxScoreView(id) {
   return head + tabs + (tab === "plays" ? playsView(g) : boxStatsView(g));
 }
 
-/* Snap counts off the drive chart. Penalty markers and two-point conversion
-   attempts aren't plays from scrimmage, so both are excluded. */
+/* Snap counts off the drive chart. Conversion attempts are real snaps and
+   count; penalty markers are not plays and don't. */
 function playCounts(g) {
   const drives = (g.stats && g.stats.drives) || [];
   if (!drives.length) return null;
   let off = 0, def = 0;
   drives.forEach(d => {
-    const n = d.plays.filter(p => !p.flag && !p.conv).length;
+    const n = d.plays.filter(p => !p.flag).length;
     if (d.unit === "offense") off += n; else def += n;
   });
   return { off, def, total: off + def };
