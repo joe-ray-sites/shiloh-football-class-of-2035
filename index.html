@@ -583,6 +583,47 @@ html:not(.unlocked) #modal{display:none !important;}
 .st b{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:19px;color:var(--navy);}
 .stats-empty{margin-top:14px;font-size:13.5px;color:var(--muted);}
 
+/* ── BOX SCORE SUB-TABS + PLAY-BY-PLAY ────────────────────── */
+.bstabs{display:flex;gap:6px;margin:22px 0 4px;max-width:640px;
+  background:#e7ebf0;padding:4px;border-radius:12px;}
+.bstab{flex:1;border:0;background:none;color:var(--muted);
+  font-size:14px;font-weight:500;padding:10px 12px;border-radius:9px;min-height:40px;transition:.16s;}
+.bstab.is-on{background:#fff;color:var(--navy);font-weight:700;box-shadow:0 1px 4px rgba(7,26,46,.1);}
+
+.pbp{margin-top:18px;max-width:640px;display:flex;flex-direction:column;gap:14px;}
+.drive{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;}
+.drive-h{display:flex;align-items:center;gap:9px;padding:11px 14px;
+  background:var(--paper);border-bottom:1px solid var(--line);}
+.drive-tag{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:11px;
+  letter-spacing:1px;text-transform:uppercase;color:#fff;background:var(--navy);
+  padding:4px 10px;border-radius:20px;}
+.drive.is-off .drive-tag{background:var(--accent);}
+.drive-n{font-size:12.5px;color:var(--muted);font-weight:500;}
+.drive-note{margin-left:auto;font-size:10.5px;letter-spacing:.6px;text-transform:uppercase;
+  color:var(--muted);font-weight:700;}
+.plays{list-style:none;counter-reset:play;}
+.play{display:flex;align-items:center;gap:10px;padding:11px 14px;
+  border-bottom:1px solid var(--line);font-size:14px;line-height:1.35;}
+.play:last-child{border-bottom:0;}
+.play-txt{flex:1;min-width:0;}
+.play-txt b{font-family:"Roboto Condensed",sans-serif;color:var(--accent);}
+.play-yds{flex:0 0 auto;font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:15px;
+  min-width:44px;text-align:right;color:var(--muted);}
+.play-yds.pos{color:var(--win);}
+.play-yds.neg{color:var(--loss);}
+.play-tag{flex:0 0 auto;font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:10px;
+  letter-spacing:.8px;text-transform:uppercase;padding:4px 8px;border-radius:6px;}
+.play-tag.td{background:var(--win);color:#fff;}
+.play-tag.to{background:var(--loss);color:#fff;}
+.play-tag.sk{background:rgba(7,26,46,.08);color:var(--navy);}
+.play-tag.ok{background:rgba(31,157,87,.14);color:var(--win);}
+.play.is-score{background:rgba(31,157,87,.07);}
+.play.is-turnover{background:rgba(216,85,63,.07);}
+.play.is-flag{color:var(--muted);font-style:italic;}
+.play.is-conv{background:#fbfcfd;font-size:13px;color:var(--muted);}
+.play.is-conv .play-txt b{color:var(--muted);}
+@media (hover:hover) and (pointer:fine){ .bstab:hover{color:var(--navy);} }
+
 /* ── TEAM STATS + BOX SCORE ───────────────────────────────── */
 .tstat-top{max-width:520px;}
 .bs-sec{margin-top:26px;max-width:640px;}
@@ -1009,7 +1050,89 @@ const GAMES = [
                 22:{solo:1,ast:1}, 24:{solo:0,ast:2}, 25:{solo:1,ast:0},
                 27:{solo:0,ast:2}, 28:{solo:0,ast:3}, 51:{solo:1,ast:0} },
     } },
-  { id:2,  week:"Wk 2", date:"2026-08-22", opp:"Pea Ridge",        home:false },
+  { id:2,  week:"Wk 2", date:"2026-08-22", opp:"Pea Ridge", home:false, final:true,
+    us:32, them:0,
+    stats:{
+      team:{ totalYards:332, rushYds:332, passYds:0, points:32, td:5,
+             twoPt:{ made:1, att:4 },
+             firstDowns:13, firstRush:13, firstPass:0,
+             penalties:1, penaltyYds:15, fumbles:"2-1",
+             def:{ tfl:11, sacks:3, int:0, fr:0, yardsLost:36, yardsAllowed:-9 } },
+      rushing:{ 1:{att:8,yds:106,td:3}, 3:{att:4,yds:94,td:2}, 11:{att:2,yds:58,td:0,twoPt:1},
+                6:{att:1,yds:30,td:0}, 37:{att:3,yds:23,td:0}, 25:{att:1,yds:15,td:0},
+                22:{att:1,yds:6,td:0} },
+      defense:{ 1:{solo:2,ast:4},  3:{solo:3,ast:2,sck:2,ff:1}, 4:{solo:1,ast:5},
+                5:{solo:1,ast:1},  6:{solo:1,ast:4},  8:{solo:2,ast:2},
+                10:{solo:0,ast:1}, 11:{solo:0,ast:2}, 13:{solo:0,ast:4,sck:1},
+                15:{solo:0,ast:1}, 24:{solo:0,ast:1}, 27:{solo:0,ast:3},
+                28:{solo:0,ast:1}, 29:{solo:0,ast:1}, 34:{solo:0,ast:2},
+                67:{solo:0,ast:1}, 99:{solo:1,ast:2} },
+      /* Play-by-play, in the order it happened. #num is swapped for the
+         player's name at render time, so this stays readable and short. */
+      drives:[
+        { unit:"offense", n:1, plays:[
+          { t:"#11 rush", yds:23 },
+          { t:"Penalty — block in the back", yds:-15, flag:true },
+          { t:"#3 rush", yds:14 },
+          { t:"#3 rush", yds:55, score:true },
+          { t:"Two-point conversion: #6 rush — no good", conv:true } ] },
+        { unit:"defense", n:1, plays:[
+          { t:"#4, #3 assist on the tackle", yds:-2 },
+          { t:"#1, #3, #67, #27 assist on the tackle", yds:0 },
+          { t:"#8 solo tackle", yds:5 } ] },
+        { unit:"offense", n:2, plays:[
+          { t:"#11 rush", yds:35 },
+          { t:"#1 rush", yds:9 },
+          { t:"#3 rush", yds:14, score:true },
+          { t:"Two-point conversion: #11 rush — GOOD", conv:true, good:true } ] },
+        { unit:"defense", n:2, plays:[
+          { t:"#1 solo tackle", yds:-5 },
+          { t:"#27, #1, #13 assist on the tackle", yds:1 },
+          { t:"#8, #99, #5 assist on the tackle", yds:4 },
+          { t:"#13, #28, #27 assist — sack", yds:-4, sack:true } ] },
+        { unit:"offense", n:3, plays:[
+          { t:"#6 rush", yds:30 },
+          { t:"#3 rush", yds:11 },
+          { t:"#1 rush", yds:15, score:true },
+          { t:"Two-point conversion: #11 pass to #6 incomplete — no good", conv:true } ] },
+        { unit:"defense", n:3, plays:[
+          { t:"#3 solo tackle", yds:-4 },
+          { t:"#3 solo sack", yds:-4, sack:true },
+          { t:"#13, #15, #1, #8 assist on the tackle", yds:1 } ] },
+        { unit:"offense", n:4, plays:[
+          { t:"#1 fumbles a bad snap — Pea Ridge recovers", turnover:true } ] },
+        { unit:"defense", n:4, note:"End of half", plays:[
+          { t:"#8 solo tackle", yds:1 },
+          { t:"#1 solo tackle", yds:3 },
+          { t:"#3 solo sack", yds:-4, sack:true } ] },
+        { unit:"defense", n:5, plays:[
+          { t:"#6, #1 assist on the tackle", yds:1 },
+          { t:"#6 solo tackle", yds:-2 },
+          { t:"#3 forces a fumble, Pea Ridge recovers; #5 solo tackle", yds:-3 } ] },
+        { unit:"offense", n:5, plays:[
+          { t:"#22 rush", yds:6 },
+          { t:"#37 rush", yds:16 },
+          { t:"#25 rush", yds:15 },
+          { t:"#1 rush, bad snap", yds:0 },
+          { t:"#1 rush", yds:10 },
+          { t:"#1 rush, bad snap", yds:-5 },
+          { t:"#37 rush, fumbles — Shiloh recovers", yds:-4 },
+          { t:"#1 rush", yds:11 },
+          { t:"#1 rush", yds:12, score:true },
+          { t:"Two-point conversion: #37 rush, no gain — no good", conv:true } ] },
+        { unit:"defense", n:6, plays:[
+          { t:"#6, #4, #11 assist on the tackle", yds:2 },
+          { t:"#34, #4 assist — fumble, Pea Ridge recovers", yds:4 },
+          { t:"#4 solo tackle, #6 assist", yds:2 },
+          { t:"#4, #6, #29 assist on the tackle", yds:3 },
+          { t:"#10, #99, #24 assist on the tackle", yds:-2 },
+          { t:"#34, #13, #4, #11 assist on the tackle", yds:-1 },
+          { t:"#99 solo tackle", yds:-5 } ] },
+        { unit:"offense", n:6, note:"End of game", plays:[
+          { t:"#37 rush", yds:11 },
+          { t:"#1 rush", yds:54, score:true } ] },
+      ],
+    } },
   { id:3,  week:"Wk 3", date:"2026-08-29", opp:"Springdale",       home:false },
   { id:4,  week:"Wk 4", date:"2026-09-12", opp:"Rogers Heritage",  home:false },
   { id:5,  week:"Wk 5", date:"2026-09-19", opp:"Bentonville",      home:true },
@@ -1096,10 +1219,9 @@ function leaderBy(pick) {
   return rows[0] || null;
 }
 
-/* Scoring values for the audit below. Little-league conversions aren't worth
-   the standard 2 everywhere, so CONVERSION is left null until confirmed — the
-   points cross-foot stays off rather than flagging correct data as wrong. */
-const SCORING = { TD: 6, CONVERSION: null };
+/* Scoring values for the audit below. Confirmed by the Pea Ridge game, which
+   cross-foots exactly: 5 TD x6 + 1 conversion x2 = 32. */
+const SCORING = { TD: 6, CONVERSION: 2 };
 
 /* Sanity-check each played game while entering stats. Warns in the console
    only; never alters the numbers shown. */
@@ -1162,6 +1284,7 @@ const state = {
   q: "",
   sort: "num",
   box: null,          // open box-score game id (schedule sub-view)
+  boxTab: "stats",    // "stats" | "plays" within a box score
   style: STYLES.includes(urlCard) ? urlCard : (STYLES.includes(stored) ? stored : "bold"),
   flipped: new Set(),
 };
@@ -1386,29 +1509,11 @@ const pName = (num) => {
 function boxScoreView(id) {
   const g = GAMES.find(x => x.id === id);
   if (!g || !g.final) return `<p class="empty">No box score for that game yet.</p>`;
-  const s = g.stats || {};
-  const t = s.team || {};
   const won = g.us > g.them;
+  const hasPlays = !!(g.stats && g.stats.drives && g.stats.drives.length);
+  const tab = hasPlays ? state.boxTab : "stats";
 
-  const order = (obj) => Object.keys(obj || {}).map(Number)
-    .sort((a, b) => (obj[b].yds || obj[b].solo + obj[b].ast || 0) - (obj[a].yds || obj[a].solo + obj[a].ast || 0));
-
-  const rush = order(s.rushing).map(n => { const v = s.rushing[n];
-    return { name:pName(n), vals:[v.att, v.yds, (v.yds/v.att).toFixed(1), v.td || 0, v.twoPt || 0] }; });
-  const pass = order(s.passing).map(n => { const v = s.passing[n];
-    return { name:pName(n), vals:[`${v.c}–${v.a}`, v.yds, v.td || 0, v.int || 0] }; });
-  const recv = order(s.receiving).map(n => { const v = s.receiving[n];
-    return { name:pName(n), vals:[v.rec, v.yds, v.td || 0, v.twoPt || 0] }; });
-  const dRows = Object.keys(s.defense || {}).map(Number)
-    .sort((a, b) => (s.defense[b].solo + s.defense[b].ast) - (s.defense[a].solo + s.defense[a].ast))
-    .map(n => { const v = s.defense[n];
-      return { name:pName(n), vals:[v.solo || 0, v.ast || 0, (v.solo || 0) + (v.ast || 0),
-                                    v.int || 0, v.fr || 0] }; });
-
-  const cmp = (label, a, b) => `<div class="cmp"><span>${a}</span><em>${label}</em><span>${b}</span></div>`;
-  const dash = "—";
-
-  return `
+  const head = `
     <button class="backlink" data-back="1">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
            stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
@@ -1425,8 +1530,43 @@ function boxScoreView(id) {
         <span class="bs-team">${esc(g.opp)}</span>
         <span class="bs-score">${g.them}</span>
       </div>
-    </div>
+    </div>`;
 
+  const tabs = hasPlays ? `
+    <div class="bstabs" role="tablist">
+      <button class="bstab ${tab === "stats" ? "is-on" : ""}" data-boxtab="stats"
+              role="tab" aria-selected="${tab === "stats"}">Team Stats</button>
+      <button class="bstab ${tab === "plays" ? "is-on" : ""}" data-boxtab="plays"
+              role="tab" aria-selected="${tab === "plays"}">Play-by-Play</button>
+    </div>` : "";
+
+  return head + tabs + (tab === "plays" ? playsView(g) : boxStatsView(g));
+}
+
+/* ── Box score: Team Stats tab ────────────────────────────── */
+function boxStatsView(g) {
+  const s = g.stats || {};
+  const t = s.team || {};
+  const dash = "—";
+
+  const order = (obj) => Object.keys(obj || {}).map(Number)
+    .sort((a, b) => (obj[b].yds || obj[b].solo + obj[b].ast || 0) - (obj[a].yds || obj[a].solo + obj[a].ast || 0));
+
+  const rush = order(s.rushing).map(n => { const v = s.rushing[n];
+    return { name:pName(n), vals:[v.att, v.yds, (v.yds/v.att).toFixed(1), v.td || 0, v.twoPt || 0] }; });
+  const pass = order(s.passing).map(n => { const v = s.passing[n];
+    return { name:pName(n), vals:[`${v.c}–${v.a}`, v.yds, v.td || 0, v.int || 0] }; });
+  const recv = order(s.receiving).map(n => { const v = s.receiving[n];
+    return { name:pName(n), vals:[v.rec, v.yds, v.td || 0, v.twoPt || 0] }; });
+  const dRows = Object.keys(s.defense || {}).map(Number)
+    .sort((a, b) => (s.defense[b].solo + s.defense[b].ast) - (s.defense[a].solo + s.defense[a].ast))
+    .map(n => { const v = s.defense[n];
+      return { name:pName(n), vals:[v.solo || 0, v.ast || 0, (v.solo || 0) + (v.ast || 0),
+                                    v.sck || 0, v.int || 0, v.fr || 0] }; });
+
+  const cmp = (label, a, b) => `<div class="cmp"><span>${a}</span><em>${label}</em><span>${b}</span></div>`;
+
+  return `
     <section class="bs-sec">
       <h3 class="bs-h">Team Stats</h3>
       <div class="cmp-head"><span>${TEAM.name}</span><em></em><span>${esc(g.opp)}</span></div>
@@ -1445,7 +1585,7 @@ function boxScoreView(id) {
     ${statTable("Rushing",   ["Att","Yds","Avg","TD","2PT"], rush)}
     ${statTable("Passing",   ["C–A","Yds","TD","INT"],       pass)}
     ${statTable("Receiving", ["Rec","Yds","TD","2PT"],       recv)}
-    ${statTable("Defense",   ["Solo","Ast","Tot","INT","FR"], dRows)}
+    ${statTable("Defense",   ["Solo","Ast","Tot","Sack","INT","FR"], dRows)}
 
     <section class="bs-sec">
       <h3 class="bs-h">Team Defense</h3>
@@ -1459,6 +1599,43 @@ function boxScoreView(id) {
         ${tblRow("Fumble Recoveries", (t.def && t.def.fr) ?? dash)}
       </div>
     </section>`;
+}
+
+/* ── Box score: Play-by-Play tab ──────────────────────────── */
+// "#11 rush" -> "<b>#11</b> Barnes rush", so the data stays short and any
+// name change flows through automatically.
+const withNames = (t) => esc(t).replace(/#(\d+)/g, (m, n) =>
+  BY_NUM[n] ? `<b>#${n}</b> ${esc(BY_NUM[n].last)}` : `<b>#${n}</b>`);
+
+function playRow(p) {
+  const cls = ["play",
+    p.score && "is-score", p.turnover && "is-turnover",
+    p.flag && "is-flag", p.conv && "is-conv"].filter(Boolean).join(" ");
+  const chip = p.yds == null ? "" :
+    `<span class="play-yds ${p.yds > 0 ? "pos" : p.yds < 0 ? "neg" : "zero"}">${
+      p.yds > 0 ? "+" : ""}${p.yds}</span>`;
+  const tag =
+      p.score    ? `<span class="play-tag td">Touchdown</span>`
+    : p.turnover ? `<span class="play-tag to">Turnover</span>`
+    : p.sack     ? `<span class="play-tag sk">Sack</span>`
+    : p.good     ? `<span class="play-tag ok">Good</span>` : "";
+  return `<li class="${cls}"><span class="play-txt">${withNames(p.t)}</span>${tag}${chip}</li>`;
+}
+
+function playsView(g) {
+  const drives = (g.stats && g.stats.drives) || [];
+  if (!drives.length) return `<p class="empty">No play-by-play recorded for this game.</p>`;
+  return `<div class="pbp">` + drives.map(d => {
+    const off = d.unit === "offense";
+    return `<section class="drive ${off ? "is-off" : "is-def"}">
+      <div class="drive-h">
+        <span class="drive-tag">${off ? "Offense" : "Defense"}</span>
+        <span class="drive-n">Series ${d.n}</span>
+        ${d.note ? `<span class="drive-note">${esc(d.note)}</span>` : ""}
+      </div>
+      <ol class="plays">${d.plays.map(playRow).join("")}</ol>
+    </section>`;
+  }).join("") + `</div>`;
 }
 
 /* ── Team stats (season) ──────────────────────────────────── */
@@ -1729,8 +1906,11 @@ document.addEventListener("click", (e) => {
 
   // Schedule → box score, and back again.
   const box = e.target.closest("[data-box]");
-  if (box) { state.box = Number(box.dataset.box); render(); window.scrollTo(0, 0); return; }
+  if (box) { state.box = Number(box.dataset.box); state.boxTab = "stats"; render(); window.scrollTo(0, 0); return; }
   if (e.target.closest("[data-back]")) { state.box = null; render(); window.scrollTo(0, 0); return; }
+
+  const bt = e.target.closest("[data-boxtab]");
+  if (bt) { state.boxTab = bt.dataset.boxtab; render(); return; }
 
   const sort = e.target.closest("[data-sort]");
   if (sort) { state.sort = sort.dataset.sort; return render(); }
