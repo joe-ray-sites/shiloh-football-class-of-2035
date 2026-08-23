@@ -1052,6 +1052,7 @@ const GAMES = [
     } },
   { id:2,  week:"Wk 2", date:"2026-08-22", opp:"Pea Ridge", home:false, final:true,
     us:32, them:0,
+    video:"https://www.youtube.com/watch?v=ofO1H44QxxI",
     stats:{
       team:{ totalYards:332, rushYds:332, passYds:0, points:32, td:5,
              twoPt:{ made:1, att:4 },
@@ -1219,9 +1220,11 @@ function leaderBy(pick) {
   return rows[0] || null;
 }
 
-/* Scoring values for the audit below. Confirmed by the Pea Ridge game, which
-   cross-foots exactly: 5 TD x6 + 1 conversion x2 = 32. */
-const SCORING = { TD: 6, CONVERSION: 2 };
+/* This league does not score like standard football — "2PT conversion" is
+   just the familiar name for the play, not its point value. Final scores are
+   authoritative as entered, so CONVERSION stays null and the points
+   cross-foot never runs. Do not re-derive scores from touchdowns. */
+const SCORING = { TD: 6, CONVERSION: null };
 
 /* Sanity-check each played game while entering stats. Warns in the console
    only; never alters the numbers shown. */
@@ -1243,8 +1246,7 @@ function auditGames() {
       if (pts !== g.us)
         console.warn(`[${g.week}] player lines total ${pts} pts but the final score says ${g.us}.`);
     } else {
-      console.info(`[${g.week}] ${td} TD, ${twoPt} conversions, final ${g.us}–${g.them}. `
-        + `Set SCORING.CONVERSION to enable the points cross-foot.`);
+      /* points intentionally not cross-footed — see SCORING above */
     }
   });
 }
