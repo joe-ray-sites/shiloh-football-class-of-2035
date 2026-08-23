@@ -1020,7 +1020,7 @@ const RAW = [
   ["Lincoln", "Gober", 13, "LB", "Linc", "Calls out the play before the snap"],
   ["Calvin", "Everheart", 15, "CB", "All Heart", "Plays the ball, never the fake"],
   ["Skyler", "Rodriguez", 18, "WR", "Sky High", "Runs the crispest route on the field"],
-  ["Cole", "Salbaum", 20, "WR,CB", "Cole Train", "Catches passes one drive, breaks them up the next"],
+  ["Cole", "Stalbaum", 20, "WR,CB", "Cole Train", "Catches passes one drive, breaks them up the next"],
   ["Holston", "Flannagan", 21, "WR", "Hollywood", "Always finds the open grass"],
   ["Teller", "Owens", 22, "CB", "The Teller", "Sticks to his man like a shadow"],
   ["Jacob", "Ray", 24, "WR,LB", "Ray Gun", "Hands on offense, hammer on defense"],
@@ -1031,14 +1031,14 @@ const RAW = [
   ["Rhett", "Hunt", 34, "CB", "The Hunt", "Tracks the ball the whole way"],
   ["Remick", "Starnes", 37, "RB,LB", "Remi", "Never goes down on first contact"],
   ["Jack", "Simpson", 51, "OL,DL", "Jackhammer", "Moves the pile forward, then blows one up"],
-  ["Gauge", "Watkins", 52, "S,WR", "Full Gauge", "Last line of defense, first read on offense"],
+  ["Gauge", "Watkins", 2, "S,WR", "Full Gauge", "Last line of defense, first read on offense"],
   ["Noland", "Arnold", 55, "OL", "No Man's Land", "The road grader on the right side"],
   ["Preston", "Avey", 56, "OL", "Press", "Snap to whistle, every rep"],
   ["Oliver", "Hardin", 61, "OL", "Hard Hat", "Low man wins — and he's always low"],
   ["Owen Cal", "Hathaway", 67, "DL", "OC", "Two first names, one job: get to the ball"],
   ["Nathan", "Baggs", 81, "CB,WR", "Nate the Great", "Bags interceptions and touchdowns"],
   ["Whitley", "Stuckey", 89, "WR", "Sticky Hands", "If it's catchable, he catches it"],
-  ["Cohen", "McCorry", 99, "LB", "The Wall", "Everything stops at the wall"],
+  ["Cohen", "McCorry", 88, "LB", "The Wall", "Everything stops at the wall"],
 ];
 
 const ROSTER = RAW.map(([first, last, num, positions, nick, fact], i) => ({
@@ -1182,7 +1182,7 @@ const GAMES = [
                 10:{solo:0,ast:1}, 11:{solo:0,ast:2}, 13:{solo:0,ast:4,sck:1},
                 15:{solo:0,ast:1}, 24:{solo:0,ast:1}, 27:{solo:0,ast:3},
                 28:{solo:0,ast:1}, 29:{solo:0,ast:1}, 34:{solo:0,ast:2},
-                67:{solo:0,ast:1}, 99:{solo:1,ast:2} },
+                67:{solo:0,ast:1}, 88:{solo:1,ast:2} },
       /* Play-by-play, in the order it happened. #num is swapped for the
          player's name at render time, so this stays readable and short. */
       drives:[
@@ -1204,7 +1204,7 @@ const GAMES = [
         { unit:"defense", n:2, plays:[
           { t:"#1 solo tackle", yds:-5 },
           { t:"#27, #1, #13 assist on the tackle", yds:1 },
-          { t:"#8, #99, #5 assist on the tackle", yds:4 },
+          { t:"#8, #88, #5 assist on the tackle", yds:4 },
           { t:"#13, #28, #27 assist — sack", yds:-4, sack:true } ] },
         { unit:"offense", n:3, plays:[
           { t:"#6 rush", yds:30 },
@@ -1241,9 +1241,9 @@ const GAMES = [
           { t:"#34, #4 assist — fumble, Pea Ridge recovers", yds:4 },
           { t:"#4 solo tackle, #6 assist", yds:2 },
           { t:"#4, #6, #29 assist on the tackle", yds:3 },
-          { t:"#10, #99, #24 assist on the tackle", yds:-2 },
+          { t:"#10, #88, #24 assist on the tackle", yds:-2 },
           { t:"#34, #13, #4, #11 assist on the tackle", yds:-1 },
-          { t:"#99 solo tackle", yds:-5 } ] },
+          { t:"#88 solo tackle", yds:-5 } ] },
         { unit:"offense", n:6, note:"End of game", plays:[
           { t:"#37 rush", yds:11 },
           { t:"#1 rush", yds:54, score:true } ] },
