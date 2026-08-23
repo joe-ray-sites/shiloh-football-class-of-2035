@@ -414,6 +414,48 @@ html:not(.unlocked) #modal{display:none !important;}
 }
 .no-photo .tcf-img,.no-photo .tcm-img,.no-photo>img{display:none;}
 
+/* ── COMPACT CARD (no portrait) ───────────────────────────── */
+/* One third the height of a full card, so a photoless roster reads as a
+   list instead of a wall of empty art panels. */
+.tc.is-compact{aspect-ratio:320/143;}
+.tc.is-compact .tc-flip-hint{display:none;}
+.tc.is-compact .tc-front{box-shadow:0 0 0 1.5px rgba(37,150,190,.32) inset,0 8px 18px -10px rgba(7,26,46,.5);}
+
+.tcc{position:absolute;inset:0;display:flex;align-items:center;gap:14px;
+  padding:0 16px;overflow:hidden;
+  background:linear-gradient(120deg,var(--navy-3) 0%,var(--navy) 55%,#050f1b 100%);}
+.tcc-mono{position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:78px;line-height:1;
+  color:rgba(255,255,255,.06);letter-spacing:-2px;pointer-events:none;}
+.tcc-num{flex:0 0 auto;min-width:52px;height:52px;padding:0 8px;display:grid;place-items:center;
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:26px;
+  background:var(--accent);color:#fff;border-radius:13px;
+  border:1.5px solid rgba(255,255,255,.22);box-shadow:0 4px 12px rgba(0,0,0,.3);}
+.tcc-body{min-width:0;z-index:1;}
+.tcc-nick{font-size:11.5px;color:var(--accent);font-weight:500;font-style:italic;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* Long names (Flannagan, Crittendon) wrap rather than truncate — the compact
+   card has vertical room for two lines. */
+.tcc-name{font-family:"Roboto Condensed",sans-serif;font-weight:400;font-size:20px;
+  color:#fff;text-transform:uppercase;line-height:1.08;letter-spacing:.3px;
+  overflow-wrap:anywhere;}
+.tcc-name b{font-weight:700;}
+.tcc-pos{font-size:11.5px;color:#9fb3c6;margin-top:2px;letter-spacing:.3px;}
+
+.tccb{position:absolute;inset:0;display:flex;flex-direction:column;gap:8px;
+  padding:13px 15px;border-radius:var(--radius);
+  background:linear-gradient(150deg,var(--navy-2),var(--navy) 70%,#040e1a);
+  border:1.5px solid rgba(37,150,190,.4);}
+.tccb-fact{flex:1;min-height:0;}
+.tccb-label{display:block;font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:10px;
+  letter-spacing:1.1px;text-transform:uppercase;color:var(--accent);margin-bottom:3px;}
+.tccb-fact p{font-size:12.5px;line-height:1.4;color:#dce6ef;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.tccb-open{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;
+  flex:0 0 auto;font-weight:700;font-size:12.5px;color:#fff;background:var(--accent);
+  border:0;border-radius:10px;padding:9px;}
+@media (hover:hover) and (pointer:fine){ .tccb-open:hover{filter:brightness(1.08);} }
+
 /* ── CARD BACK ────────────────────────────────────────────── */
 .tcb{
   position:absolute;inset:0;color:#fff;padding:20px 20px 16px;
@@ -782,6 +824,7 @@ button.game{width:100%;text-align:left;font:inherit;cursor:pointer;}
   .opts{gap:18px;}
   .grid{grid-template-columns:repeat(auto-fill,minmax(var(--card-w),1fr));gap:26px 22px;align-items:start;}
   .tc{max-width:var(--card-w);aspect-ratio:300/430;margin:0 auto;}
+  .tc.is-compact{aspect-ratio:300/143;}
 
   .modal-card{flex-direction:row;max-width:760px;max-height:88vh;overflow:hidden;}
   .modal-photo{flex:0 0 46%;height:auto;min-height:420px;}
@@ -1372,6 +1415,10 @@ const esc = (s) => String(s).replace(/[&<>"']/g, (c) =>
 
 const initials = (p) => (p.first[0] + p.last[0]).toUpperCase();
 
+// Jersey numbers with no photo on disk. Populated the first time an image
+// fails so later re-renders (sorting, searching) size the card immediately.
+const NO_PHOTO = new Set();
+
 // Photos ship as a project asset; when it isn't there (opened standalone) the
 // card falls back to a monogram over the same navy art rather than a broken img.
 const img = (src, alt, cls) =>
@@ -1388,6 +1435,25 @@ function photoFallback(el) {
   }
   const host = el.closest(".photo-host");
   if (host) host.classList.add("no-photo");
+}
+
+/* Work out which players have a portrait before the grid settles, so cards
+   don't resize under the reader mid-scroll. One re-render once all probes
+   finish; compact cards carry no <img>, so this can't loop. */
+function probePhotos() {
+  let pending = ROSTER.length;
+  const done = () => { if (--pending === 0 && state.tab === "players") render(); };
+  ROSTER.forEach(pl => {
+    const jpg = new Image();
+    jpg.onload = done;
+    jpg.onerror = () => {
+      const png = new Image();
+      png.onload = done;
+      png.onerror = () => { NO_PHOTO.add(pl.num); done(); };
+      png.src = pl.photo.replace(/\.jpg$/i, ".png");
+    };
+    jpg.src = pl.photo;
+  });
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1486,23 +1552,52 @@ function cardBack(p) {
   </div>`;
 }
 
+// Compact card: no portrait, so it drops to a third of the height and shows
+// just the identifying line rather than an empty art panel.
+function compactFront(p) {
+  return `<div class="tcc">
+    <div class="tcc-mono" aria-hidden="true">${initials(p)}</div>
+    <div class="tcc-num">${p.num}</div>
+    <div class="tcc-body">
+      <div class="tcc-nick">“${esc(p.nickname)}”</div>
+      <div class="tcc-name">${esc(p.first)} <b>${esc(p.last)}</b></div>
+      <div class="tcc-pos">${p.position}</div>
+    </div>
+  </div>`;
+}
+
+function compactBack(p) {
+  return `<div class="tccb">
+    <div class="tccb-fact">
+      <span class="tccb-label">Fun fact</span>
+      <p>${esc(p.fact)}</p>
+    </div>
+    <button class="tccb-open" data-open="${p.id}">
+      Full card
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </div>`;
+}
+
 function playerCard(p) {
   const v = state.style;
   const flipped = state.flipped.has(p.id);
   // A div, not a button: the back holds its own "View full card" button and the
   // HTML parser would hoist a nested button straight out of the card.
-  return `<div class="tc tc-${v}${flipped ? " is-flipped" : ""}"
-      role="button" tabindex="0" data-flip="${p.id}" aria-pressed="${flipped}"
+  const compact = NO_PHOTO.has(p.num);
+  return `<div class="tc tc-${v}${flipped ? " is-flipped" : ""}${compact ? " is-compact" : ""}"
+      role="button" tabindex="0" data-flip="${p.id}" data-num="${p.num}" aria-pressed="${flipped}"
       aria-label="${esc(p.name)}, number ${p.num}, ${p.position}. Activate to flip the card.">
     <div class="tc-inner">
       <div class="tc-face tc-front"${flipped ? " inert" : ""}>
-        ${v === "modern" ? modernFront(p) : photoFront(p, v)}
+        ${compact ? compactFront(p) : v === "modern" ? modernFront(p) : photoFront(p, v)}
         <span class="tc-flip-hint" aria-hidden="true">
           <span>FLIP</span>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
         </span>
       </div>
-      <div class="tc-face tc-back"${flipped ? "" : " inert"}>${cardBack(p)}</div>
+      <div class="tc-face tc-back"${flipped ? "" : " inert"}>${compact ? compactBack(p) : cardBack(p)}</div>
     </div>
   </div>`;
 }
@@ -2129,6 +2224,7 @@ const GATE_CODE = "1985";
 
 renderChrome();
 render();
+probePhotos();
 auditGames();
 </script>
 </body>
