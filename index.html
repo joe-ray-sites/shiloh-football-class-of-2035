@@ -625,6 +625,31 @@ html:not(.unlocked) #modal{display:none !important;}
 .st b{font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:19px;color:var(--navy);}
 .stats-empty{margin-top:14px;font-size:13.5px;color:var(--muted);}
 
+/* ── MENU / SEASON LIST ROWS ──────────────────────────────── */
+.mlist{display:flex;flex-direction:column;gap:10px;max-width:560px;}
+.mrow{display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+  background:#fff;border:1px solid var(--line);border-radius:16px;
+  padding:16px 16px;font:inherit;cursor:pointer;transition:.16s;}
+.mrow-ico{flex:0 0 auto;width:40px;height:40px;display:grid;place-items:center;
+  border-radius:12px;background:var(--paper);color:var(--accent);}
+.mrow-yr{flex:0 0 auto;min-width:56px;height:40px;display:grid;place-items:center;
+  border-radius:12px;background:var(--navy);color:#fff;
+  font-family:"Roboto Condensed",sans-serif;font-weight:700;font-size:16px;}
+.mrow-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+.mrow-txt b{font-family:"Roboto Condensed",sans-serif;font-size:18px;color:var(--navy);letter-spacing:.2px;}
+.mrow-txt span{font-size:12.5px;color:var(--muted);}
+.mrow-go{flex:0 0 auto;color:var(--muted);}
+
+/* career table: totals row reads like the "Pro Totals" line on a card back */
+.career{margin-top:24px;}
+.career .pstat-scroll{margin-top:12px;}
+.career table{min-width:420px;}
+.career .pstat-name{font-family:"Roboto Condensed",sans-serif;font-weight:700;
+  color:var(--navy);font-size:14px;}
+.career tbody tr.career-total{background:var(--paper);}
+.career tbody tr.career-total td{border-top:2px solid var(--navy);}
+.career tbody tr.career-total .pstat-name{letter-spacing:.5px;text-transform:uppercase;font-size:12.5px;}
+
 /* ── BOX SCORE SUB-TABS + PLAY-BY-PLAY ────────────────────── */
 .bstabs{display:flex;gap:6px;margin:22px 0 4px;max-width:640px;
   background:#e7ebf0;padding:4px;border-radius:12px;}
@@ -849,6 +874,7 @@ button.game{width:100%;text-align:left;font:inherit;cursor:pointer;}
 /* pointer-precision affordances only where hover really exists */
 @media (hover:hover) and (pointer:fine){
   .menu-btn:hover{border-color:var(--accent);color:var(--navy);}
+  .mrow:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 10px 22px -14px rgba(7,26,46,.5);}
   .lead:hover{border-color:var(--accent);box-shadow:0 10px 22px -14px rgba(7,26,46,.5);transform:translateY(-2px);}
   .lead:hover .lead-go{color:var(--accent);}
   .filmlink:hover{filter:brightness(1.07);}
@@ -1274,23 +1300,51 @@ const GAMES = [
   { id:11, week:"Championship", date:"2026-10-31", opp:"TBD", playoff:true },
 ];
 
-const PLAYED  = GAMES.filter(g => g.final);
+/* ── SEASONS ───────────────────────────────────────────────────
+   Each season is its own game list. Stats for 2025 haven't been entered
+   yet — the games carry final:true with null scores, which reads as
+   "played, result not recorded" rather than "upcoming". */
+const GAMES_2025 = [
+  { id:2501, week:"Wk 1", date:"2025-09-08", opp:"Fayetteville",     home:false, final:true, us:null, them:null },
+  { id:2502, week:"Wk 2", date:"2025-09-13", opp:"Bentonville",      home:false, final:true, us:null, them:null },
+  { id:2503, week:"Wk 3", date:"2025-09-27", opp:"Springdale",       home:true,  final:true, us:null, them:null },
+  { id:2504, week:"Wk 4", date:"2025-10-04", opp:"Bentonville West", home:false, final:true, us:null, them:null },
+  { id:2505, week:"Wk 5", date:"2025-10-11", opp:"Rogers",           home:true,  final:true, us:null, them:null },
+  { id:2506, week:"Wk 6", date:"2025-10-25", opp:"Bentonville West", home:true,  final:true, us:null, them:null },
+  { id:2507, week:"Wk 7", date:"2025-11-01", opp:"Springdale",       home:true,  final:true, us:null, them:null },
+];
+
+// A game only counts toward stats once it has a score on it.
+const playedIn = (games) => games.filter(g => g.final && g.us != null);
+
+const SEASONS = [
+  { year:2025, label:"2025 Season", games:GAMES_2025 },
+  { year:2026, label:"2026 Season", games:GAMES, current:true },
+];
+const CURRENT = SEASONS.find(s => s.current);
+const PAST_SEASONS = SEASONS.filter(s => !s.current).sort((a, b) => b.year - a.year);
+
+const PLAYED  = playedIn(GAMES);
 const NEXT_ID = (GAMES.find(g => !g.final) || {}).id;
+
+const recordOf = (games) => {
+  const p = playedIn(games);
+  return { w: p.filter(g => g.us >  g.them).length,
+           l: p.filter(g => g.us <  g.them).length,
+           t: p.filter(g => g.us === g.them).length };
+};
 
 const TEAM = {
   name: "Shiloh Saints",
   full: "Shiloh 4th Grade Football",
-  season: "2026 Season",
+  season: CURRENT.label,
   monogram: "SC",
-  record: {
-    w: PLAYED.filter(g => g.us >  g.them).length,
-    l: PLAYED.filter(g => g.us <  g.them).length,
-    t: PLAYED.filter(g => g.us === g.them).length,
-  },
+  record: recordOf(GAMES),
 };
 
 /* ── DERIVED STATS ─────────────────────────────────────────────
-   Nothing below is hand-maintained; it all rolls up from GAMES. */
+   Nothing below is hand-maintained; it all rolls up from the game lists.
+   Every function takes a game list so past seasons reuse the same code. */
 const BY_NUM = {};
 ROSTER.forEach(p => { BY_NUM[p.num] = p; });
 
@@ -1298,10 +1352,10 @@ const addInto = (dst, src, keys) => keys.forEach(k => {
   if (src[k] != null) dst[k] = (dst[k] || 0) + src[k];
 });
 
-// One player's totals across every played game.
-function seasonStats(num) {
+// One player's totals across the given games (defaults to this season).
+function seasonStats(num, games) {
   const out = { gp: 0 };
-  PLAYED.forEach(g => {
+  (games || PLAYED).forEach(g => {
     const s = g.stats; if (!s) return;
     let played = false;
     const r = s.rushing   && s.rushing[num];
@@ -1320,13 +1374,22 @@ function seasonStats(num) {
   return out;
 }
 
-// Team totals across every played game.
-function teamSeason() {
+// Career: one row per season the player appeared in, plus the totals row.
+function careerStats(num) {
+  const rows = SEASONS
+    .map(sn => ({ season: sn, s: seasonStats(num, playedIn(sn.games)) }))
+    .filter(r => r.s.gp > 0);
+  const total = seasonStats(num, SEASONS.flatMap(sn => playedIn(sn.games)));
+  return { rows, total };
+}
+
+// Team totals across the given games (defaults to this season).
+function teamSeason(games) {
   const t = { games:0, points:0, pointsAgainst:0, totalYards:0, rushYds:0, passYds:0,
               td:0, twoPtMade:0, twoPtAtt:0,
               firstDowns:0, firstRush:0, firstPass:0, penalties:0, penaltyYds:0,
               tfl:0, sacks:0, int:0, fr:0, yardsLost:0, yardsAllowed:0, solo:0, ast:0 };
-  PLAYED.forEach(g => {
+  (games || PLAYED).forEach(g => {
     t.games++; t.points += g.us || 0; t.pointsAgainst += g.them || 0;
     const s = g.stats; if (!s) return;
     addInto(t, s.team, ["totalYards","rushYds","passYds","td","firstDowns",
@@ -1342,8 +1405,8 @@ function teamSeason() {
 }
 
 // Season leader for a given stat path, e.g. s => s.rush && s.rush.yds
-function leaderBy(pick) {
-  const rows = ROSTER.map(p => ({ p, v: pick(seasonStats(p.num)) }))
+function leaderBy(pick, games) {
+  const rows = ROSTER.map(p => ({ p, v: pick(seasonStats(p.num, games)) }))
                      .filter(r => r.v != null && r.v > 0)
                      .sort((a, b) => b.v - a.v);
   return rows[0] || null;
@@ -1388,13 +1451,23 @@ const fmtDate = (iso, opts) =>
    STATE
    ═══════════════════════════════════════════════════════════ */
 const NAV = [
-  { id:"schedule", label:"Schedule", icon:"M8 2v4M16 2v4M3 9h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" },
-  { id:"players",  label:"Players",  icon:"M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1" },
-  { id:"coaches",  label:"Coaches",  icon:"M12 2l2.4 5 5.6.6-4.2 3.9 1.2 5.5L12 19.3 6.9 22l1.2-5.5L4 12.6 9.6 12z" },
+  { id:"schedule", label:"Schedule",   icon:"M8 2v4M16 2v4M3 9h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" },
+  { id:"players",  label:"Players",    icon:"M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1" },
   { id:"stats",    label:"Team Stats", icon:"M4 20V10M10 20v-7M16 20V4M22 20H2" },
+  { id:"menu",     label:"Menu",       icon:"M4 7h16M4 12h16M4 17h16" },
 ];
 const HOME_TAB = NAV[0].id;   // the logo returns here
-const TABS = NAV.map(n => n.id);
+
+// Pages reached through Menu rather than the bar itself.
+const MENU_PAGES = [
+  { id:"coaches", label:"Coaches", desc:"The staff guiding the Saints",
+    icon:"M12 2l2.4 5 5.6.6-4.2 3.9 1.2 5.5L12 19.3 6.9 22l1.2-5.5L4 12.6 9.6 12z" },
+  { id:"seasons", label:"Past Seasons", desc:"Schedules and team stats from previous years",
+    icon:"M3 3v18h18M7 15l4-4 3 3 5-6" },
+];
+// Menu stays lit while you're on one of its pages.
+const navTabFor = (tab) => MENU_PAGES.some(m => m.id === tab) ? "menu" : tab;
+const TABS = NAV.map(n => n.id).concat(MENU_PAGES.map(m => m.id));
 const STYLES = ["classic", "modern", "bold"];
 const LS_KEY = "shiloh.cardStyle.v2";   // bumped so Bold becomes everyone's default
 
@@ -1417,6 +1490,8 @@ const state = {
   box: null,          // open box-score game id (schedule sub-view)
   boxTab: "stats",    // "stats" | "plays" within a box score
   leaders: null,      // open Team Stats breakdown ("rush" | "pass" | "rec" | "tkl")
+  season: null,       // open past season (year)
+  seasonTab: "schedule", // "schedule" | "stats" within a past season
   style: STYLES.includes(urlCard) ? urlCard : (STYLES.includes(stored) ? stored : "bold"),
   flipped: new Set(),
 };
@@ -1483,7 +1558,7 @@ function renderChrome() {
     `Win–Loss · ${Math.round(w / (w + l) * 100)}% on the year`;
 
   $("#nav").innerHTML = NAV.map(n => {
-    const count = n.id === "players" ? ROSTER.length : n.id === "coaches" ? COACHES.length : null;
+    const count = n.id === "players" ? ROSTER.length : null;
     return `<button class="nav-item" data-tab="${n.id}" aria-current="false">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
            stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${n.icon}"/></svg>
@@ -1639,10 +1714,12 @@ function coachCard(c) {
 }
 
 function gameRow(g) {
-  const won  = g.final && g.us > g.them;
+  const scored = g.final && g.us != null;
+  const won  = scored && g.us > g.them;
   const next = g.id === NEXT_ID;
-  const right = g.final
+  const right = scored
     ? `<div class="game-res ${won ? "win" : "loss"}">${won ? "W" : "L"} ${g.us}–${g.them}</div>`
+    : g.final  ? `<div class="game-upc">No result recorded</div>`
     : next     ? `<div class="game-badge">Next Up</div>`
     : g.playoff ? `<div class="game-badge playoff">${g.week}</div>`
     : `<div class="game-upc">Upcoming</div>`;
@@ -1654,12 +1731,12 @@ function gameRow(g) {
         <span class="ha ${g.home ? "home" : "away"}">${g.home ? "VS" : "@"}</span>
         ${esc(g.opp)}
       </h3>
-      <div class="game-when">${fmtDate(g.date)}${g.final ? " · Final" : ""}</div>
+      <div class="game-when">${fmtDate(g.date, { weekday:"short", month:"short", day:"numeric", year:"numeric" })}${scored ? " · Final" : ""}</div>
     </div>
     <div class="game-right">${right}</div>`;
 
-  // Played games are tappable and open the box score.
-  return g.final
+  // Games with a recorded result are tappable and open the box score.
+  return scored
     ? `<button class="game is-final" data-box="${g.id}">${inner}
          <span class="game-go" aria-hidden="true">
            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -1667,6 +1744,104 @@ function gameRow(g) {
          </span>
        </button>`
     : `<article class="game${next ? " is-next" : ""}${g.playoff ? " is-playoff" : ""}">${inner}</article>`;
+}
+
+/* Career table, in the spirit of a trading-card back: a row per season and
+   a totals row. Columns cover the categories this league actually tracks. */
+function careerSection(p) {
+  const { rows, total } = careerStats(p.num);
+  if (!rows.length) return "";
+  const cells = (s) => [
+    s.gp,
+    s.rush ? s.rush.att : 0,
+    s.rush ? s.rush.yds : 0,
+    s.rec ? s.rec.rec : 0,
+    s.rec ? s.rec.yds : 0,
+    (s.rush ? s.rush.td || 0 : 0) + (s.rec ? s.rec.td || 0 : 0),
+    s.def ? s.def.tkl : 0,
+    s.def ? s.def.sck || 0 : 0,
+    s.def ? s.def.int || 0 : 0,
+  ];
+  const row = (label, s, cls) =>
+    `<tr class="${cls || ""}"><td class="pstat-name">${label}</td>${
+      cells(s).map(v => `<td>${v}</td>`).join("")}</tr>`;
+
+  return `<section class="stats career">
+    <div class="stats-h">
+      <h3>Career Stats</h3>
+      <span>${rows.length} season${rows.length === 1 ? "" : "s"}</span>
+    </div>
+    <div class="pstat-scroll">
+      <table>
+        <thead><tr>
+          <th class="pstat-name">Year</th><th>G</th><th>Car</th><th>Rush</th>
+          <th>Rec</th><th>Yds</th><th>TD</th><th>Tkl</th><th>Sk</th><th>Int</th>
+        </tr></thead>
+        <tbody>
+          ${rows.map(r => row(String(r.season.year), r.s)).join("")}
+          ${rows.length > 1 ? row("Career", total, "career-total") : ""}
+        </tbody>
+      </table>
+    </div>
+  </section>`;
+}
+
+/* ── Menu page ────────────────────────────────────────────── */
+function menuView() {
+  return `<div class="mlist">${MENU_PAGES.map(m => `
+    <button class="mrow" data-tab="${m.id}">
+      <span class="mrow-ico">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="${m.icon}"/></svg>
+      </span>
+      <span class="mrow-txt">
+        <b>${m.label}</b>
+        <span>${m.desc}</span>
+      </span>
+      <svg class="mrow-go" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+    </button>`).join("")}</div>`;
+}
+
+/* ── Past seasons ─────────────────────────────────────────────
+   A past season reuses the current season's schedule and Team Stats
+   views verbatim — same code, different game list. */
+function seasonsView() {
+  if (!PAST_SEASONS.length) return `<p class="empty">No previous seasons yet.</p>`;
+  return `<div class="mlist">${PAST_SEASONS.map(sn => {
+    const rec = recordOf(sn.games);
+    const played = playedIn(sn.games).length;
+    const sub = played
+      ? `${rec.w}–${rec.l} · ${played} game${played === 1 ? "" : "s"}`
+      : `${sn.games.length} games · stats not entered yet`;
+    return `<button class="mrow" data-season="${sn.year}">
+      <span class="mrow-yr">${sn.year}</span>
+      <span class="mrow-txt"><b>${esc(sn.label)}</b><span>${sub}</span></span>
+      <svg class="mrow-go" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+    </button>`;
+  }).join("")}</div>`;
+}
+
+function seasonDetailView(year) {
+  const sn = SEASONS.find(x => x.year === year);
+  if (!sn) return `<p class="empty">Unknown season.</p>`;
+  const tab = state.seasonTab;
+  return `
+    <button class="backlink" data-back-season="1">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+      Past Seasons
+    </button>
+    <div class="bstabs" role="tablist">
+      <button class="bstab ${tab === "schedule" ? "is-on" : ""}" data-seasontab="schedule"
+              role="tab" aria-selected="${tab === "schedule"}">Schedule</button>
+      <button class="bstab ${tab === "stats" ? "is-on" : ""}" data-seasontab="stats"
+              role="tab" aria-selected="${tab === "stats"}">Team Stats</button>
+    </div>
+    ${tab === "stats"
+      ? teamStatsView(playedIn(sn.games), sn.label)
+      : `<div class="sched">${sn.games.map(gameRow).join("")}</div>`}`;
 }
 
 /* ── Box score (one game) ─────────────────────────────────── */
@@ -1867,9 +2042,9 @@ const LEADER_CATS = {
                      s.def.sck || 0, s.def.int || 0, s.def.fr || 0] },
 };
 
-function leaderCard(key) {
+function leaderCard(key, games) {
   const cat = LEADER_CATS[key];
-  const row = leaderBy(cat.pick);
+  const row = leaderBy(cat.pick, games);
   if (!row) return "";
   return `<button class="lead" data-leaders="${key}">
     <div class="lead-k">${cat.label}</div>
@@ -1883,11 +2058,11 @@ function leaderCard(key) {
 }
 
 /* Full ranked breakdown behind a leader card. */
-function leadersView(key) {
+function leadersView(key, games) {
   const cat = LEADER_CATS[key];
   if (!cat) return `<p class="empty">Unknown category.</p>`;
   const rows = ROSTER
-    .map(pl => ({ pl, s: seasonStats(pl.num) }))
+    .map(pl => ({ pl, s: seasonStats(pl.num, games) }))
     .filter(r => cat.pick(r.s) != null)
     .sort((a, b) => cat.pick(b.s) - cat.pick(a.s))
     .map((r, i) => ({
@@ -1906,14 +2081,15 @@ function leadersView(key) {
       : `<p class="empty">No ${cat.table.toLowerCase()} recorded yet this season.</p>`}`;
 }
 
-function teamStatsView() {
-  const t = teamSeason();
-  if (!t.games) return `<p class="empty">No games played yet this season.</p>`;
+function teamStatsView(games, label) {
+  const t = teamSeason(games);
+  const rec = games ? recordOf(games) : TEAM.record;
+  if (!t.games) return `<p class="empty">No stats recorded yet for ${esc(label || TEAM.season)}.</p>`;
   const per = (n) => (n / t.games).toFixed(1);
 
   return `
     <div class="modal-stats tstat-top">
-      <div class="ms"><span>Record</span><b>${TEAM.record.w}–${TEAM.record.l}</b></div>
+      <div class="ms"><span>Record</span><b>${rec.w}–${rec.l}</b></div>
       <div class="ms"><span>Points For</span><b>${t.points}</b></div>
       <div class="ms"><span>Points Ag.</span><b>${t.pointsAgainst}</b></div>
     </div>
@@ -1921,7 +2097,7 @@ function teamStatsView() {
     <section class="bs-sec">
       <h3 class="bs-h">Team Leaders</h3>
       <div class="lead-grid">
-        ${Object.keys(LEADER_CATS).map(leaderCard).join("")}
+        ${Object.keys(LEADER_CATS).map(k => leaderCard(k, games)).join("")}
       </div>
     </section>
 
@@ -1982,8 +2158,9 @@ function render() {
   const tab = state.tab;
 
   // nav + tab bar
+  const navTab = navTabFor(tab);
   document.querySelectorAll(".nav-item").forEach(b => {
-    const on = b.dataset.tab === tab;
+    const on = b.dataset.tab === navTab;
     b.classList.toggle("is-active", on);
     b.setAttribute("aria-current", on ? "page" : "false");
   });
@@ -1993,12 +2170,18 @@ function render() {
   $("#page-title").textContent =
     tab === "players"  ? "Meet the Team"
   : tab === "coaches"  ? "Coaching Staff"
+  : tab === "menu"     ? "Menu"
+  : tab === "seasons"  ? (state.season ? `${state.season} Season` : "Past Seasons")
   : tab === "stats"    ? (state.leaders ? LEADER_CATS[state.leaders].label : "Team Stats")
   : boxGame            ? `${TEAM.name} vs ${boxGame.opp}`
   :                      "Game Schedule";
   $("#page-sub").textContent =
     tab === "players"  ? ""
   : tab === "coaches"  ? `${COACHES.length} coaches & staff guiding the Saints`
+  : tab === "menu"     ? "More from the Saints hub"
+  : tab === "seasons"  ? (state.season
+        ? "Schedule and team stats"
+        : `${PAST_SEASONS.length} previous season${PAST_SEASONS.length === 1 ? "" : "s"}`)
   : tab === "stats"    ? (state.leaders
         ? `Every player · ${TEAM.season}`
         : `${TEAM.season} · ${PLAYED.length} game${PLAYED.length === 1 ? "" : "s"} played`)
@@ -2034,6 +2217,10 @@ function render() {
     view.innerHTML = `<div class="grid grid-coach">${COACHES.map(coachCard).join("")}</div>`;
   } else if (tab === "stats") {
     view.innerHTML = state.leaders ? leadersView(state.leaders) : teamStatsView();
+  } else if (tab === "menu") {
+    view.innerHTML = menuView();
+  } else if (tab === "seasons") {
+    view.innerHTML = state.season ? seasonDetailView(state.season) : seasonsView();
   } else if (state.box) {
     view.innerHTML = boxScoreView(state.box);
   } else {
@@ -2117,7 +2304,8 @@ function openPlayer(id) {
       <div class="modal-fact-h">Fun fact</div>
       <p>${esc(p.fact)}</p>
     </div>
-    ${statsSection(st, p.first)}`;
+    ${statsSection(st, p.first)}
+    ${careerSection(p)}`;
 
   $("#modal").hidden = false;
   document.body.classList.add("is-locked");
@@ -2139,6 +2327,8 @@ function goTab(id) {
   state.tab = id;
   state.box = null;
   state.leaders = null;
+  state.season = null;
+  state.seasonTab = "schedule";
   history.replaceState(null, "", location.search + "#" + id);
   render();
   $("#main").scrollIntoView({ block: "start" });
@@ -2164,6 +2354,13 @@ document.addEventListener("click", (e) => {
   const box = e.target.closest("[data-box]");
   if (box) { state.box = Number(box.dataset.box); state.boxTab = "stats"; render(); window.scrollTo(0, 0); return; }
   if (e.target.closest("[data-back]")) { state.box = null; render(); window.scrollTo(0, 0); return; }
+
+  const sea = e.target.closest("[data-season]");
+  if (sea) { state.season = Number(sea.dataset.season); state.seasonTab = "schedule"; render(); window.scrollTo(0, 0); return; }
+  if (e.target.closest("[data-back-season]")) { state.season = null; render(); window.scrollTo(0, 0); return; }
+
+  const stab = e.target.closest("[data-seasontab]");
+  if (stab) { state.seasonTab = stab.dataset.seasontab; render(); return; }
 
   const ld = e.target.closest("[data-leaders]");
   if (ld) { state.leaders = ld.dataset.leaders; render(); window.scrollTo(0, 0); return; }
