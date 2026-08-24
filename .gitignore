@@ -9,3 +9,6 @@ assets/_originals/
 .vscode/
 .idea/
 *.swp
+
+# Local editor/tooling config (dev server ports, machine paths)
+.claude/
