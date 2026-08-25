@@ -1650,7 +1650,81 @@ const GAMES_2025 = [
           { t:"#11 rush, no gain", yds:0 } ] },
       ],
     } },
-  { id:2505, week:"Wk 5", date:"2025-10-11", opp:"Rogers",           home:true,  final:true, us:null, them:null },
+  { id:2505, week:"Wk 5", date:"2025-10-11", opp:"Rogers", home:true, final:true,
+    us:38, them:0,
+    video:"https://www.youtube.com/watch?v=WahBmaDW-DQ",
+    stats:{
+      team:{ totalYards:390, rushYds:353, passYds:37, points:38, td:5,
+             twoPt:{ made:5, att:5 },
+             firstDowns:10, firstRush:9, firstPass:1,
+             penalties:2, penaltyYds:15, fumbles:"0-0",
+             def:{ tfl:9, sacks:1, int:0, fr:1, yardsLost:29, yardsAllowed:16 } },
+      rushing:{ 6:{att:5,yds:179,td:3}, 1:{att:4,yds:81,td:1},
+                11:{att:2,yds:50,td:0,twoPt:1}, 3:{att:2,yds:40,td:0},
+                21:{att:1,yds:3,td:0,twoPt:1} },
+      passing:{ 11:{c:3,a:3,yds:30,td:1,int:0}, 1:{c:1,a:1,yds:7,td:0,int:0} },
+      receiving:{ 6:{rec:1,yds:20,td:1}, 3:{rec:2,yds:10,td:0,twoPt:2},
+                  21:{rec:1,yds:7,td:0,twoPt:1} },
+      /* The fumble recovery in series 2 wasn't credited to a player. */
+      defense:{ 1:{solo:3,ast:4}, 3:{solo:4,ast:1,sck:1}, 4:{solo:2,ast:0},
+                6:{solo:2,ast:2}, 8:{solo:1,ast:0}, 24:{solo:0,ast:2},
+                27:{solo:1,ast:2}, 80:{solo:0,ast:1} },
+      drives:[
+        { unit:"offense", n:1, plays:[
+          { t:"#3 rush", yds:32 },
+          { t:"#1 rush", yds:40, score:true },
+          { t:"Two-point conversion: #11 rush — GOOD", conv:true, good:true } ] },
+        { unit:"defense", n:1, plays:[
+          { t:"#24, #6 assist on the tackle, no gain", yds:0 },
+          { t:"#6, #27 assist on the tackle, no gain", yds:0 },
+          { t:"#1 solo tackle, no gain", yds:0 } ] },
+        { unit:"offense", n:2, plays:[
+          { t:"#1 rush", yds:2 },
+          { t:"#3 rush", yds:8 },
+          { t:"Penalty — snap infraction", yds:-5, flag:true },
+          { t:"#6 rush", yds:55, score:true },
+          { t:"Two-point conversion: #11 complete to #3 — GOOD", conv:true, good:true } ] },
+        { unit:"defense", n:2, plays:[
+          { t:"#3 solo tackle", yds:-4 },
+          { t:"Fumble — recovered by the defense", yds:0, turnover:true } ] },
+        { unit:"offense", n:3, plays:[
+          { t:"#11 complete to #6", yds:20, score:true },
+          { t:"Two-point conversion: #11 complete to #3 — GOOD", conv:true, good:true } ] },
+        { unit:"defense", n:3, note:"End of half", plays:[
+          { t:"#1, #27 assist on the tackle", yds:1 },
+          { t:"#3 solo tackle", yds:4 },
+          { t:"#24, #1 assist on the tackle", yds:5 },
+          { t:"#4 solo tackle", yds:10 },
+          { t:"#8 solo tackle", yds:20 },
+          { t:"#1 solo tackle", yds:-5 },
+          { t:"#80, #1 assist on the tackle", yds:-3 } ] },
+        { unit:"defense", n:4, plays:[
+          { t:"#6 solo tackle", yds:-2 },
+          { t:"#27 solo tackle", yds:-5 },
+          { t:"Pass incomplete", yds:0 } ] },
+        { unit:"offense", n:4, plays:[
+          { t:"#6 rush", yds:-3 },
+          { t:"#1 rush", yds:39 },
+          { t:"#6 rush", yds:21, score:true },
+          { t:"Two-point conversion: #1 complete to #21 — GOOD", conv:true, good:true } ] },
+        { unit:"defense", n:5, plays:[
+          { t:"#1 solo tackle", yds:4 },
+          { t:"#1, #3 assist on the tackle", yds:-1 },
+          { t:"#3 solo sack", yds:-4, sack:true } ] },
+        { unit:"offense", n:5, plays:[
+          { t:"#11 rush", yds:45 },
+          { t:"Penalty — holding", yds:-10, flag:true },
+          { t:"#6 rush", yds:56, score:true },
+          { t:"Two-point conversion: #21 rush — GOOD", conv:true, good:true } ] },
+        { unit:"defense", n:6, plays:[
+          { t:"#3 solo tackle", yds:-4 },
+          { t:"#6 solo tackle", yds:-1 },
+          { t:"#4 solo tackle", yds:1 } ] },
+        { unit:"offense", n:6, note:"End of game", plays:[
+          { t:"#6 rush", yds:50 },
+          { t:"#1 rush, no gain", yds:0 } ] },
+      ],
+    } },
   { id:2506, week:"Wk 6", date:"2025-10-25", opp:"Bentonville West", home:true,  final:true, us:null, them:null },
   { id:2507, week:"Wk 7", date:"2025-11-01", opp:"Springdale",       home:true,  final:true, us:null, them:null },
 ];
