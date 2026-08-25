@@ -1305,7 +1305,92 @@ const GAMES = [
    yet — the games carry final:true with null scores, which reads as
    "played, result not recorded" rather than "upcoming". */
 const GAMES_2025 = [
-  { id:2501, week:"Wk 1", date:"2025-09-08", opp:"Fayetteville",     home:false, final:true, us:null, them:null },
+  { id:2501, week:"Wk 1", date:"2025-09-08", opp:"Fayetteville", home:false, final:true,
+    us:12, them:0,
+    video:"https://www.youtube.com/watch?v=0kRDyLzUvOw",
+    stats:{
+      team:{ totalYards:253, rushYds:240, passYds:13, points:12, td:2,
+             twoPt:{ made:0, att:2 },
+             firstDowns:13, firstRush:12, firstPass:0,
+             penalties:12, penaltyYds:85, fumbles:"0-0",
+             def:{ tfl:2, sacks:0, int:0, fr:1, yardsLost:5, yardsAllowed:29 } },
+      rushing:{ 1:{att:9,yds:85,td:0}, 6:{att:3,yds:59,td:0},
+                11:{att:8,yds:54,td:1}, 3:{att:6,yds:42,td:1} },
+      passing:{ 11:{c:2,a:5,yds:13,td:0,int:0} },
+      receiving:{ 21:{rec:1,yds:10,td:0}, 3:{rec:1,yds:3,td:0} },
+      defense:{ 1:{solo:1,ast:1},  3:{solo:1,ast:0,fr:1}, 4:{solo:0,ast:5},
+                8:{solo:1,ast:0},  10:{solo:0,ast:2},     21:{solo:0,ast:1},
+                24:{solo:2,ast:5}, 27:{solo:1,ast:1},     28:{solo:0,ast:1},
+                29:{solo:0,ast:1} },
+      drives:[
+        { unit:"offense", n:1, plays:[
+          { t:"#3 rush", yds:10 },
+          { t:"Penalty — false start", yds:-5, flag:true },
+          { t:"#1 rush", yds:26 },
+          { t:"#11 rush", yds:22 },
+          { t:"Penalty — false start", yds:-5, flag:true },
+          { t:"#3 rush", yds:14 },
+          { t:"#11 rush", yds:11, score:true },
+          { t:"Two-point conversion: bad snap, #11 rush, no gain — no good", conv:true } ] },
+        { unit:"defense", n:1, plays:[
+          { t:"#3 solo tackle, #29 assist", yds:4 },
+          { t:"#1 solo tackle", yds:3 },
+          { t:"#27, #24, #4 assist on the tackle", yds:-2 } ] },
+        { unit:"offense", n:2, plays:[
+          { t:"#11 rush, bad snap", yds:-3 },
+          { t:"Penalty — false start", yds:-5, flag:true },
+          { t:"#6 rush", yds:18 },
+          { t:"#3 rush", yds:2 },
+          { t:"#11 rush", yds:17 },
+          { t:"Penalty — false start", yds:-5, flag:true },
+          { t:"#11 sacked", yds:-4, sack:true },
+          { t:"Penalty — false start", yds:-5, flag:true },
+          { t:"#11 complete to #3", yds:3 },
+          { t:"Penalty — false start", yds:-5, flag:true },
+          { t:"#11 complete to #21", yds:10 } ] },
+        { unit:"defense", n:2, plays:[
+          { t:"#1, #4, #24 assist on the tackle", yds:3 },
+          { t:"#27 solo tackle", yds:0 },
+          { t:"#8 solo tackle", yds:1 } ] },
+        { unit:"offense", n:3, note:"End of half", plays:[
+          { t:"Penalty — false start", yds:-5, flag:true },
+          { t:"#1 rush", yds:18 } ] },
+        { unit:"defense", n:3, plays:[
+          { t:"Fumble — recovered by #3", yds:0, turnover:true } ] },
+        { unit:"offense", n:4, plays:[
+          { t:"#11 pass to #6 incomplete", yds:0 },
+          { t:"Penalty — pass interference on the defense", yds:15, flag:true },
+          { t:"#11 rush, no gain", yds:0 },
+          { t:"Penalty — block in the back", yds:-15, flag:true },
+          { t:"#1 rush", yds:15 },
+          { t:"#11 pass to #3 — dropped, incomplete", yds:0 },
+          { t:"#1 rush, no gain", yds:0 },
+          { t:"Penalty — false start", yds:-5, flag:true },
+          { t:"#6 rush", yds:9 } ] },
+        { unit:"defense", n:4, plays:[
+          { t:"#24 solo tackle", yds:12 },
+          { t:"#10, #24, #4 assist on the tackle", yds:5 },
+          { t:"#10, #4 assist on the tackle", yds:3 },
+          { t:"Penalty — facemask", yds:15, flag:true },
+          { t:"#24 solo tackle, #4 assist", yds:2 },
+          { t:"#21, #24 assist on the tackle", yds:1 },
+          { t:"#28, #24 assist on the tackle", yds:-3 } ] },
+        { unit:"offense", n:5, note:"End of game", plays:[
+          { t:"#1 rush", yds:2 },
+          { t:"#3 rush", yds:8 },
+          { t:"Penalty — holding", yds:-10, flag:true },
+          { t:"#6 rush", yds:32 },
+          { t:"#1 rush", yds:7 },
+          { t:"#3 rush", yds:3 },
+          { t:"Penalty — false start", yds:-5, flag:true },
+          { t:"#1 rush", yds:11 },
+          { t:"#1 rush", yds:5 },
+          { t:"#11 rush", yds:11 },
+          { t:"#1 rush", yds:1 },
+          { t:"#3 rush", yds:5, score:true },
+          { t:"Two-point conversion: #11 pass to #3 incomplete — no good", conv:true } ] },
+      ],
+    } },
   { id:2502, week:"Wk 2", date:"2025-09-13", opp:"Bentonville",      home:false, final:true, us:null, them:null },
   { id:2503, week:"Wk 3", date:"2025-09-27", opp:"Springdale",       home:true,  final:true, us:null, them:null },
   { id:2504, week:"Wk 4", date:"2025-10-04", opp:"Bentonville West", home:false, final:true, us:null, them:null },
@@ -1323,6 +1408,10 @@ const SEASONS = [
 ];
 const CURRENT = SEASONS.find(s => s.current);
 const PAST_SEASONS = SEASONS.filter(s => !s.current).sort((a, b) => b.year - a.year);
+
+// Box scores are reachable from any season, so ids resolve across all of them.
+const ALL_GAMES = SEASONS.flatMap(sn => sn.games);
+const gameById = (id) => ALL_GAMES.find(g => g.id === id);
 
 const PLAYED  = playedIn(GAMES);
 const NEXT_ID = (GAMES.find(g => !g.final) || {}).id;
@@ -1866,8 +1955,8 @@ const pName = (num) => {
 };
 
 function boxScoreView(id) {
-  const g = GAMES.find(x => x.id === id);
-  if (!g || !g.final) return `<p class="empty">No box score for that game yet.</p>`;
+  const g = gameById(id);
+  if (!g || g.us == null) return `<p class="empty">No box score for that game yet.</p>`;
   const won = g.us > g.them;
   const hasPlays = !!(g.stats && g.stats.drives && g.stats.drives.length);
   const tab = hasPlays ? state.boxTab : "stats";
@@ -1876,7 +1965,7 @@ function boxScoreView(id) {
     <button class="backlink" data-back="1">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
            stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
-      All games
+      ${state.season ? `${state.season} schedule` : "All games"}
     </button>
 
     <div class="bs-head">
@@ -2166,12 +2255,13 @@ function render() {
   });
 
   // header copy
-  const boxGame = state.box && GAMES.find(g => g.id === state.box);
+  const boxGame = state.box && gameById(state.box);
   $("#page-title").textContent =
     tab === "players"  ? "Meet the Team"
   : tab === "coaches"  ? "Coaching Staff"
   : tab === "menu"     ? "Menu"
-  : tab === "seasons"  ? (state.season ? `${state.season} Season` : "Past Seasons")
+  : tab === "seasons"  ? (boxGame ? `${TEAM.name} vs ${boxGame.opp}`
+                          : state.season ? `${state.season} Season` : "Past Seasons")
   : tab === "stats"    ? (state.leaders ? LEADER_CATS[state.leaders].label : "Team Stats")
   : boxGame            ? `${TEAM.name} vs ${boxGame.opp}`
   :                      "Game Schedule";
@@ -2179,7 +2269,8 @@ function render() {
     tab === "players"  ? ""
   : tab === "coaches"  ? `${COACHES.length} coaches & staff guiding the Saints`
   : tab === "menu"     ? "More from the Saints hub"
-  : tab === "seasons"  ? (state.season
+  : tab === "seasons"  ? (boxGame ? `Box score · ${fmtDate(boxGame.date, { month:"long", day:"numeric", year:"numeric" })}`
+        : state.season
         ? "Schedule and team stats"
         : `${PAST_SEASONS.length} previous season${PAST_SEASONS.length === 1 ? "" : "s"}`)
   : tab === "stats"    ? (state.leaders
@@ -2220,7 +2311,8 @@ function render() {
   } else if (tab === "menu") {
     view.innerHTML = menuView();
   } else if (tab === "seasons") {
-    view.innerHTML = state.season ? seasonDetailView(state.season) : seasonsView();
+    view.innerHTML = state.box ? boxScoreView(state.box)
+      : state.season ? seasonDetailView(state.season) : seasonsView();
   } else if (state.box) {
     view.innerHTML = boxScoreView(state.box);
   } else {
