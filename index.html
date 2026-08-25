@@ -1823,8 +1823,8 @@ const GAMES_2025 = [
              firstDowns:12, firstRush:10, firstPass:2,
              penalties:3, penaltyYds:25, fumbles:"1-0",
              def:{ tfl:3, sacks:0, int:0, fr:1, yardsLost:11, yardsAllowed:14 } },
-      rushing:{ 11:{att:13,yds:75,td:1}, 3:{att:10,yds:46,td:0}, 1:{att:6,yds:28,td:0},
-                6:{att:2,yds:6,td:0}, 2:{att:1,yds:0,td:0} },
+      rushing:{ 11:{att:14,yds:75,td:1}, 3:{att:10,yds:46,td:0}, 1:{att:6,yds:28,td:0},
+                6:{att:2,yds:6,td:0} },
       passing:{ 11:{c:4,a:7,yds:28,td:0,int:2} },
       receiving:{ 6:{rec:1,yds:20,td:0}, 3:{rec:2,yds:8,td:0}, 1:{rec:1,yds:0,td:0} },
       defense:{ 1:{solo:2,ast:2,ff:1}, 3:{solo:2,ast:4},  4:{solo:2,ast:2},
@@ -1898,7 +1898,7 @@ const GAMES_2025 = [
           { t:"#1 rush", yds:4 },
           { t:"#1 rush", yds:8 },
           { t:"#1 fumbles a wet snap — Shiloh recovers", yds:-7 },
-          { t:"#2 rush, no gain", yds:0 },
+          { t:"#11 rush, no gain", yds:0 },
           { t:"Penalty — facemask on Springdale", yds:15, flag:true },
           { t:"#11 rush, no gain", yds:0 } ] },
       ],
@@ -1912,6 +1912,16 @@ const SEASONS = [
   { year:2025, label:"2025 Season", games:GAMES_2025 },
   { year:2026, label:"2026 Season", games:GAMES, current:true },
 ];
+SEASONS.forEach(sn => sn.games.forEach(g => { g.year = sn.year; }));
+
+/* Jerseys worn by someone other than the current holder in a past season.
+   Stats under these numbers belong to that player, so they are shown under
+   the right name and kept off the current holder's career line. */
+const SEASON_JERSEYS = {
+  2025: { 21: { last: "Claypool" } },
+};
+const wornByOther = (year, num) => (SEASON_JERSEYS[year] || {})[num] || null;
+
 const CURRENT = SEASONS.find(s => s.current);
 const PAST_SEASONS = SEASONS.filter(s => !s.current).sort((a, b) => b.year - a.year);
 
@@ -1952,6 +1962,7 @@ function seasonStats(num, games) {
   const out = { gp: 0 };
   (games || PLAYED).forEach(g => {
     const s = g.stats; if (!s) return;
+    if (wornByOther(g.year, num)) return;   // that jersey was someone else's
     let played = false;
     const r = s.rushing   && s.rushing[num];
     const a = s.passing   && s.passing[num];
@@ -1967,6 +1978,27 @@ function seasonStats(num, games) {
   });
   if (out.def) out.def.tkl = (out.def.solo || 0) + (out.def.ast || 0);
   return out;
+}
+
+// Stats for a jersey number in a given season, whoever wore it.
+function seasonStats2(num, games, year) {
+  if (wornByOther(year, num)) {
+    const out = { gp: 0 };
+    (games || []).forEach(g => {
+      const st = g.stats; if (!st) return;
+      let played = false;
+      const r = st.rushing && st.rushing[num], a = st.passing && st.passing[num];
+      const c = st.receiving && st.receiving[num], d = st.defense && st.defense[num];
+      if (r) { out.rush = out.rush || {}; addInto(out.rush, r, ["att","yds","td","twoPt"]); played = true; }
+      if (a) { out.pass = out.pass || {}; addInto(out.pass, a, ["c","a","yds","td","int"]); played = true; }
+      if (c) { out.rec  = out.rec  || {}; addInto(out.rec,  c, ["rec","yds","td","twoPt"]); played = true; }
+      if (d) { out.def  = out.def  || {}; addInto(out.def,  d, ["solo","ast","tfl","sck","int","fr"]); played = true; }
+      if (played) out.gp++;
+    });
+    if (out.def) out.def.tkl = (out.def.solo || 0) + (out.def.ast || 0);
+    return out;
+  }
+  return seasonStats(num, games);
 }
 
 // Career: one row per season the player appeared in, plus the totals row.
@@ -2450,7 +2482,9 @@ function statTable(title, cols, rows) {
   </div>`;
 }
 
-const pName = (num) => {
+const pName = (num, year) => {
+  const alt = year && wornByOther(year, num);
+  if (alt) return `<b>${num}</b> ${esc(alt.last)}`;
   const p = BY_NUM[num];
   return p ? `<b>${p.num}</b> ${esc(p.last)}` : `<b>${num}</b>`;
 };
@@ -2509,15 +2543,15 @@ function boxStatsView(g) {
     .sort((a, b) => (obj[b].yds || obj[b].solo + obj[b].ast || 0) - (obj[a].yds || obj[a].solo + obj[a].ast || 0));
 
   const rush = order(s.rushing).map(n => { const v = s.rushing[n];
-    return { name:pName(n), vals:[v.att, v.yds, (v.yds/v.att).toFixed(1), v.td || 0, v.twoPt || 0] }; });
+    return { name:pName(n, g.year), vals:[v.att, v.yds, (v.yds/v.att).toFixed(1), v.td || 0, v.twoPt || 0] }; });
   const pass = order(s.passing).map(n => { const v = s.passing[n];
-    return { name:pName(n), vals:[`${v.c}–${v.a}`, v.yds, v.td || 0, v.int || 0] }; });
+    return { name:pName(n, g.year), vals:[`${v.c}–${v.a}`, v.yds, v.td || 0, v.int || 0] }; });
   const recv = order(s.receiving).map(n => { const v = s.receiving[n];
-    return { name:pName(n), vals:[v.rec, v.yds, v.td || 0, v.twoPt || 0] }; });
+    return { name:pName(n, g.year), vals:[v.rec, v.yds, v.td || 0, v.twoPt || 0] }; });
   const dRows = Object.keys(s.defense || {}).map(Number)
     .sort((a, b) => (s.defense[b].solo + s.defense[b].ast) - (s.defense[a].solo + s.defense[a].ast))
     .map(n => { const v = s.defense[n];
-      return { name:pName(n), vals:[v.solo || 0, v.ast || 0, (v.solo || 0) + (v.ast || 0),
+      return { name:pName(n, g.year), vals:[v.solo || 0, v.ast || 0, (v.solo || 0) + (v.ast || 0),
                                     v.sck || 0, v.int || 0, v.fr || 0] }; });
 
   const cmp = (label, a, b) => `<div class="cmp"><span>${a}</span><em>${label}</em><span>${b}</span></div>`;
@@ -2570,10 +2604,13 @@ function boxStatsView(g) {
 /* ── Box score: Play-by-Play tab ──────────────────────────── */
 // "#11 rush" -> "<b>#11</b> Barnes rush", so the data stays short and any
 // name change flows through automatically.
-const withNames = (t) => esc(t).replace(/#(\d+)/g, (m, n) =>
-  BY_NUM[n] ? `<b>#${n}</b> ${esc(BY_NUM[n].last)}` : `<b>#${n}</b>`);
+const withNames = (t, year) => esc(t).replace(/#(\d+)/g, (m, n) => {
+  const alt = year && wornByOther(year, n);
+  if (alt) return `<b>#${n}</b> ${esc(alt.last)}`;
+  return BY_NUM[n] ? `<b>#${n}</b> ${esc(BY_NUM[n].last)}` : `<b>#${n}</b>`;
+});
 
-function playRow(p) {
+function playRow(p, year) {
   const cls = ["play",
     p.score && "is-score", p.turnover && "is-turnover",
     p.flag && "is-flag", p.conv && "is-conv"].filter(Boolean).join(" ");
@@ -2585,7 +2622,7 @@ function playRow(p) {
     : p.turnover ? `<span class="play-tag to">Turnover</span>`
     : p.sack     ? `<span class="play-tag sk">Sack</span>`
     : p.good     ? `<span class="play-tag ok">Good</span>` : "";
-  return `<li class="${cls}"><span class="play-txt">${withNames(p.t)}</span>${tag}${chip}</li>`;
+  return `<li class="${cls}"><span class="play-txt">${withNames(p.t, year)}</span>${tag}${chip}</li>`;
 }
 
 function playsView(g) {
@@ -2599,7 +2636,7 @@ function playsView(g) {
         <span class="drive-n">Series ${d.n}</span>
         ${d.note ? `<span class="drive-note">${esc(d.note)}</span>` : ""}
       </div>
-      <ol class="plays">${d.plays.map(playRow).join("")}</ol>
+      <ol class="plays">${d.plays.map(pl => playRow(pl, g.year)).join("")}</ol>
     </section>`;
   }).join("") + `</div>`;
 }
@@ -2645,12 +2682,15 @@ function leaderCard(key, games) {
 function leadersView(key, games) {
   const cat = LEADER_CATS[key];
   if (!cat) return `<p class="empty">Unknown category.</p>`;
-  const rows = ROSTER
-    .map(pl => ({ pl, s: seasonStats(pl.num, games) }))
+  const year = games && games.length ? games[0].year : CURRENT.year;
+  // Numbers worn by a different player that season are listed under that name.
+  const extras = Object.keys(SEASON_JERSEYS[year] || {}).map(Number);
+  const rows = [...new Set(ROSTER.map(pl => pl.num).concat(extras))]
+    .map(num => ({ num, s: seasonStats2(num, games, year) }))
     .filter(r => cat.pick(r.s) != null)
     .sort((a, b) => cat.pick(b.s) - cat.pick(a.s))
     .map((r, i) => ({
-      name: `<span class="rank">${i + 1}</span>${pName(r.pl.num)}`,
+      name: `<span class="rank">${i + 1}</span>${pName(r.num, year)}`,
       vals: cat.vals(r.s),
     }));
 
@@ -2921,8 +2961,10 @@ function closePlayer() {
 /* ═══════════════════════════════════════════════════════════
    EVENTS
    ═══════════════════════════════════════════════════════════ */
+// Tapping the tab you're already on returns it to its root view, rather
+// than leaving a box score or breakdown open underneath.
 function goTab(id) {
-  if (!TABS.includes(id) || id === state.tab) return;
+  if (!TABS.includes(id)) return;
   state.tab = id;
   state.box = null;
   state.leaders = null;
