@@ -290,17 +290,22 @@ html:not(.unlocked) #modal{display:none !important;}
   display:block;cursor:pointer;-webkit-tap-highlight-color:transparent;
   -webkit-user-select:none;user-select:none;
 }
-.tc-inner{
-  position:relative;width:100%;height:100%;
-  transition:transform .6s cubic-bezier(.4,.1,.2,1);
-  transform-style:preserve-3d;
-}
-.tc.is-flipped .tc-inner{transform:rotateY(180deg);}
+/* The flip animates each face independently rather than rotating a
+   preserve-3d parent: iOS WebKit ignores backface-visibility on elements
+   that also clip (overflow:hidden + border-radius), which leaked the front
+   face through — mirrored — on iPhones. Faces counter-rotate and swap
+   visibility while edge-on, so no backface is ever relied upon. The
+   symmetric easing keeps the 90° point at exactly half the duration. */
+.tc-inner{position:relative;width:100%;height:100%;perspective:1400px;}
 .tc-face{
   position:absolute;inset:0;border-radius:var(--radius);overflow:hidden;
   backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  transform:rotateY(0deg);
+  transition:transform .6s cubic-bezier(.45,0,.55,1), visibility 0s linear .3s;
 }
-.tc-back{transform:rotateY(180deg);}
+.tc-back{transform:rotateY(-180deg);visibility:hidden;}
+.tc.is-flipped .tc-front{transform:rotateY(180deg);visibility:hidden;}
+.tc.is-flipped .tc-back{transform:rotateY(0deg);visibility:visible;}
 .tc-front{box-shadow:0 0 0 1.5px rgba(37,150,190,.4) inset, 0 16px 30px -12px rgba(7,26,46,.55);}
 
 .tc-flip-hint{
@@ -895,7 +900,7 @@ button.game{width:100%;text-align:left;font:inherit;cursor:pointer;}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important;}
-  .tc-inner{transition:none;}
+  .tc-face{transition:none;}
 }
 </style>
 </head>
