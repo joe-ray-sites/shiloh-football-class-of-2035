@@ -724,10 +724,13 @@ html:not(.unlocked) #modal{display:none !important;}
   font-weight:700;font-size:12px;color:#9fb0c0;margin-right:12px;text-align:right;}
 
 /* box-score header */
-.backlink{
-  display:inline-flex;align-items:center;gap:5px;border:0;background:none;
-  color:var(--accent);font-size:13.5px;font-weight:700;padding:6px 0;margin-bottom:6px;
+.crumb{
+  display:inline-flex;align-items:center;gap:8px;border:0;background:none;
+  color:var(--accent);font-size:17px;font-weight:700;letter-spacing:.2px;
+  padding:2px 10px 2px 0;margin:0 0 14px -4px;min-height:40px;cursor:pointer;
 }
+.crumb svg{flex:0 0 auto;}
+.crumb:active{opacity:.7;}
 .bs-head{background:var(--navy);color:#fff;border-radius:18px;padding:16px 20px;max-width:640px;}
 .bs-meta{font-size:11.5px;letter-spacing:.6px;text-transform:uppercase;color:#8fa6ba;margin-bottom:10px;}
 .bs-line{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:7px 0;}
@@ -878,6 +881,7 @@ button.game{width:100%;text-align:left;font:inherit;cursor:pointer;}
   .lead:hover{border-color:var(--accent);box-shadow:0 10px 22px -14px rgba(7,26,46,.5);transform:translateY(-2px);}
   .lead:hover .lead-go{color:var(--accent);}
   .filmlink:hover{filter:brightness(1.07);}
+  .crumb:hover{color:var(--navy);}
   .mmark:hover,.brand-mark:hover{filter:brightness(.94);}
   .menu-item:hover{background:var(--paper);}
   .tc-flip-hint{opacity:0;}
@@ -970,6 +974,11 @@ button.game{width:100%;text-align:left;font:inherit;cursor:pointer;}
 
   <!-- ── MAIN ─────────────────────────────────────────────── -->
   <main class="main" id="main">
+    <button class="crumb" id="crumb" hidden>
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+      <span id="crumb-txt"></span>
+    </button>
     <header class="topbar">
       <div class="topbar-titles">
         <h1 id="page-title"></h1>
@@ -2414,11 +2423,6 @@ function seasonDetailView(year) {
   if (!sn) return `<p class="empty">Unknown season.</p>`;
   const tab = state.seasonTab;
   return `
-    <button class="backlink" data-back-season="1">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-           stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
-      Past Seasons
-    </button>
     <div class="bstabs" role="tablist">
       <button class="bstab ${tab === "schedule" ? "is-on" : ""}" data-seasontab="schedule"
               role="tab" aria-selected="${tab === "schedule"}">Schedule</button>
@@ -2459,12 +2463,6 @@ function boxScoreView(id) {
   const tab = hasPlays ? state.boxTab : "stats";
 
   const head = `
-    <button class="backlink" data-back="1">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-           stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
-      ${state.season ? `${state.season} schedule` : "All games"}
-    </button>
-
     <div class="bs-head">
       <div class="bs-meta">Final · ${fmtDate(g.date, { weekday:"long", month:"long", day:"numeric", year:"numeric" })}</div>
       <div class="bs-line ${won ? "is-win" : ""}">
@@ -2657,11 +2655,6 @@ function leadersView(key, games) {
     }));
 
   return `
-    <button class="backlink" data-back-leaders="1">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-           stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
-      Team Stats
-    </button>
     ${rows.length
       ? statTable(cat.table, cat.cols, rows)
       : `<p class="empty">No ${cat.table.toLowerCase()} recorded yet this season.</p>`}`;
@@ -2777,6 +2770,17 @@ function render() {
         : `${TEAM.season} · ${PLAYED.length} game${PLAYED.length === 1 ? "" : "s"} played`)
   : boxGame            ? `Box score · ${fmtDate(boxGame.date)}`
   :                      `${TEAM.season} · ${PLAYED.length} of ${GAMES.length} games played`;
+
+  // Breadcrumb: one element, retargeted to whatever we can back out of.
+  const crumb = $("#crumb");
+  const back =
+      state.box      ? { attr:"data-back",         label:state.season ? `${state.season} schedule` : "All games" }
+    : state.leaders  ? { attr:"data-back-leaders", label:state.season ? `${state.season} Team Stats` : "Team Stats" }
+    : state.season   ? { attr:"data-back-season",  label:"Past Seasons" }
+    : null;
+  ["data-back", "data-back-leaders", "data-back-season"].forEach(a => crumb.removeAttribute(a));
+  crumb.hidden = !back;
+  if (back) { crumb.setAttribute(back.attr, "1"); $("#crumb-txt").textContent = back.label; }
 
   const film = $("#filmlink");
   if (boxGame && boxGame.video) { film.href = boxGame.video; film.hidden = false; }
