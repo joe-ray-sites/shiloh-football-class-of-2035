@@ -1725,7 +1725,86 @@ const GAMES_2025 = [
           { t:"#1 rush, no gain", yds:0 } ] },
       ],
     } },
-  { id:2506, week:"Wk 6", date:"2025-10-25", opp:"Bentonville West", home:true,  final:true, us:null, them:null },
+  { id:2506, week:"Wk 6", date:"2025-10-25", opp:"Bentonville West", home:true, final:true,
+    us:20, them:0,
+    video:"https://www.youtube.com/watch?v=IrJHp5D6Rqw",
+    stats:{
+      team:{ totalYards:244, rushYds:217, passYds:27, points:20, td:3,
+             twoPt:{ made:1, att:3 },
+             firstDowns:12, firstRush:12, firstPass:0,
+             penalties:1, penaltyYds:5, fumbles:"1-1",
+             def:{ tfl:7, sacks:1, int:0, fr:1, yardsLost:30, yardsAllowed:-1 } },
+      rushing:{ 11:{att:10,yds:102,td:0,twoPt:1}, 6:{att:4,yds:44,td:1},
+                3:{att:5,yds:42,td:0}, 1:{att:3,yds:19,td:2}, 21:{att:1,yds:10,td:0} },
+      passing:{ 11:{c:5,a:7,yds:27,td:0,int:0}, 1:{c:0,a:1,yds:0,td:0,int:1} },
+      receiving:{ 3:{rec:5,yds:27,td:0} },
+      defense:{ 1:{solo:1,ast:1},  3:{solo:1,ast:4},  4:{solo:2,ast:4,sck:1},
+                5:{solo:0,ast:1},  6:{solo:1,ast:0},  8:{solo:0,ast:2,fr:1},
+                24:{solo:2,ast:1}, 27:{solo:1,ast:3}, 28:{solo:0,ast:1} },
+      drives:[
+        { unit:"offense", n:1, plays:[
+          { t:"#11 rush", yds:42 },
+          { t:"#3 rush", yds:18 },
+          { t:"#6 rush", yds:15, score:true },
+          { t:"Two-point conversion: #11 rush — GOOD", conv:true, good:true } ] },
+        { unit:"defense", n:1, plays:[
+          { t:"Fumble — recovered by #8", yds:0, turnover:true } ] },
+        { unit:"offense", n:2, plays:[
+          { t:"#11 rush", yds:4 },
+          { t:"#3 rush", yds:7 },
+          { t:"#11 rush", yds:4 },
+          { t:"#11 complete to #3", yds:3 },
+          { t:"#1 rush", yds:6, score:true },
+          { t:"Two-point conversion: #11 rush, no gain — no good", conv:true } ] },
+        { unit:"defense", n:2, plays:[
+          { t:"#1 solo tackle", yds:-3 },
+          { t:"#1, #8 assist on the tackle", yds:-3 },
+          { t:"#24, #3 assist on the tackle", yds:4 } ] },
+        { unit:"offense", n:3, plays:[
+          { t:"#11 rush", yds:5 },
+          { t:"#1 rush", yds:10 },
+          { t:"#1 pass intercepted", yds:0, turnover:true } ] },
+        { unit:"defense", n:3, plays:[
+          { t:"#3 solo tackle", yds:2 },
+          { t:"#27 solo tackle", yds:2 },
+          { t:"#4, #27 assist on the tackle", yds:-10 } ] },
+        { unit:"offense", n:4, plays:[
+          { t:"#11 complete to #3", yds:9 },
+          { t:"#11 rush, no gain", yds:0 },
+          { t:"#3 rush, fumbles — Bentonville West recovers", yds:7, turnover:true } ] },
+        { unit:"defense", n:4, note:"End of half", plays:[
+          { t:"#4 solo tackle", yds:3 },
+          { t:"#4 solo sack", yds:-8, sack:true } ] },
+        { unit:"defense", n:5, plays:[
+          { t:"#24 solo tackle", yds:-2 },
+          { t:"#28, #4, #8 assist on the tackle", yds:5 },
+          { t:"#3, #27 assist on the tackle", yds:4 },
+          { t:"#24 solo tackle", yds:-1 } ] },
+        { unit:"offense", n:5, plays:[
+          { t:"#11 rush", yds:-3 },
+          { t:"#11 complete to #3", yds:1 },
+          { t:"#11 complete to #3", yds:6 },
+          { t:"#11 rush", yds:45 },
+          { t:"Penalty — false start", yds:-5, flag:true },
+          { t:"#11 pass to #17 incomplete — broken up", yds:0 },
+          { t:"#3 rush", yds:14 },
+          { t:"#1 rush", yds:3, score:true },
+          { t:"Two-point conversion: #11 pass to #18 dropped — no good", conv:true } ] },
+        { unit:"defense", n:6, plays:[
+          { t:"#6 solo tackle", yds:8 },
+          { t:"#3, #4 assist on the tackle", yds:1 },
+          { t:"#3, #27 assist on the tackle, no gain", yds:0 },
+          { t:"#5, #4 assist on the tackle — turnover on downs", yds:-3, turnover:true } ] },
+        { unit:"offense", n:6, note:"End of game", plays:[
+          { t:"#21 rush", yds:10 },
+          { t:"#6 rush", yds:20 },
+          { t:"#3 rush", yds:-4 },
+          { t:"#6 rush", yds:5 },
+          { t:"#11 complete to #3", yds:8 },
+          { t:"#6 rush", yds:4 },
+          { t:"#11 rush, no gain", yds:0 } ] },
+      ],
+    } },
   { id:2507, week:"Wk 7", date:"2025-11-01", opp:"Springdale",       home:true,  final:true, us:null, them:null },
 ];
 
