@@ -780,7 +780,7 @@ button.game{width:100%;text-align:left;font:inherit;cursor:pointer;}
   .opts{margin:0;padding:0;overflow:visible;justify-content:space-between;flex-wrap:wrap;}
   .game-main{flex:1;order:0;}
   .game-right{order:0;}
-  .game-week{width:64px;flex:0 0 64px;}
+  .game-week{flex:0 0 auto;min-width:64px;max-width:104px;}
   .modal{align-items:center;padding:24px;}
   .modal-card{max-width:520px;border-radius:24px;max-height:88vh;}
 }
@@ -1725,7 +1725,7 @@ const GAMES_2025 = [
           { t:"#1 rush, no gain", yds:0 } ] },
       ],
     } },
-  { id:2506, week:"Wk 6", date:"2025-10-25", opp:"Bentonville West", home:true, final:true,
+  { id:2506, week:"Playoff", date:"2025-10-25", opp:"Bentonville West", home:true, final:true, playoff:true,
     us:20, them:0,
     video:"https://www.youtube.com/watch?v=IrJHp5D6Rqw",
     stats:{
@@ -1805,7 +1805,7 @@ const GAMES_2025 = [
           { t:"#11 rush, no gain", yds:0 } ] },
       ],
     } },
-  { id:2507, week:"Wk 7", date:"2025-11-01", opp:"Springdale", home:true, final:true,
+  { id:2507, week:"Championship", date:"2025-11-01", opp:"Springdale", home:true, final:true, playoff:true,
     us:6, them:0,
     video:"https://www.youtube.com/watch?v=liJt_61YEXk",
     stats:{
@@ -2758,6 +2758,7 @@ function render() {
   : tab === "coaches"  ? "Coaching Staff"
   : tab === "menu"     ? "Menu"
   : tab === "seasons"  ? (boxGame ? `${TEAM.name} vs ${boxGame.opp}`
+                          : state.leaders ? LEADER_CATS[state.leaders].label
                           : state.season ? `${state.season} Season` : "Past Seasons")
   : tab === "stats"    ? (state.leaders ? LEADER_CATS[state.leaders].label : "Team Stats")
   : boxGame            ? `${TEAM.name} vs ${boxGame.opp}`
@@ -2767,6 +2768,7 @@ function render() {
   : tab === "coaches"  ? `${COACHES.length} coaches & staff guiding the Saints`
   : tab === "menu"     ? "More from the Saints hub"
   : tab === "seasons"  ? (boxGame ? `Box score · ${fmtDate(boxGame.date, { month:"long", day:"numeric", year:"numeric" })}`
+        : state.leaders ? `Every player · ${state.season} Season`
         : state.season
         ? "Schedule and team stats"
         : `${PAST_SEASONS.length} previous season${PAST_SEASONS.length === 1 ? "" : "s"}`)
@@ -2808,8 +2810,12 @@ function render() {
   } else if (tab === "menu") {
     view.innerHTML = menuView();
   } else if (tab === "seasons") {
-    view.innerHTML = state.box ? boxScoreView(state.box)
-      : state.season ? seasonDetailView(state.season) : seasonsView();
+    const sn = state.season && SEASONS.find(x => x.year === state.season);
+    view.innerHTML =
+        state.box               ? boxScoreView(state.box)
+      : state.leaders && sn     ? leadersView(state.leaders, playedIn(sn.games))
+      : sn                      ? seasonDetailView(state.season)
+      :                           seasonsView();
   } else if (state.box) {
     view.innerHTML = boxScoreView(state.box);
   } else {
@@ -2945,8 +2951,8 @@ document.addEventListener("click", (e) => {
   if (e.target.closest("[data-back]")) { state.box = null; render(); window.scrollTo(0, 0); return; }
 
   const sea = e.target.closest("[data-season]");
-  if (sea) { state.season = Number(sea.dataset.season); state.seasonTab = "schedule"; render(); window.scrollTo(0, 0); return; }
-  if (e.target.closest("[data-back-season]")) { state.season = null; render(); window.scrollTo(0, 0); return; }
+  if (sea) { state.season = Number(sea.dataset.season); state.seasonTab = "schedule"; state.leaders = null; render(); window.scrollTo(0, 0); return; }
+  if (e.target.closest("[data-back-season]")) { state.season = null; state.leaders = null; render(); window.scrollTo(0, 0); return; }
 
   const stab = e.target.closest("[data-seasontab]");
   if (stab) { state.seasonTab = stab.dataset.seasontab; render(); return; }
