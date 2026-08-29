@@ -691,6 +691,7 @@ html:not(.unlocked) #modal{display:none !important;}
 .play-tag.ok{background:rgba(31,157,87,.14);color:var(--win);}
 .play.is-score{background:rgba(31,157,87,.07);}
 .play.is-turnover{background:rgba(216,85,63,.07);}
+.play.is-opp .play-yds{color:var(--loss);}
 .play.is-flag{color:var(--muted);font-style:italic;}
 .play.is-conv{background:#fbfcfd;font-size:13px;color:var(--muted);}
 .play.is-conv .play-txt b{color:var(--muted);}
@@ -1303,7 +1304,111 @@ const GAMES = [
           { t:"#1 rush", yds:54, score:true } ] },
       ],
     } },
-  { id:3,  week:"Wk 3", date:"2026-08-29", opp:"Springdale",       home:false },
+  { id:3,  week:"Wk 3", date:"2026-08-29", opp:"Springdale", home:false, final:true,
+    us:12, them:18,
+    video:"https://www.youtube.com/watch?v=siahhFHOhrM",
+    stats:{
+      team:{ totalYards:252, rushYds:252, passYds:0, points:12, td:2,
+             twoPt:{ made:0, att:2 },
+             firstDowns:9, firstRush:9, firstPass:0,
+             penalties:9, penaltyYds:60, fumbles:"1-0",
+             def:{ tfl:4, sacks:0, int:1, fr:0, yardsLost:6, yardsAllowed:263 } },
+      rushing:{ 11:{att:13,yds:113,td:1}, 3:{att:9,yds:104,td:1}, 6:{att:3,yds:36,td:0},
+                13:{att:1,yds:2,td:0}, 25:{att:2,yds:1,td:0}, 37:{att:1,yds:1,td:0},
+                1:{att:1,yds:-2,td:0}, 88:{att:1,yds:-3,td:0} },
+      passing:{ 11:{c:1,a:6,yds:0,td:0,int:0} },
+      receiving:{ 6:{rec:1,yds:0,td:0} },
+      defense:{ 3:{solo:1,ast:2},  4:{solo:0,ast:2},  6:{solo:2,ast:3},
+                8:{solo:0,ast:4},  13:{solo:1,ast:3}, 22:{solo:0,ast:2},
+                24:{solo:1,ast:4}, 27:{solo:1,ast:2}, 28:{solo:0,ast:2},
+                37:{solo:0,ast:1}, 56:{solo:0,ast:3}, 88:{solo:0,ast:2,int:1} },
+      drives:[
+        { unit:"offense", n:1, plays:[
+          { t:"#11 rush", yds:10 },
+          { t:"#6 rush", yds:5 },
+          { t:"Penalty — false start", yds:-5, flag:true },
+          { t:"Penalty — false start", yds:-5, flag:true },
+          { t:"#11 rush", yds:25 },
+          { t:"#3 rush, drops the ball — recovered by #11", yds:-3 },
+          { t:"Penalty — false start", yds:-5, flag:true },
+          { t:"#11 rush", yds:3 },
+          { t:"#3 rush, no gain", yds:0 } ] },
+        { unit:"defense", n:1, plays:[
+          { t:"#28, #3, #4 assist on the tackle", yds:1 },
+          { t:"#88 intercepts the pass", yds:0, turnover:true } ] },
+        { unit:"offense", n:2, plays:[
+          { t:"#3 rush", yds:3 },
+          { t:"#11 rush", yds:11 },
+          { t:"Penalty — flag on the play", yds:-10, flag:true },
+          { t:"#11 complete to #6, no gain", yds:0 },
+          { t:"#3 rush", yds:8 },
+          { t:"#11 pass to #6 incomplete — turnover on downs", yds:0, turnover:true } ] },
+        { unit:"defense", n:2, plays:[
+          { t:"#6 solo tackle", yds:-2 },
+          { t:"#3 solo tackle, no gain", yds:0 },
+          { t:"Springdale rush — touchdown", yds:85, oppScore:true },
+          { t:"Two-point conversion: pass incomplete — no good", conv:true } ] },
+        { unit:"offense", n:3, plays:[
+          { t:"#1 rush", yds:-2 },
+          { t:"#11 rush", yds:10 },
+          { t:"#25 rush", yds:-1 },
+          { t:"Penalty — false start", yds:-5, flag:true } ] },
+        { unit:"defense", n:3, plays:[
+          { t:"Springdale rush — touchdown", yds:62, oppScore:true },
+          { t:"Two-point conversion: #24, #28, #4 assist on the stop — no good", conv:true } ] },
+        { unit:"offense", n:4, plays:[
+          { t:"#11 rush", yds:-1 },
+          { t:"#11 pass to #1 incomplete", yds:0 },
+          { t:"#3 rush", yds:70, score:true },
+          { t:"Penalty — illegal motion on the conversion", yds:-5, flag:true },
+          { t:"Two-point conversion: #11 pass incomplete — no good", conv:true } ] },
+        { unit:"defense", n:4, note:"End of half", plays:[
+          { t:"#24 solo tackle", yds:13 },
+          { t:"#13 solo tackle", yds:8 },
+          { t:"#27, #22, #3 assist on the tackle, no gain", yds:0 },
+          { t:"#56, #6, #8 assist on the tackle", yds:5 } ] },
+        { unit:"defense", n:5, plays:[
+          { t:"#6 solo tackle", yds:13 },
+          { t:"#27 solo tackle", yds:-1 },
+          { t:"#8, #56, #24 assist on the tackle", yds:6 },
+          { t:"#22, #88 assist on the tackle", yds:2 },
+          { t:"Pass incomplete — turnover on downs", yds:0, turnover:true } ] },
+        { unit:"offense", n:5, plays:[
+          { t:"#11 rush", yds:1 },
+          { t:"#3 rush", yds:4 },
+          { t:"#37 rush", yds:1 },
+          { t:"#11 rush, no gain", yds:0 } ] },
+        { unit:"defense", n:6, plays:[
+          { t:"Pass incomplete", yds:0 },
+          { t:"#37, #8 assist on the tackle", yds:3 },
+          { t:"#27, #13 assist on the tackle", yds:-1 } ] },
+        { unit:"offense", n:6, plays:[
+          { t:"#11 rush", yds:9 },
+          { t:"#6 rush", yds:19 },
+          { t:"#3 rush", yds:10 },
+          { t:"#25 rush", yds:2 },
+          { t:"#11 rush", yds:3 },
+          { t:"#3 rush", yds:1 },
+          { t:"#6 rush", yds:12 },
+          { t:"Penalty — holding", yds:-10, flag:true },
+          { t:"#11 rush", yds:39 },
+          { t:"#11 rush", yds:1, score:true },
+          { t:"Penalty — false start on the conversion", yds:-5, flag:true },
+          { t:"Two-point conversion: #13 rush — no good", conv:true } ] },
+        { unit:"defense", n:7, plays:[
+          { t:"#24, #88, #6, #13 assist on the tackle", yds:7 },
+          { t:"#8, #24, #6 assist on the tackle", yds:6 },
+          { t:"Springdale rush — touchdown", yds:58, oppScore:true },
+          { t:"Two-point conversion: #13, #56 assist for a loss — no good", conv:true, yds:-2 } ] },
+        { unit:"offense", n:7, note:"End of game", plays:[
+          { t:"#3 rush", yds:11 },
+          { t:"Penalty — holding", yds:-10, flag:true },
+          { t:"#11 pass to #6 dropped — incomplete", yds:0 },
+          { t:"#11 pass incomplete — hit while throwing", yds:0 },
+          { t:"#11 rush", yds:2 },
+          { t:"#88 rush", yds:-3 } ] },
+      ],
+    } },
   { id:4,  week:"Wk 4", date:"2026-09-12", opp:"Rogers Heritage",  home:false },
   { id:5,  week:"Wk 5", date:"2026-09-19", opp:"Bentonville",      home:true },
   { id:6,  week:"Wk 6", date:"2026-09-26", opp:"Rogers",           home:true },
@@ -2617,13 +2722,14 @@ const withNames = (t, year) => esc(t).replace(/#(\d+)/g, (m, n) => {
 
 function playRow(p, year) {
   const cls = ["play",
-    p.score && "is-score", p.turnover && "is-turnover",
-    p.flag && "is-flag", p.conv && "is-conv"].filter(Boolean).join(" ");
+    p.score && "is-score", (p.turnover || p.oppScore) && "is-turnover",
+    p.flag && "is-flag", p.conv && "is-conv", p.oppScore && "is-opp"].filter(Boolean).join(" ");
   const chip = p.yds == null ? "" :
     `<span class="play-yds ${p.yds > 0 ? "pos" : p.yds < 0 ? "neg" : "zero"}">${
       p.yds > 0 ? "+" : ""}${p.yds}</span>`;
   const tag =
       p.score    ? `<span class="play-tag td">Touchdown</span>`
+    : p.oppScore ? `<span class="play-tag to">Touchdown</span>`
     : p.turnover ? `<span class="play-tag to">Turnover</span>`
     : p.sack     ? `<span class="play-tag sk">Sack</span>`
     : p.good     ? `<span class="play-tag ok">Good</span>` : "";
