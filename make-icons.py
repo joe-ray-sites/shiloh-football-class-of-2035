@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate favicons and home-screen icons from assets/sc-logo.png.
+Generate favicons and home-screen icons from assets/sc35-logo.png.
 
     python3 make-icons.py
 
@@ -24,7 +24,7 @@ except ImportError:
     sys.exit("Pillow is required.  Install it with:  python3 -m pip install Pillow")
 
 ROOT = Path(__file__).resolve().parent
-SRC = ROOT / "assets" / "sc-logo.png"
+SRC = ROOT / "assets" / "sc35-logo.png"
 OUT = ROOT / "assets" / "icons"
 WHITE = (255, 255, 255, 255)
 

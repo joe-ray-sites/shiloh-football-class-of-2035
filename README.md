@@ -12,7 +12,8 @@ browser and it runs.
 index.html            the entire site (markup, styles, data, logic)
 resize-photos.py      batch-resizes photos for the web
 assets/
-  sc-logo.png         team mark
+  sc35-logo.png       team mark (used across the site + icons)
+  sc-logo.png         previous team mark, kept for later use
   players/            player photos, named by JERSEY NUMBER (24.jpg, 1.png …)
   coaches/            coach photos, named by their id in COACHES (1.jpg …)
   _originals/         full-res originals (git-ignored)
