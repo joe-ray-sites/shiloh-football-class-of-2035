@@ -1134,16 +1134,16 @@ const GAMES = [
       team:{ totalYards:353, rushYds:350, passYds:3, points:28, td:4, twoPt:{ made:3, att:4 },
              firstDowns:8, firstRush:8, firstPass:0,
              penalties:6, penaltyYds:40, fumbles:"2-0",
-             def:{ tfl:5, sacks:2, int:1, fr:1, yardsLost:32, yardsAllowed:73 } },
+             def:{ tfl:5, sacks:3, int:1, fr:1, yardsLost:32, yardsAllowed:73 } },
       rushing:{ 11:{att:5,yds:134,td:1}, 3:{att:6,yds:43,td:1}, 6:{att:1,yds:55,td:1},
                 1:{att:4,yds:106,td:1,twoPt:2}, 37:{att:1,yds:12,td:0} },
       passing:{ 11:{c:1,a:4,yds:3,td:0,int:0} },
       receiving:{ 25:{rec:1,yds:3,td:0,twoPt:1} },
-      defense:{ 1:{solo:2,ast:5}, 3:{solo:2,ast:3,fr:1}, 4:{solo:1,ast:0},
+      defense:{ 1:{solo:2,ast:5,sck:2}, 3:{solo:2,ast:3,fr:1}, 4:{solo:1,ast:0},
                 5:{solo:0,ast:1},  6:{solo:0,ast:1}, 8:{solo:1,ast:3},
                 13:{solo:0,ast:1}, 15:{solo:0,ast:1}, 0:{solo:0,ast:3,int:1},
                 22:{solo:1,ast:1}, 24:{solo:0,ast:2}, 25:{solo:1,ast:0},
-                27:{solo:0,ast:2}, 28:{solo:0,ast:3}, 51:{solo:1,ast:0} },
+                27:{solo:0,ast:2}, 28:{solo:0,ast:3}, 51:{solo:1,ast:0,sck:1} },
       /* Play-by-play. Tackle credits were reconciled to the stat line above:
          six plays had a participant swapped so the per-player solo/assist
          totals match exactly (see the commit message for the list). */
@@ -1151,7 +1151,7 @@ const GAMES = [
         { unit:"defense", n:1, plays:[
           { t:"#3, #1, #28 assist on the tackle", yds:-1 },
           { t:"#3 solo tackle, #1 assist", yds:-5 },
-          { t:"#1 solo tackle", yds:-7 } ] },
+          { t:"#1 sack", yds:-7, sack:true } ] },
         { unit:"offense", n:1, plays:[
           { t:"#11 rush", yds:4 },
           { t:"#11 fumbles a bad snap — Shiloh recovers" },
@@ -1167,7 +1167,7 @@ const GAMES = [
           { t:"Penalty — false start on the conversion", yds:-5, flag:true },
           { t:"Two-point conversion: #11 pass to #3 dropped — no good", conv:true } ] },
         { unit:"defense", n:3, plays:[
-          { t:"#1, #0, #27 assist on the tackle", yds:-7 },
+          { t:"#1, #0, #27 sack — credited to #1", yds:-7, sack:true },
           { t:"#4 solo tackle", yds:6 },
           { t:"#8, #0, #5 assist on the tackle", yds:8 },
           { t:"#3, #22 assist on the tackle — turnover on downs", yds:2, turnover:true } ] },
@@ -1202,7 +1202,7 @@ const GAMES = [
           { t:"#1, #24, #8 assist on the tackle", yds:7 },
           { t:"#8 solo tackle", yds:55 },
           { t:"#13, #28 assist on the tackle", yds:4 },
-          { t:"#51 solo tackle", yds:-4 },
+          { t:"#51 sack", yds:-4, sack:true },
           { t:"#22 solo tackle", yds:5 } ] },
         { unit:"offense", n:5, plays:[
           { t:"#11 rush", yds:18 },
@@ -1225,17 +1225,17 @@ const GAMES = [
              twoPt:{ made:1, att:4 },
              firstDowns:13, firstRush:13, firstPass:0,
              penalties:1, penaltyYds:15, fumbles:"2-1",
-             def:{ tfl:11, sacks:3, int:0, fr:0, yardsLost:36, yardsAllowed:-9 } },
+             def:{ tfl:11, sacks:5, int:0, fr:0, yardsLost:36, yardsAllowed:-9 } },
       /* Conversion attempts count as carries/attempts and their yardage,
          same as any other snap. */
       rushing:{ 1:{att:8,yds:106,td:3}, 3:{att:4,yds:94,td:2}, 11:{att:3,yds:63,td:0,twoPt:1},
                 6:{att:2,yds:32,td:0}, 37:{att:4,yds:23,td:0}, 25:{att:1,yds:15,td:0},
                 22:{att:1,yds:6,td:0} },
       passing:{ 11:{c:0,a:1,yds:0,td:0,int:0} },
-      defense:{ 1:{solo:2,ast:4},  3:{solo:3,ast:2,sck:2,ff:1}, 4:{solo:1,ast:5},
+      defense:{ 1:{solo:2,ast:4,sck:1},  3:{solo:3,ast:2,sck:2,ff:1}, 4:{solo:1,ast:5},
                 5:{solo:1,ast:1},  6:{solo:1,ast:4},  8:{solo:2,ast:2},
                 10:{solo:0,ast:1}, 11:{solo:0,ast:2}, 13:{solo:0,ast:4,sck:1},
-                15:{solo:0,ast:1}, 0:{solo:1,ast:2}, 24:{solo:0,ast:1},
+                15:{solo:0,ast:1}, 0:{solo:1,ast:2,sck:1}, 24:{solo:0,ast:1},
                 27:{solo:0,ast:3}, 28:{solo:0,ast:1}, 29:{solo:0,ast:1},
                 34:{solo:0,ast:2}, 67:{solo:0,ast:1} },
       /* Play-by-play, in the order it happened. #num is swapped for the
@@ -1257,7 +1257,7 @@ const GAMES = [
           { t:"#3 rush", yds:14, score:true },
           { t:"Two-point conversion: #11 rush — GOOD", yds:5, conv:true, good:true } ] },
         { unit:"defense", n:2, plays:[
-          { t:"#1 solo tackle", yds:-5 },
+          { t:"#1 sack", yds:-5, sack:true },
           { t:"#27, #1, #13 assist on the tackle", yds:1 },
           { t:"#8, #0, #5 assist on the tackle", yds:4 },
           { t:"#13, #28, #27 assist — sack", yds:-4, sack:true } ] },
@@ -1298,7 +1298,7 @@ const GAMES = [
           { t:"#4, #6, #29 assist on the tackle", yds:3 },
           { t:"#10, #0, #24 assist on the tackle", yds:-2 },
           { t:"#34, #13, #4, #11 assist on the tackle", yds:-1 },
-          { t:"#0 solo tackle", yds:-5 } ] },
+          { t:"#0 sack", yds:-5, sack:true } ] },
         { unit:"offense", n:6, note:"End of game", plays:[
           { t:"#37 rush", yds:11 },
           { t:"#1 rush", yds:54, score:true } ] },
@@ -1417,7 +1417,7 @@ const GAMES = [
              twoPt:{ made:4, att:4 },
              firstDowns:16, firstRush:11, firstPass:5,
              penalties:2, penaltyYds:20, fumbles:"0-0",
-             def:{ tfl:9, sacks:0, int:0, fr:3, yardsLost:25, yardsAllowed:-14 } },
+             def:{ tfl:9, sacks:1, int:0, fr:3, yardsLost:25, yardsAllowed:-14 } },
       rushing:{ 11:{att:3,yds:93,td:1,twoPt:1}, 3:{att:5,yds:79,td:0,twoPt:1},
                 1:{att:3,yds:29,td:1}, 24:{att:1,yds:25,td:0}, 6:{att:2,yds:15,td:0,twoPt:1},
                 25:{att:2,yds:12,td:0}, 37:{att:2,yds:14,td:0}, 21:{att:1,yds:10,td:0},
@@ -1428,7 +1428,7 @@ const GAMES = [
       /* McCorry was dictated under #88 and #20 before settling on #0. His
          Wk-4 line keeps both assist credits from the play dictated as
          "#88, #20 assist". */
-      defense:{ 1:{solo:1,ast:2},  3:{solo:1,ast:1},  4:{solo:2,ast:3,fr:1},
+      defense:{ 1:{solo:1,ast:2},  3:{solo:1,ast:1,sck:1},  4:{solo:2,ast:3,fr:1},
                 8:{solo:1,ast:2},  10:{solo:0,ast:3}, 13:{solo:3,ast:1,fr:1},
                 15:{solo:0,ast:1}, 0:{solo:0,ast:4}, 27:{solo:0,ast:1,fr:1},
                 28:{solo:0,ast:1}, 29:{solo:0,ast:1}, 51:{solo:0,ast:1},
@@ -1442,7 +1442,7 @@ const GAMES = [
         { unit:"defense", n:1, plays:[
           { t:"#1, #8 assist on the tackle", yds:5 },
           { t:"#8 solo tackle, no gain", yds:0 },
-          { t:"#3 solo tackle", yds:-5 } ] },
+          { t:"#3 sack", yds:-5, sack:true } ] },
         { unit:"offense", n:2, plays:[
           { t:"#3 rush", yds:12 },
           { t:"#11 pass to #3 incomplete", yds:0 },
@@ -1509,12 +1509,12 @@ const GAMES = [
              twoPt:{ made:2, att:3 },
              firstDowns:8, firstRush:8, firstPass:0,
              penalties:1, penaltyYds:0, fumbles:"3-1",
-             def:{ tfl:7, sacks:0, int:1, fr:2, yardsLost:15, yardsAllowed:154 } },
+             def:{ tfl:7, sacks:1, int:1, fr:2, yardsLost:15, yardsAllowed:154 } },
       rushing:{ 11:{att:9,yds:143,td:2}, 6:{att:9,yds:52,td:0},
                 1:{att:2,yds:18,td:1}, 3:{att:4,yds:0,td:0,twoPt:2} },
       passing:{ 1:{c:1,a:2,yds:1,td:0,int:0}, 11:{c:1,a:1,yds:0,td:0,int:0} },
       receiving:{ 22:{rec:1,yds:1,td:0}, 3:{rec:1,yds:0,td:0} },
-      defense:{ 1:{solo:2,ast:4,ff:1},  3:{solo:5,ast:4},  4:{solo:1,ast:3},
+      defense:{ 1:{solo:2,ast:4,ff:1},  3:{solo:5,ast:4},  4:{solo:1,ast:3,sck:1},
                 6:{solo:3,ast:1},  8:{solo:2,ast:6,int:1}, 10:{solo:0,ast:1},
                 13:{solo:0,ast:1}, 0:{solo:3,ast:4,fr:1}, 22:{solo:1,ast:2},
                 24:{solo:0,ast:1}, 27:{solo:0,ast:0,fr:1}, 28:{solo:0,ast:2} },
@@ -1569,7 +1569,7 @@ const GAMES = [
         { unit:"defense", n:6, plays:[
           { t:"#6 solo tackle", yds:27 },
           { t:"#1 solo tackle, #28 assist", yds:2 },
-          { t:"#4 solo tackle", yds:-5 },
+          { t:"#4 sack", yds:-5, sack:true },
           { t:"#22, #3, #8 assist on the tackle", yds:4 },
           { t:"#0, #24 assist on the tackle", yds:1 },
           { t:"#8 solo tackle", yds:5 },
@@ -1607,17 +1607,17 @@ const GAMES = [
              twoPt:{ made:4, att:5 },
              firstDowns:11, firstRush:9, firstPass:2,
              penalties:5, penaltyYds:30, fumbles:"0-0",
-             def:{ tfl:10, sacks:0, int:0, fr:1, yardsLost:44, yardsAllowed:41 } },
+             def:{ tfl:10, sacks:5, int:0, fr:1, yardsLost:44, yardsAllowed:41 } },
       rushing:{ 3:{att:3,yds:100,td:1,twoPt:1}, 11:{att:4,yds:90,td:1,twoPt:1},
                 1:{att:4,yds:55,td:2}, 6:{att:1,yds:47,td:1},
                 24:{att:1,yds:32,td:0}, 37:{att:1,yds:12,td:0}, 25:{att:1,yds:9,td:0} },
       passing:{ 11:{c:4,a:5,yds:45,td:0,int:0}, 1:{c:0,a:1,yds:0,td:0,int:0} },
       receiving:{ 6:{rec:1,yds:25,td:0}, 18:{rec:1,yds:10,td:0},
                   22:{rec:1,yds:5,td:0,twoPt:1}, 25:{rec:1,yds:5,td:0,twoPt:1} },
-      defense:{ 1:{solo:2,ast:2},  3:{solo:1,ast:6},  4:{solo:1,ast:2,ff:1},
-                5:{solo:3,ast:1},  6:{solo:1,ast:1},  10:{solo:1,ast:0},
+      defense:{ 1:{solo:2,ast:2,sck:1},  3:{solo:1,ast:6},  4:{solo:1,ast:2,sck:1,ff:1},
+                5:{solo:3,ast:1,sck:1},  6:{solo:1,ast:1,sck:1},  10:{solo:1,ast:0},
                 11:{solo:1,ast:0}, 13:{solo:0,ast:0,fr:1}, 0:{solo:3,ast:4},
-                22:{solo:2,ast:0}, 24:{solo:1,ast:0}, 27:{solo:0,ast:3},
+                22:{solo:2,ast:0}, 24:{solo:1,ast:0}, 27:{solo:0,ast:3,sck:1},
                 28:{solo:0,ast:1}, 29:{solo:0,ast:1}, 34:{solo:1,ast:0},
                 56:{solo:1,ast:0} },
       drives:[
@@ -1637,14 +1637,14 @@ const GAMES = [
           { t:"Two-point conversion: #11 rush — GOOD", yds:5, conv:true, good:true } ] },
         { unit:"defense", n:1, plays:[
           { t:"#4, #1 assist on the tackle, no gain", yds:0 },
-          { t:"#1 solo tackle", yds:-5 },
-          { t:"#27, #6 assist on the tackle", yds:-7 } ] },
+          { t:"#1 sack", yds:-5, sack:true },
+          { t:"#27, #6 sack — credited to #27", yds:-7, sack:true } ] },
         { unit:"offense", n:2, plays:[
           { t:"#6 rush", yds:47, score:true },
           { t:"Two-point conversion: #11 complete to #25 — GOOD", yds:5, conv:true, good:true } ] },
         { unit:"defense", n:2, plays:[
           { t:"#24 solo tackle, #3 assist", yds:10 },
-          { t:"#4 tackle for a loss, forces the fumble — recovered by #13", yds:-5, turnover:true } ] },
+          { t:"#4 sack, forces the fumble — recovered by #13", yds:-5, sack:true, turnover:true } ] },
         { unit:"offense", n:3, plays:[
           { t:"#3 rush", yds:25, score:true },
           { t:"Two-point conversion: #3 rush — GOOD", yds:5, conv:true, good:true } ] },
@@ -1677,13 +1677,13 @@ const GAMES = [
         { unit:"defense", n:6, note:"End of game", plays:[
           { t:"#11 solo tackle, #0 assist", yds:11 },
           { t:"#0 breaks up the pass — incomplete", yds:0 },
-          { t:"#6 solo tackle", yds:-5 },
+          { t:"#6 sack", yds:-5, sack:true },
           { t:"Penalty — encroachment on Shiloh, 5 yards", flag:true },
           { t:"#10 solo tackle", yds:14 },
           { t:"#6 breaks up the pass — incomplete", yds:0 },
           { t:"#34 solo tackle", yds:14 },
           { t:"#0 solo tackle", yds:-3 },
-          { t:"#5 solo tackle", yds:-5 },
+          { t:"#5 sack", yds:-5, sack:true },
           { t:"Penalty — encroachment on Shiloh, 5 yards", flag:true },
           { t:"Pass incomplete", yds:0 },
           { t:"#0 solo tackle", yds:7 } ] },
@@ -1784,7 +1784,7 @@ const GAMES = [
              twoPt:{ made:4, att:6 },
              firstDowns:9, firstRush:7, firstPass:2,
              penalties:1, penaltyYds:5, fumbles:"1-1",
-             def:{ tfl:12, sacks:0, int:1, fr:4, yardsLost:44, yardsAllowed:-4 } },
+             def:{ tfl:12, sacks:3, int:1, fr:4, yardsLost:44, yardsAllowed:-4 } },
       rushing:{ 11:{att:4,yds:66,td:1,twoPt:1}, 37:{att:3,yds:59,td:0},
                 3:{att:2,yds:56,td:1}, 1:{att:2,yds:55,td:1},
                 24:{att:1,yds:13,td:0}, 25:{att:1,yds:3,td:0,twoPt:1},
@@ -1793,8 +1793,8 @@ const GAMES = [
       receiving:{ 22:{rec:1,yds:27,td:1}, 89:{rec:1,yds:11,td:1},
                   24:{rec:1,yds:10,td:0,twoPt:1}, 25:{rec:1,yds:5,td:0,twoPt:1},
                   18:{rec:1,yds:0,td:0} },
-      defense:{ 0:{solo:3,ast:1,ff:1},  1:{solo:0,ast:3,fr:2},  4:{solo:3,ast:2,fr:1},
-                5:{solo:0,ast:3},  7:{solo:0,ast:1},  8:{solo:2,ast:2},
+      defense:{ 0:{solo:3,ast:1,sck:1,ff:1},  1:{solo:0,ast:3,fr:2},  4:{solo:3,ast:2,sck:1,fr:1},
+                5:{solo:0,ast:3},  7:{solo:0,ast:1},  8:{solo:2,ast:2,sck:1},
                 10:{solo:0,ast:1}, 13:{solo:1,ast:3}, 20:{solo:1,ast:1},
                 24:{solo:0,ast:0,int:1}, 27:{solo:1,ast:1,fr:1,td:1},
                 28:{solo:0,ast:2}, 34:{solo:0,ast:1}, 37:{solo:0,ast:1} },
@@ -1802,7 +1802,7 @@ const GAMES = [
         { unit:"defense", n:1, plays:[
           { t:"#4, #1 assist on the tackle", yds:-3 },
           { t:"#0 solo tackle", yds:-4 },
-          { t:"#8 solo tackle", yds:-5 } ] },
+          { t:"#8 sack", yds:-5, sack:true } ] },
         { unit:"offense", n:1, plays:[
           { t:"#11 complete to #18, no gain", yds:0 },
           { t:"#3 rush", yds:51, score:true },
@@ -1826,7 +1826,7 @@ const GAMES = [
           { t:"Two-point conversion: #11 complete to #24 — GOOD", yds:10, conv:true, good:true } ] },
         { unit:"defense", n:4, plays:[
           { t:"#1, #27 assist on the tackle", yds:-5 },
-          { t:"#0 solo tackle", yds:-5 },
+          { t:"#0 sack", yds:-5, sack:true },
           { t:"#34, #37 assist on the tackle", yds:3 } ] },
         { unit:"offense", n:4, plays:[
           { t:"Penalty — false start", yds:-5, flag:true },
@@ -1834,7 +1834,7 @@ const GAMES = [
           { t:"#1 rush", yds:56, score:true },
           { t:"Two-point conversion: #11 pass to #18 incomplete — no good", conv:true } ] },
         { unit:"defense", n:5, plays:[
-          { t:"#4 solo tackle", yds:-6 },
+          { t:"#4 sack", yds:-6, sack:true },
           { t:"#24 intercepts the pass", yds:0, turnover:true } ] },
         { unit:"offense", n:5, note:"End of half", plays:[
           { t:"#11 rush", yds:11 } ] },
@@ -1965,14 +1965,14 @@ const GAMES = [
              twoPt:{ made:0, att:1 },
              firstDowns:7, firstRush:4, firstPass:3,
              penalties:2, penaltyYds:25, fumbles:"1-0",
-             def:{ tfl:3, sacks:0, int:0, fr:0, yardsLost:23, yardsAllowed:129 } },
+             def:{ tfl:3, sacks:2, int:0, fr:0, yardsLost:23, yardsAllowed:129 } },
       rushing:{ 6:{att:3,yds:51,td:0}, 1:{att:4,yds:36,td:0}, 11:{att:6,yds:14,td:0},
                 22:{att:1,yds:1,td:0}, 3:{att:2,yds:0,td:0} },
       passing:{ 11:{c:2,a:4,yds:50,td:1,int:1}, 1:{c:1,a:1,yds:30,td:0,int:0} },
       receiving:{ 6:{rec:2,yds:52,td:0}, 1:{rec:1,yds:28,td:1} },
       defense:{ 0:{solo:1,ast:2},  1:{solo:2,ast:7},  4:{solo:1,ast:3},
-                6:{solo:3,ast:5},  8:{solo:3,ast:2},  13:{solo:0,ast:3},
-                24:{solo:2,ast:1}, 27:{solo:0,ast:3}, 28:{solo:0,ast:1},
+                6:{solo:3,ast:5},  8:{solo:3,ast:2,sck:1},  13:{solo:0,ast:3},
+                24:{solo:2,ast:1,sck:1}, 27:{solo:0,ast:3}, 28:{solo:0,ast:1},
                 37:{solo:0,ast:3} },
       drives:[
         { unit:"offense", n:1, plays:[
@@ -2008,7 +2008,7 @@ const GAMES = [
           { t:"#13, #28 assist on the tackle", yds:6 },
           { t:"#37, #4 assist on the tackle", yds:4 },
           { t:"#0 solo tackle", yds:2 },
-          { t:"#24 solo tackle", yds:-10 } ] },
+          { t:"#24 sack", yds:-10, sack:true } ] },
         { unit:"defense", n:3, plays:[
           { t:"#24, #1, #6 assist on the tackle", yds:9 },
           { t:"#1, #13 assist on the tackle", yds:4 },
@@ -2031,7 +2031,7 @@ const GAMES = [
           { t:"#8, #27 assist on the tackle, no gain", yds:0 },
           { t:"#4 solo tackle", yds:2 },
           { t:"#8 solo tackle", yds:1 },
-          { t:"#8 solo tackle", yds:-10 } ] },
+          { t:"#8 sack", yds:-10, sack:true } ] },
         { unit:"offense", n:4, note:"End of game", plays:[
           { t:"#1 rush", yds:8 },
           { t:"#1 rush, no gain", yds:0 },
