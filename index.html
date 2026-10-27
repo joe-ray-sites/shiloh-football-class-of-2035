@@ -1072,7 +1072,7 @@ const RAW = [
   ["Lincoln", "Gober", 13, "LB", "Linc", "Calls out the play before the snap"],
   ["Calvin", "Everheart", 15, "CB", "All Heart", "Plays the ball, never the fake"],
   ["Skyler", "Rodriguez", 18, "WR", "Sky High", "Runs the crispest route on the field"],
-  ["Cole", "Stalbaum", 80, "WR,CB", "Cole Train", "Catches passes one drive, breaks them up the next"],
+  ["Cole", "Stalbaum", 20, "WR,CB", "Cole Train", "Catches passes one drive, breaks them up the next"],
   ["Holston", "Flannagan", 21, "WR", "Hollywood", "Always finds the open grass"],
   ["Teller", "Owens", 22, "CB", "The Teller", "Sticks to his man like a shadow"],
   ["Jacob", "Ray", 24, "WR,LB", "Ray Gun", "Hands on offense, hammer on defense"],
@@ -1793,8 +1793,6 @@ const GAMES = [
       receiving:{ 22:{rec:1,yds:27,td:1}, 89:{rec:1,yds:11,td:1},
                   24:{rec:1,yds:10,td:0,twoPt:1}, 25:{rec:1,yds:5,td:0,twoPt:1},
                   18:{rec:1,yds:0,td:0} },
-      /* #20 is a new number this game (McCorry, #0, tackled alongside #20
-         in the last series) — entered as given until we have a name. */
       defense:{ 0:{solo:3,ast:1,ff:1},  1:{solo:0,ast:3,fr:2},  4:{solo:3,ast:2,fr:1},
                 5:{solo:0,ast:3},  7:{solo:0,ast:1},  8:{solo:2,ast:2},
                 10:{solo:0,ast:1}, 13:{solo:1,ast:3}, 20:{solo:1,ast:1},
@@ -2150,11 +2148,11 @@ const GAMES_2025 = [
                 6:{att:5,yds:72,td:1,twoPt:1}, 11:{att:8,yds:25,td:0,twoPt:1} },
       passing:{ 11:{c:2,a:6,yds:40,td:1,int:0} },
       receiving:{ 3:{rec:2,yds:40,td:1} },
-      /* #80 was Cole Stalbaum in 2025 (he wears 80 on the current roster too). */
+      /* Stalbaum wore #80 in 2025; re-keyed to his current #20. */
       defense:{ 1:{solo:1,ast:3,sck:1}, 3:{solo:1,ast:0,ff:1}, 4:{solo:0,ast:1},
                 6:{solo:1,ast:1},       8:{solo:1,ast:1},      21:{solo:0,ast:1},
                 25:{solo:2,ast:0},      27:{solo:1,ast:2},     28:{solo:0,ast:1},
-                29:{solo:1,ast:0,fr:1}, 37:{solo:1,ast:0},     80:{solo:0,ast:1} },
+                29:{solo:1,ast:0,fr:1}, 37:{solo:1,ast:0},     20:{solo:0,ast:1} },
       drives:[
         { unit:"offense", n:1, plays:[
           { t:"#3 rush", yds:34 },
@@ -2168,7 +2166,7 @@ const GAMES_2025 = [
         { unit:"defense", n:1, plays:[
           { t:"#3 solo tackle", yds:-2 },
           { t:"#6, #1 assist on the tackle", yds:1 },
-          { t:"#1, #80 assist on the tackle", yds:4 } ] },
+          { t:"#1, #20 assist on the tackle", yds:4 } ] },
         { unit:"offense", n:2, plays:[
           { t:"#1 rush", yds:14 },
           { t:"#6 rush", yds:26, score:true },
@@ -2242,7 +2240,7 @@ const GAMES_2025 = [
       /* One of the two fumble recoveries wasn't credited to a player. */
       defense:{ 1:{solo:4,ast:3}, 3:{solo:3,ast:3,sck:1}, 4:{solo:1,ast:1},
                 6:{solo:2,ast:1}, 8:{solo:1,ast:0}, 24:{solo:1,ast:2},
-                25:{solo:1,ast:2}, 29:{solo:0,ast:0,fr:1}, 80:{solo:0,ast:1} },
+                25:{solo:1,ast:2}, 29:{solo:0,ast:0,fr:1}, 20:{solo:0,ast:1} },
       drives:[
         { unit:"defense", n:1, plays:[
           { t:"Fumble — recovered by #29", yds:0, turnover:true } ] },
@@ -2251,7 +2249,7 @@ const GAMES_2025 = [
           { t:"Bad snap — #11 fumbles, Springdale recovers", yds:0, turnover:true } ] },
         { unit:"defense", n:2, plays:[
           { t:"#3, #24 assist on the tackle", yds:2 },
-          { t:"#1, #25, #80 assist on the tackle", yds:-2 },
+          { t:"#1, #25, #20 assist on the tackle", yds:-2 },
           { t:"Bad snap — Springdale recovers", yds:-10 } ] },
         { unit:"offense", n:2, plays:[
           { t:"#11 rush", yds:9 },
@@ -2414,7 +2412,7 @@ const GAMES_2025 = [
       /* The fumble recovery in series 2 wasn't credited to a player. */
       defense:{ 1:{solo:3,ast:4}, 3:{solo:4,ast:1,sck:1}, 4:{solo:2,ast:0},
                 6:{solo:2,ast:2}, 8:{solo:1,ast:0}, 24:{solo:0,ast:2},
-                27:{solo:1,ast:2}, 80:{solo:0,ast:1} },
+                27:{solo:1,ast:2}, 20:{solo:0,ast:1} },
       drives:[
         { unit:"offense", n:1, plays:[
           { t:"#3 rush", yds:32 },
@@ -2443,7 +2441,7 @@ const GAMES_2025 = [
           { t:"#4 solo tackle", yds:10 },
           { t:"#8 solo tackle", yds:20 },
           { t:"#1 solo tackle", yds:-5 },
-          { t:"#80, #1 assist on the tackle", yds:-3 } ] },
+          { t:"#20, #1 assist on the tackle", yds:-3 } ] },
         { unit:"defense", n:4, plays:[
           { t:"#6 solo tackle", yds:-2 },
           { t:"#27 solo tackle", yds:-5 },
@@ -2566,7 +2564,7 @@ const GAMES_2025 = [
       receiving:{ 6:{rec:1,yds:20,td:0}, 3:{rec:2,yds:8,td:0}, 1:{rec:1,yds:0,td:0} },
       defense:{ 1:{solo:2,ast:2,ff:1}, 3:{solo:2,ast:4},  4:{solo:2,ast:2},
                 6:{solo:1,ast:0},      24:{solo:1,ast:0}, 25:{solo:0,ast:1},
-                27:{solo:0,ast:2,fr:1}, 80:{solo:1,ast:0} },
+                27:{solo:0,ast:2,fr:1}, 20:{solo:1,ast:0} },
       drives:[
         { unit:"offense", n:1, plays:[
           { t:"#11 rush", yds:5 },
@@ -2593,7 +2591,7 @@ const GAMES_2025 = [
           { t:"#11 pass to #8 intercepted", yds:0, turnover:true } ] },
         { unit:"defense", n:2, plays:[
           { t:"#1, #27 assist on the tackle", yds:-2 },
-          { t:"#80 solo tackle", yds:1 },
+          { t:"#20 solo tackle", yds:1 },
           { t:"#3 solo tackle", yds:3 },
           { t:"Pass incomplete — turnover on downs", yds:0, turnover:true } ] },
         { unit:"offense", n:3, note:"End of half", plays:[
