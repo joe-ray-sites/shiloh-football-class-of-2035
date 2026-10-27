@@ -1776,7 +1776,100 @@ const GAMES = [
           { t:"#1 solo tackle", yds:-2 } ] },
       ],
     } },
-  { id:8,  week:"Wk 8", date:"2026-10-10", opp:"Siloam Springs",   home:true },
+  { id:8,  week:"Wk 8", date:"2026-10-10", opp:"Siloam Springs",   home:true,
+    us:43, them:0, final:true,
+    video:"https://www.youtube.com/watch?v=orgMiXnfDqY",
+    stats:{
+      team:{ totalYards:306, rushYds:253, passYds:53, points:43, td:6,
+             twoPt:{ made:4, att:6 },
+             firstDowns:9, firstRush:7, firstPass:2,
+             penalties:1, penaltyYds:5, fumbles:"1-1",
+             def:{ tfl:12, sacks:0, int:1, fr:4, yardsLost:44, yardsAllowed:-4 } },
+      rushing:{ 11:{att:4,yds:66,td:1,twoPt:1}, 37:{att:3,yds:59,td:0},
+                3:{att:2,yds:56,td:1}, 1:{att:2,yds:55,td:1},
+                24:{att:1,yds:13,td:0}, 25:{att:1,yds:3,td:0,twoPt:1},
+                18:{att:1,yds:1,td:0}, 89:{att:1,yds:0,td:0} },
+      passing:{ 1:{c:3,a:4,yds:43,td:2,int:0}, 11:{c:2,a:7,yds:10,td:0,int:0} },
+      receiving:{ 22:{rec:1,yds:27,td:1}, 89:{rec:1,yds:11,td:1},
+                  24:{rec:1,yds:10,td:0,twoPt:1}, 25:{rec:1,yds:5,td:0,twoPt:1},
+                  18:{rec:1,yds:0,td:0} },
+      /* #20 is a new number this game (McCorry, #0, tackled alongside #20
+         in the last series) — entered as given until we have a name. */
+      defense:{ 0:{solo:3,ast:1,ff:1},  1:{solo:0,ast:3,fr:2},  4:{solo:3,ast:2,fr:1},
+                5:{solo:0,ast:3},  7:{solo:0,ast:1},  8:{solo:2,ast:2},
+                10:{solo:0,ast:1}, 13:{solo:1,ast:3}, 20:{solo:1,ast:1},
+                24:{solo:0,ast:0,int:1}, 27:{solo:1,ast:1,fr:1,td:1},
+                28:{solo:0,ast:2}, 34:{solo:0,ast:1}, 37:{solo:0,ast:1} },
+      drives:[
+        { unit:"defense", n:1, plays:[
+          { t:"#4, #1 assist on the tackle", yds:-3 },
+          { t:"#0 solo tackle", yds:-4 },
+          { t:"#8 solo tackle", yds:-5 } ] },
+        { unit:"offense", n:1, plays:[
+          { t:"#11 complete to #18, no gain", yds:0 },
+          { t:"#3 rush", yds:51, score:true },
+          { t:"Two-point conversion: #11 rush — GOOD", yds:5, conv:true, good:true } ] },
+        { unit:"defense", n:2, plays:[
+          { t:"#28, #5 assist on the tackle", yds:1 },
+          { t:"Fumble on a two-yard loss — recovered by #4", yds:-2, turnover:true } ] },
+        { unit:"offense", n:2, plays:[
+          { t:"#18 rush", yds:1 },
+          { t:"#24 rush", yds:13 },
+          { t:"#11 pass to #24 incomplete", yds:0 },
+          { t:"#3 rush", yds:5 },
+          { t:"#11 pass to #24 incomplete", yds:0 },
+          { t:"#11 rush, fumble — Siloam Springs recovers", yds:-3, turnover:true } ] },
+        { unit:"defense", n:3, plays:[
+          { t:"#4, #5, #7 assist on the tackle", yds:-5 },
+          { t:"#8, #28, #13 assist on the tackle", yds:5 },
+          { t:"#13, #5 assist on the tackle, no gain", yds:0 },
+          { t:"#0 solo tackle, forces the fumble — #27 recovers in the end zone, defensive touchdown", yds:-3, score:true, turnover:true } ] },
+        { unit:"offense", n:3, plays:[
+          { t:"Two-point conversion: #11 complete to #24 — GOOD", yds:10, conv:true, good:true } ] },
+        { unit:"defense", n:4, plays:[
+          { t:"#1, #27 assist on the tackle", yds:-5 },
+          { t:"#0 solo tackle", yds:-5 },
+          { t:"#34, #37 assist on the tackle", yds:3 } ] },
+        { unit:"offense", n:4, plays:[
+          { t:"Penalty — false start", yds:-5, flag:true },
+          { t:"#11 pass to #18 incomplete", yds:0 },
+          { t:"#1 rush", yds:56, score:true },
+          { t:"Two-point conversion: #11 pass to #18 incomplete — no good", conv:true } ] },
+        { unit:"defense", n:5, plays:[
+          { t:"#4 solo tackle", yds:-6 },
+          { t:"#24 intercepts the pass", yds:0, turnover:true } ] },
+        { unit:"offense", n:5, note:"End of half", plays:[
+          { t:"#11 rush", yds:11 } ] },
+        { unit:"offense", n:6, plays:[
+          { t:"#37 rush", yds:25 },
+          { t:"#1 pass to #22 dropped — incomplete", yds:0 },
+          { t:"#37 rush", yds:-5 },
+          { t:"#37 rush", yds:39 },
+          { t:"#89 rush, no gain", yds:0 },
+          { t:"#1 rush", yds:-1 },
+          { t:"#1 complete to #89", yds:11, score:true },
+          { t:"Two-point conversion: #1 complete to #25 — GOOD", yds:5, conv:true, good:true } ] },
+        { unit:"defense", n:6, plays:[
+          { t:"#27 solo tackle", yds:-4 },
+          { t:"#13 solo tackle", yds:-1 },
+          { t:"#20 solo tackle", yds:3 } ] },
+        { unit:"offense", n:7, plays:[
+          { t:"#11 rush", yds:53, score:true },
+          { t:"Two-point conversion: #11 pass to #22 incomplete — no good", conv:true } ] },
+        { unit:"defense", n:7, plays:[
+          { t:"#4 solo tackle", yds:-1 },
+          { t:"#4 solo tackle, ball comes loose — recovered by #1", yds:-2, turnover:true } ] },
+        { unit:"offense", n:8, plays:[
+          { t:"#1 complete to #22", yds:27, score:true },
+          { t:"Two-point conversion: #25 rush — GOOD", yds:3, conv:true, good:true } ] },
+        { unit:"defense", n:8, note:"End of game", plays:[
+          { t:"#0, #20 assist on the tackle", yds:11 },
+          { t:"#8, #10 assist on the tackle", yds:9 },
+          { t:"#8 solo tackle", yds:10 },
+          { t:"#1, #13 assist on the tackle", yds:4 },
+          { t:"Fumble on a four-yard loss — recovered by #1", yds:-4, turnover:true } ] },
+      ],
+    } },
   { id:9,  week:"Wk 9", date:"2026-10-17", opp:"Fayetteville",     home:false },
   { id:10, week:"Playoff",      date:"2026-10-24", opp:"TBD", playoff:true },
   { id:11, week:"Championship", date:"2026-10-31", opp:"TBD", playoff:true },
@@ -2445,7 +2538,7 @@ function seasonStats(num, games) {
     if (r) { out.rush = out.rush || {}; addInto(out.rush, r, ["att","yds","td","twoPt"]); played = true; }
     if (a) { out.pass = out.pass || {}; addInto(out.pass, a, ["c","a","yds","td","int"]); played = true; }
     if (c) { out.rec  = out.rec  || {}; addInto(out.rec,  c, ["rec","yds","td","twoPt"]); played = true; }
-    if (d) { out.def  = out.def  || {}; addInto(out.def,  d, ["solo","ast","tfl","sck","int","fr"]); played = true; }
+    if (d) { out.def  = out.def  || {}; addInto(out.def,  d, ["solo","ast","tfl","sck","int","fr","td"]); played = true; }
     if (k) { out.kick = out.kick || {}; addInto(out.kick, k, ["xpm","xpa","fgm","fga"]); played = true; }
     if (played) out.gp++;
   });
@@ -2465,7 +2558,7 @@ function seasonStats2(num, games, year) {
       if (r) { out.rush = out.rush || {}; addInto(out.rush, r, ["att","yds","td","twoPt"]); played = true; }
       if (a) { out.pass = out.pass || {}; addInto(out.pass, a, ["c","a","yds","td","int"]); played = true; }
       if (c) { out.rec  = out.rec  || {}; addInto(out.rec,  c, ["rec","yds","td","twoPt"]); played = true; }
-      if (d) { out.def  = out.def  || {}; addInto(out.def,  d, ["solo","ast","tfl","sck","int","fr"]); played = true; }
+      if (d) { out.def  = out.def  || {}; addInto(out.def,  d, ["solo","ast","tfl","sck","int","fr","td"]); played = true; }
       if (played) out.gp++;
     });
     if (out.def) out.def.tkl = (out.def.solo || 0) + (out.def.ast || 0);
@@ -2526,7 +2619,8 @@ function auditGames() {
     const sum = (obj, key) => Object.keys(obj || {})
       .reduce((n, k) => n + (obj[k][key] || 0), 0);
     // A passing TD scores the same points as its receiving TD — count once.
-    const td    = sum(s.rushing, "td") + sum(s.receiving, "td") + sum(s.returns, "td");
+    const td    = sum(s.rushing, "td") + sum(s.receiving, "td") + sum(s.returns, "td")
+                + sum(s.defense, "td");
     const twoPt = sum(s.rushing, "twoPt") + sum(s.receiving, "twoPt");
 
     if (s.team && s.team.td != null && s.team.td !== td)
@@ -3021,11 +3115,12 @@ function boxStatsView(g) {
     return { name:pName(n, g.year), vals:[`${v.c}–${v.a}`, v.yds, v.td || 0, v.int || 0] }; });
   const recv = order(s.receiving).map(n => { const v = s.receiving[n];
     return { name:pName(n, g.year), vals:[v.rec, v.yds, v.td || 0, v.twoPt || 0] }; });
+  const defTd = Object.values(s.defense || {}).some(v => v.td);
   const dRows = Object.keys(s.defense || {}).map(Number)
     .sort((a, b) => (s.defense[b].solo + s.defense[b].ast) - (s.defense[a].solo + s.defense[a].ast))
     .map(n => { const v = s.defense[n];
       return { name:pName(n, g.year), vals:[v.solo || 0, v.ast || 0, (v.solo || 0) + (v.ast || 0),
-                                    v.sck || 0, v.int || 0, v.fr || 0] }; });
+                                    v.sck || 0, v.int || 0, v.fr || 0, ...(defTd ? [v.td || 0] : [])] }; });
 
   const cmp = (label, a, b) => `<div class="cmp"><span>${a}</span><em>${label}</em><span>${b}</span></div>`;
 
@@ -3058,7 +3153,7 @@ function boxStatsView(g) {
     ${statTable("Rushing",   ["Att","Yds","Avg","TD","2PT"], rush)}
     ${statTable("Passing",   ["C–A","Yds","TD","INT"],       pass)}
     ${statTable("Receiving", ["Rec","Yds","TD","2PT"],       recv)}
-    ${statTable("Defense",   ["Solo","Ast","Tot","Sack","INT","FR"], dRows)}
+    ${statTable("Defense",   ["Solo","Ast","Tot","Sack","INT","FR", ...(defTd ? ["TD"] : [])], dRows)}
 
     <section class="bs-sec">
       <h3 class="bs-h">Team Defense</h3>
@@ -3360,7 +3455,7 @@ const STAT_GROUPS = [
       ["Avg", (v.yds / v.rec).toFixed(1)], ["2PT", v.twoPt] ] },
   { key:"def", label:"Defense", tiles:(v) => [
       ["Tackles", v.tkl], ["Solo", v.solo], ["Assist", v.ast],
-      ["TFL", v.tfl], ["Sacks", v.sck], ["INT", v.int], ["Fum Rec", v.fr] ] },
+      ["TFL", v.tfl], ["Sacks", v.sck], ["INT", v.int], ["Fum Rec", v.fr], ["TD", v.td] ] },
   { key:"kick", label:"Kicking", tiles:(v) => [
       ["XP", `${v.xpm}/${v.xpa}`], ["FG", `${v.fgm}/${v.fga}`], ["Long", v.lng + " yd"] ] },
 ];
